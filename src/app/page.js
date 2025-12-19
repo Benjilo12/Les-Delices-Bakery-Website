@@ -1,7 +1,7 @@
 function page() {
   return (
-    <div className="text-3xl text-red-400  mx-auto max-w-7xl">
-      <h1>hello</h1>
+    <div className="text-3xl text-yellow-400  mx-auto max-w-7xl justify-items-center items-center">
+      <h1>hello this is my website</h1>
     </div>
   );
 }
