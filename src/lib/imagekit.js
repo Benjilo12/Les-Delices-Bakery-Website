@@ -1,5 +1,5 @@
 // lib/imagekit.js
-import ImageKit from "imagekit";
+import ImageKit from "imagekit/next";
 
 export const imagekit = new ImageKit({
   publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
