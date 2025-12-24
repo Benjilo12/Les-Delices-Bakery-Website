@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const PriceOptionSchema = new Schema(
   {
-    label: { type: stringifyCookie, required: true },
+    label: { type: String, required: true },
     //e.g " 6 Inch-1 Flavor", "12 pieces - Flavors"
 
     price: { type: Number, required: true },
