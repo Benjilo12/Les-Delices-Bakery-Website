@@ -2,7 +2,6 @@
 import { NextResponse } from "next/server";
 import Product from "@/models/product.model";
 import { currentUser } from "@clerk/nextjs/server";
-
 import { connect } from "@/mongodb/mongoose";
 import { uploadToImageKit } from "@/lib/imagekit";
 
