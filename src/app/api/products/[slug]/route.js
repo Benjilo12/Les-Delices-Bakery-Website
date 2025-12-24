@@ -3,9 +3,8 @@ import { NextResponse } from "next/server";
 import { connect } from "@/mongodb/mongoose";
 import Product from "@/models/product.model";
 import { currentUser } from "@clerk/nextjs/server";
-import { uploadToImageKit } from "@/lib/imagekit";
+import { deleteFromImageKit, uploadToImageKit } from "@/lib/imagekit";
 
-// GET - Fetch single product by slug (No auth required)
 export async function GET(request, { params }) {
   try {
     await connect();
@@ -201,7 +200,7 @@ export async function DELETE(request, { params }) {
 
     const { slug } = params;
 
-    const product = await Product.findOneAndDelete({ slug });
+    const product = await Product.findOne({ slug });
 
     if (!product) {
       return NextResponse.json(
@@ -211,6 +210,24 @@ export async function DELETE(request, { params }) {
         { status: 404 }
       );
     }
+
+    // Delete images from ImageKit before deleting product
+    if (product.images && product.images.length > 0) {
+      console.log(`Deleting ${product.images.length} images from ImageKit...`);
+      for (const imageUrl of product.images) {
+        // Extract fileId from ImageKit URL
+        const fileId = imageUrl.split("/").pop().split("?")[0];
+        try {
+          await deleteFromImageKit(fileId);
+          console.log("Image deleted from ImageKit:", fileId);
+        } catch (error) {
+          console.error("Failed to delete image from ImageKit:", error);
+          // Continue with product deletion even if image deletion fails
+        }
+      }
+    }
+
+    await Product.findOneAndDelete({ slug });
 
     console.log("Product deleted successfully:", product._id);
 

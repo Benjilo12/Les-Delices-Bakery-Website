@@ -15,7 +15,7 @@ function generateSlug(name) {
     .trim();
 }
 
-//! GET - Fetch all products (No auth required)
+// GET - Fetch all products (No auth required)
 export async function GET(request) {
   try {
     await connect();
@@ -65,7 +65,7 @@ export async function GET(request) {
   }
 }
 
-//! POST - Create new product (Admin only)
+// POST - Create new product (Admin only)
 export async function POST(request) {
   try {
     console.log("Starting product creation...");
@@ -160,7 +160,7 @@ export async function POST(request) {
     };
 
     console.log("Creating product in database with data:", productData);
-    const product = await product.create(productData);
+    const product = await Product.create(productData);
     console.log("Product created successfully:", product._id);
 
     return NextResponse.json(
