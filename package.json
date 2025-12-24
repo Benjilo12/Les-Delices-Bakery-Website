@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack ",
     "start": "next start",
     "lint": "eslint"
   },
@@ -17,6 +17,7 @@
     "@radix-ui/react-slot": "^1.2.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "imagekit": "^6.0.0",
     "lucide-react": "^0.562.0",
     "mongodb": "^7.0.0",
     "moongose": "^1.0.0",

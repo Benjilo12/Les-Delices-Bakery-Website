@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import Product from "@/models/product.model";
+import Product from "@/models/product";
 import { connect } from "@/mongodb/mongoose";
 
+// GET - Fetch products by category (No auth required)
 export async function GET(request, { params }) {
   try {
     await connect();

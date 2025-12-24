@@ -1,7 +1,7 @@
 // app/api/products/route.js
 import { NextResponse } from "next/server";
 import { connect } from "@/mongodb/mongoose";
-import Product from "@/models/product.model";
+import Product from "@/models/product";
 import { currentUser } from "@clerk/nextjs/server";
 import { deleteFromImageKit, uploadToImageKit } from "@/lib/imagekit";
 
