@@ -18,6 +18,7 @@ export async function GET(request, { params }) {
       query.isAvailable = true;
     }
 
+  
     const products = await Product.find(query).sort({ createdAt: -1 });
 
     return NextResponse.json(
