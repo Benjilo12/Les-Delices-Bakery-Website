@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connect } from "@/mongodb/mongoose";
-import Order from "@/models/order.model";
-import Product from "@/models/product.model";
+import Order from "@/models/order";
+import Product from "@/models/product";
 import { currentUser } from "@clerk/nextjs/server";
 
 // GET - Fetch orders (User: their orders, Admin: all orders)

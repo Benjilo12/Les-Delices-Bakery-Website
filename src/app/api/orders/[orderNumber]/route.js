@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { connect } from "@/mongodb/mongoose";
-import Order from "@/models/order.model";
+import Order from "@/models/order";
 import { currentUser } from "@clerk/nextjs/server";
 
 // GET - Fetch single order

@@ -1,7 +1,7 @@
 // app/api/payments/initialize/route.js
 import { NextResponse } from "next/server";
 import { connect } from "@/mongodb/mongoose";
-import Order from "@/models/order.model";
+import Order from "@/models/order";
 
 import crypto from "crypto";
 
