@@ -2,6 +2,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
 import localFont from "next/font/local";
+import I18nProvider from "./providers/I18nProvider";
 
 const raleway = localFont({
   src: "./fonts/Raleway.woff2",
@@ -18,10 +19,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${raleway.variable} antialiased`}>
-        <ClerkProvider>
-          <Navbar />
-          {children}
-        </ClerkProvider>
+        <I18nProvider>
+          <ClerkProvider>
+            <Navbar />
+            {children}
+          </ClerkProvider>
+        </I18nProvider>
       </body>
     </html>
   );

@@ -49,7 +49,7 @@ export default function MobileMenu() {
                 className={`text-base font-medium py-3 px-4 rounded-lg transition-colors ${
                   pathname === link.href
                     ? "bg-amber-200 text-gray-900 shadow-sm"
-                    : "text-gray-100 hover:bg-amber-100"
+                    : "text-gray-100 hover:bg-amber-100 hover:text-gray-950"
                 }`}
               >
                 {link.label}
@@ -64,7 +64,7 @@ export default function MobileMenu() {
               <SignInButton mode="modal">
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-base font-medium py-3 px-4 rounded-lg text-gray-100 hover:bg-amber-100"
+                  className="w-full justify-start text-base font-medium py-3 px-4 rounded-lg text-gray-100 hover:bg-amber-100 hover:text-gray-950"
                 >
                   Login / Sign Up
                 </Button>
