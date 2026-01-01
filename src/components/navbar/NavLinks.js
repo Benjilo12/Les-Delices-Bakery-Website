@@ -18,10 +18,10 @@ export default function NavLinks() {
         <Link
           key={link.href}
           href={link.href}
-          className={`text-base font-bold transition-colors hover:text-amber-600 ${
+          className={`text-base font-medium transition-colors hover:text-amber-600 ${
             pathname === link.href
-              ? "text-amber-600 border-b-2 border-amber-600"
-              : "text-gray-700"
+              ? "text-amber-600 border-b-2 border-amber-600 font-bold"
+              : "text-gray-700 "
           }`}
         >
           {link.label}

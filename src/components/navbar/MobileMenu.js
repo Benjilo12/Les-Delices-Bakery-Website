@@ -28,7 +28,7 @@ export default function MobileMenu() {
     <div className="md:hidden">
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
-          <button className="text-gray-700 hover:text-amber-700">
+          <button className="text-gray-700 hover:text-amber-700 cursor-pointer">
             <Menu className="w-6 h-6" />
           </button>
         </SheetTrigger>

@@ -1,7 +1,15 @@
 {
   "nav": {
-    "home": "Accueil",
-    "menu": "Menu",
-    "blog": "Blog"
+    "Home": "Accueil",
+    "Menu": "Menu",
+    "Blog": "Blog"
+  },
+  "auth": {
+    "loginRegister": "Connexion / Inscription",
+    "login": "Connexion",
+    "register": "Inscription",
+    "logout": "Déconnexion",
+    "profile": "Profil",
+    "account": "Compte"
   }
 }
