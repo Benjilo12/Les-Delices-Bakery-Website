@@ -1,9 +1,9 @@
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import Navbar from "@/components/Navbar";
+
 import localFont from "next/font/local";
 
-import Topbar from "@/components/Topbar";
+
 
 const raleway = localFont({
   src: "./fonts/Raleway.woff2",
@@ -21,9 +21,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${raleway.variable} antialiased`}>
         <ClerkProvider>
-          <Topbar />
-          <Navbar />
-          {children}
+       <main>{children}</main>
         </ClerkProvider>
       </body>
     </html>

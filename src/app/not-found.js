@@ -1,8 +1,14 @@
+import Navbar from "@/components/Navbar";
+import Topbar from "@/components/Topbar";
+
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export default function NotFound() {
   return (
+    <>
+    <Topbar />
+    <Navbar />
     <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-white">
       <div className="text-center">
         {/* Decorative number */}
@@ -55,5 +61,6 @@ export default function NotFound() {
         </div>
       </div>
     </div>
+    </>
   );
 }
