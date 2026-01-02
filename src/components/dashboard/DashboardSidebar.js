@@ -15,45 +15,21 @@ import {
   X,
   ChevronLeft,
 } from "lucide-react";
-import Image from "next/image";
+import { useUser } from "@clerk/nextjs";
 
 const menuItems = [
-  {
-    label: "Overview",
-    icon: LayoutDashboard,
-    href: "/dashboard",
-  },
+  { label: "Overview", icon: LayoutDashboard, href: "/dashboard" },
   {
     label: "Orders",
     icon: ShoppingBag,
     href: "/dashboard/orders",
     badge: "12",
   },
-  {
-    label: "Products",
-    icon: CakeSlice,
-    href: "/dashboard/products",
-  },
-  {
-    label: "Inventory",
-    icon: Package,
-    href: "/dashboard/inventory",
-  },
-  {
-    label: "Blog",
-    icon: FileText,
-    href: "/dashboard/blog",
-  },
-  {
-    label: "Customers",
-    icon: Users,
-    href: "/dashboard/customers",
-  },
-  {
-    label: "Settings",
-    icon: Settings,
-    href: "/dashboard/settings",
-  },
+  { label: "Products", icon: CakeSlice, href: "/dashboard/products" },
+  { label: "Inventory", icon: Package, href: "/dashboard/inventory" },
+  { label: "Blog", icon: FileText, href: "/dashboard/blog" },
+  { label: "Customers", icon: Users, href: "/dashboard/customers" },
+  { label: "Settings", icon: Settings, href: "/dashboard/settings" },
 ];
 
 export default function DashboardSidebar() {
@@ -61,17 +37,20 @@ export default function DashboardSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
 
+  // Get the current user from Clerk
+  const { user, isLoaded } = useUser();
+
   return (
     <>
-      {/* Mobile Toggle Button */}
+      {/* MOBILE MENU BUTTON */}
       <button
         onClick={() => setIsOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-lg"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md"
       >
         <Menu className="w-6 h-6 text-gray-700" />
       </button>
 
-      {/* Mobile Overlay */}
+      {/* MOBILE OVERLAY */}
       {isOpen && (
         <div
           className="lg:hidden fixed inset-0 bg-black/50 z-40"
@@ -79,47 +58,44 @@ export default function DashboardSidebar() {
         />
       )}
 
-      {/* Sidebar */}
+      {/* SIDEBAR */}
       <aside
         className={`
-          fixed lg:static inset-y-0 left-0 z-50
+          fixed inset-y-0 left-0 z-50
           flex flex-col
           bg-white border-r border-gray-200
-          transition-all duration-300 ease-in-out
+          transition-all duration-300
+          h-screen
+          shadow-lg
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
           ${isCollapsed ? "w-20" : "w-64"}
         `}
       >
-        {/* Sidebar Header */}
-        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
+        {/* HEADER */}
+        <div className="h-16 px-4 flex items-center justify-between border-b">
           {!isCollapsed && (
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 relative">
-                {/* <Image
-                  src="/logo.png"
-                  alt="Les Délices"
-                  fill
-                  className="object-contain"
-                /> */}
+              <div className="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center text-white font-bold">
+                LD
               </div>
-              <span className="text-lg font-serif text-amber-900">
+              <span className="font-serif text-lg text-amber-900">
                 Les Délices
               </span>
             </Link>
           )}
 
-          {/* Mobile Close Button */}
+          {/* MOBILE CLOSE */}
           <button
             onClick={() => setIsOpen(false)}
-            className="lg:hidden p-2 hover:bg-gray-100 rounded-lg"
+            className="lg:hidden p-2 rounded hover:bg-gray-100"
           >
             <X className="w-5 h-5" />
           </button>
 
-          {/* Desktop Collapse Toggle */}
+          {/* DESKTOP COLLAPSE */}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="hidden lg:block p-2 hover:bg-gray-100 rounded-lg"
+            className="hidden lg:block p-2 rounded hover:bg-gray-100"
           >
             <ChevronLeft
               className={`w-5 h-5 transition-transform ${
@@ -129,35 +105,34 @@ export default function DashboardSidebar() {
           </button>
         </div>
 
-        {/* Navigation Menu */}
+        {/* NAVIGATION */}
         <nav className="flex-1 overflow-y-auto p-4">
           <ul className="space-y-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.href;
+              const active =
+                pathname === item.href || pathname.startsWith(`${item.href}/`);
 
               return (
                 <li key={item.href}>
                   <Link
                     href={item.href}
                     onClick={() => setIsOpen(false)}
-                    className={`
-                      flex items-center gap-3 px-3 py-2.5 rounded-lg
-                      transition-colors font-medium
+                    className={`flex items-center gap-3 px-3 py-2 rounded-lg font-medium transition
                       ${
-                        isActive
-                          ? "bg-amber-50 text-amber-900"
+                        active
+                          ? "bg-amber-50 text-amber-900 border-r-2 border-amber-500"
                           : "text-gray-700 hover:bg-gray-100"
                       }
                       ${isCollapsed ? "justify-center" : ""}
                     `}
                   >
-                    <Icon className="w-5 h-5 shrink-0" />
+                    <Icon className="w-5 h-5" />
                     {!isCollapsed && (
                       <>
                         <span className="flex-1">{item.label}</span>
                         {item.badge && (
-                          <span className="px-2 py-0.5 text-xs font-bold bg-amber-100 text-amber-900 rounded-full">
+                          <span className="text-xs bg-amber-100 px-2 py-0.5 rounded-full">
                             {item.badge}
                           </span>
                         )}
@@ -170,18 +145,47 @@ export default function DashboardSidebar() {
           </ul>
         </nav>
 
-        {/* Sidebar Footer */}
-        <div className="p-4 border-t border-gray-200">
+        {/* FOOTER */}
+        <div className="p-4 border-t">
           {!isCollapsed && (
-            <div className="flex items-center gap-3 p-3 bg-amber-50 rounded-lg">
-              <div className="w-10 h-10 bg-amber-200 rounded-full flex items-center justify-center">
-                <span className="text-amber-900 font-bold">ED</span>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
-                  Eleanor Dartey
-                </p>
-                <p className="text-xs text-gray-600 truncate">Admin</p>
+            <div className="bg-amber-50 p-3 rounded-lg">
+              {isLoaded && user ? (
+                <>
+                  <p className="text-sm font-semibold text-gray-900 truncate">
+                    {user.fullName ||
+                      user.firstName ||
+                      user.emailAddresses[0]?.emailAddress ||
+                      "Admin User"}
+                  </p>
+                  <p className="text-xs text-gray-600 mt-1">
+                    {/* Display role from public metadata or default to "Admin" */}
+                    {user.publicMetadata?.role === "super_admin"
+                      ? "Super Admin"
+                      : user.publicMetadata?.role === "manager"
+                      ? "Manager"
+                      : "Admin"}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <div className="animate-pulse">
+                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Show user initials/avatar when sidebar is collapsed */}
+          {isCollapsed && isLoaded && user && (
+            <div className="flex justify-center">
+              <div className="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center text-white font-semibold text-sm">
+                {user.firstName?.charAt(0) ||
+                  user.emailAddresses[0]?.emailAddress
+                    ?.charAt(0)
+                    .toUpperCase() ||
+                  "A"}
               </div>
             </div>
           )}

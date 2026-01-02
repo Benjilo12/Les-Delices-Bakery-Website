@@ -184,39 +184,44 @@ export default function AddProductPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="w-full">
       {/* Header with Back Button */}
-      <div className="mb-10">
+      <div className="mb-6 md:mb-8">
         <Button
           variant="ghost"
           onClick={() => router.back()}
-          className="mb-4 -ml-2"
+          className="mb-3 -ml-2"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Products
         </Button>
-        <h1 className="text-4xl font-bold text-gray-900">Add New Product</h1>
-        <p className="text-gray-600 mt-2 text-lg">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+          Add New Product
+        </h1>
+        <p className="text-gray-600 mt-1 md:mt-2 text-sm md:text-base">
           Create a new product for your bakery menu
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-10">
+      <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
         {/* Basic Information */}
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-8 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-              <span className="text-amber-600 text-xl">📝</span>
+        <div className="bg-white rounded-lg md:rounded-xl border border-gray-200 md:border-2 p-4 md:p-6 lg:p-8 shadow-sm">
+          <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+            <div className="w-8 h-8 md:w-10 md:h-10 bg-amber-100 rounded-lg flex items-center justify-center">
+              <span className="text-amber-600 text-lg md:text-xl">📝</span>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900">
               Basic Information
             </h2>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-4 md:space-y-6">
             {/* Product Name */}
             <div>
-              <Label htmlFor="name" className="text-base font-semibold">
+              <Label
+                htmlFor="name"
+                className="text-sm md:text-base font-semibold"
+              >
                 Product Name <span className="text-red-500">*</span>
               </Label>
               <Input
@@ -227,13 +232,16 @@ export default function AddProductPage() {
                   setFormData({ ...formData, name: e.target.value })
                 }
                 placeholder="e.g., Chocolate Birthday Cake"
-                className="mt-3 h-12 text-base"
+                className="mt-2 h-10 md:h-12 text-sm md:text-base"
               />
             </div>
 
-            {/* Category - Added more spacing */}
-            <div className="pb-2">
-              <Label htmlFor="category" className="text-base font-semibold">
+            {/* Category */}
+            <div>
+              <Label
+                htmlFor="category"
+                className="text-sm md:text-base font-semibold"
+              >
                 Category <span className="text-red-500">*</span>
               </Label>
               <Select
@@ -243,7 +251,7 @@ export default function AddProductPage() {
                   setFormData({ ...formData, category: value })
                 }
               >
-                <SelectTrigger className="mt-3 h-12 text-base bg-gray-950 text-gray-100">
+                <SelectTrigger className="mt-2 h-10 md:h-12 text-sm md:text-base bg-gray-950 text-gray-100">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent className="bg-gray-900 text-gray-100">
@@ -254,14 +262,17 @@ export default function AddProductPage() {
                   ))}
                 </SelectContent>
               </Select>
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="text-xs md:text-sm text-gray-500 mt-1">
                 Choose the category this product belongs to
               </p>
             </div>
 
-            {/* Description - Added more spacing above */}
-            <div className="pt-4">
-              <Label htmlFor="description" className="text-base font-semibold">
+            {/* Description */}
+            <div>
+              <Label
+                htmlFor="description"
+                className="text-sm md:text-base font-semibold"
+              >
                 Description
               </Label>
               <Textarea
@@ -271,25 +282,25 @@ export default function AddProductPage() {
                   setFormData({ ...formData, description: e.target.value })
                 }
                 placeholder="Describe your product (ingredients, size, serving suggestions)..."
-                rows={5}
-                className="mt-3 text-base"
+                rows={3}
+                className="mt-2 text-sm md:text-base"
               />
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="text-xs md:text-sm text-gray-500 mt-1">
                 Optional: Provide detailed information about your product
               </p>
             </div>
 
-            {/* Availability - moved to bottom with more spacing */}
-            <div className="pt-6">
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            {/* Availability */}
+            <div>
+              <div className="flex items-center justify-between p-3 md:p-4 bg-gray-50 rounded-lg">
                 <div>
                   <Label
                     htmlFor="isAvailable"
-                    className="text-base font-semibold"
+                    className="text-sm md:text-base font-semibold"
                   >
                     Available for Order
                   </Label>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-xs md:text-sm text-gray-600 mt-1">
                     Customers can order this product
                   </p>
                 </div>
@@ -306,27 +317,31 @@ export default function AddProductPage() {
         </div>
 
         {/* Images */}
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-8 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-              <span className="text-blue-600 text-xl">📸</span>
+        <div className="bg-white rounded-lg md:rounded-xl border border-gray-200 md:border-2 p-4 md:p-6 lg:p-8 shadow-sm">
+          <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+            <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+              <span className="text-blue-600 text-lg md:text-xl">📸</span>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">Product Images</h2>
+            <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900">
+              Product Images
+            </h2>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <div>
-              <Label className="text-base font-semibold">Upload Images</Label>
-              <div className="mt-3">
+              <Label className="text-sm md:text-base font-semibold">
+                Upload Images
+              </Label>
+              <div className="mt-2">
                 <label
                   htmlFor="images"
-                  className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-amber-300 rounded-xl cursor-pointer hover:bg-amber-50 bg-amber-25 transition-colors"
+                  className="flex flex-col items-center justify-center w-full h-32 md:h-40 border border-dashed md:border-2 border-amber-300 rounded-lg md:rounded-xl cursor-pointer hover:bg-amber-50 bg-amber-25 transition-colors"
                 >
-                  <Upload className="w-10 h-10 text-amber-600 mb-3" />
-                  <span className="text-base font-medium text-gray-700">
+                  <Upload className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-amber-600 mb-2" />
+                  <span className="text-sm md:text-base font-medium text-gray-700">
                     Click to upload images
                   </span>
-                  <span className="text-sm text-gray-500 mt-1">
+                  <span className="text-xs md:text-sm text-gray-500 mt-1">
                     PNG, JPG up to 10MB
                   </span>
                   <input
@@ -342,22 +357,24 @@ export default function AddProductPage() {
             </div>
 
             {imagePreviews.length > 0 && (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                 {imagePreviews.map((preview, index) => (
                   <div key={index} className="relative group">
-                    <Image
-                      width={300}
-                      height={160}
-                      src={preview}
-                      alt={`Preview ${index + 1}`}
-                      className="w-full h-40 object-cover rounded-lg border-2 border-gray-200"
-                    />
+                    <div className="aspect-video w-full overflow-hidden rounded-lg border border-gray-200">
+                      <Image
+                        width={300}
+                        height={200}
+                        src={preview}
+                        alt={`Preview ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
                     <button
                       type="button"
                       onClick={() => removeImage(index)}
-                      className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-1 right-1 md:top-2 md:right-2 p-1 md:p-2 bg-red-500 text-white rounded-full hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
                     >
-                      <X className="w-4 h-4" />
+                      <X className="w-3 h-3 md:w-4 md:h-4" />
                     </button>
                   </div>
                 ))}
@@ -367,17 +384,22 @@ export default function AddProductPage() {
         </div>
 
         {/* Price Options */}
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-8 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-              <span className="text-green-600 text-xl">💰</span>
+        <div className="bg-white rounded-lg md:rounded-xl border border-gray-200 md:border-2 p-4 md:p-6 lg:p-8 shadow-sm">
+          <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+            <div className="w-8 h-8 md:w-10 md:h-10 bg-green-100 rounded-lg flex items-center justify-center">
+              <span className="text-green-600 text-lg md:text-xl">💰</span>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">Price Options</h2>
+            <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900">
+              Price Options
+            </h2>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 md:space-y-4">
             {priceOptions.map((option, index) => (
-              <div key={index} className="flex gap-4 p-4 bg-gray-50 rounded-lg">
+              <div
+                key={index}
+                className="flex flex-col md:flex-row gap-2 md:gap-4 p-3 md:p-4 bg-gray-50 rounded-lg"
+              >
                 <div className="flex-1">
                   <Input
                     placeholder="e.g., 8 Inch - 1 Flavor"
@@ -385,31 +407,33 @@ export default function AddProductPage() {
                     onChange={(e) =>
                       updatePriceOption(index, "label", e.target.value)
                     }
-                    className="h-11"
+                    className="h-9 md:h-11"
                   />
                 </div>
-                <div className="w-40">
-                  <Input
-                    type="number"
-                    placeholder="Price (GH₵)"
-                    value={option.price}
-                    onChange={(e) =>
-                      updatePriceOption(index, "price", e.target.value)
-                    }
-                    className="h-11"
-                  />
+                <div className="flex gap-2">
+                  <div className="flex-1 md:w-40">
+                    <Input
+                      type="number"
+                      placeholder="Price (GH₵)"
+                      value={option.price}
+                      onChange={(e) =>
+                        updatePriceOption(index, "price", e.target.value)
+                      }
+                      className="h-9 md:h-11"
+                    />
+                  </div>
+                  {priceOptions.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removePriceOption(index)}
+                      className="h-9 w-9 md:h-11 md:w-11 text-red-500 hover:text-red-700 hover:bg-red-50"
+                    >
+                      <X className="w-4 h-4 md:w-5 md:h-5" />
+                    </Button>
+                  )}
                 </div>
-                {priceOptions.length > 1 && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removePriceOption(index)}
-                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                  >
-                    <X className="w-5 h-5" />
-                  </Button>
-                )}
               </div>
             ))}
 
@@ -417,35 +441,35 @@ export default function AddProductPage() {
               type="button"
               variant="outline"
               onClick={addPriceOption}
-              className="w-full h-12 border-2 border-dashed border-gray-300 hover:border-amber-400 hover:bg-amber-50"
+              className="w-full h-10 md:h-12 border border-dashed md:border-2 border-gray-300 hover:border-amber-400 hover:bg-amber-50 text-sm md:text-base"
             >
-              <Plus className="w-5 h-5 mr-2" />
+              <Plus className="w-4 h-4 md:w-5 md:h-5 mr-2" />
               Add Price Option
             </Button>
           </div>
         </div>
 
         {/* Available Flavors */}
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-8 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-              <span className="text-purple-600 text-xl">🍰</span>
+        <div className="bg-white rounded-lg md:rounded-xl border border-gray-200 md:border-2 p-4 md:p-6 lg:p-8 shadow-sm">
+          <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+            <div className="w-8 h-8 md:w-10 md:h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+              <span className="text-purple-600 text-lg md:text-xl">🍰</span>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900">
               Available Flavors
             </h2>
           </div>
 
-          <div className="space-y-6">
-            <div className="flex flex-wrap gap-3">
+          <div className="space-y-4 md:space-y-6">
+            <div className="flex flex-wrap gap-2 md:gap-3">
               {commonFlavors.map((flavor) => (
                 <button
                   key={flavor}
                   type="button"
                   onClick={() => toggleFlavor(flavor)}
-                  className={`px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                  className={`px-3 py-1.5 md:px-4 md:py-2.5 rounded-lg text-xs md:text-sm font-medium md:font-semibold transition-all ${
                     selectedFlavors.includes(flavor)
-                      ? "bg-amber-500 text-white shadow-md scale-105"
+                      ? "bg-amber-500 text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
@@ -454,7 +478,7 @@ export default function AddProductPage() {
               ))}
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex flex-col md:flex-row gap-2 md:gap-3">
               <Input
                 placeholder="Add custom flavor..."
                 value={customFlavor}
@@ -465,27 +489,27 @@ export default function AddProductPage() {
                     addCustomFlavor();
                   }
                 }}
-                className="h-12"
+                className="h-10 md:h-12 text-sm md:text-base"
               />
               <Button
                 type="button"
                 onClick={addCustomFlavor}
-                className="h-12 px-6"
+                className="h-10 md:h-12 px-4 md:px-6 text-sm md:text-base"
               >
                 Add
               </Button>
             </div>
 
             {selectedFlavors.length > 0 && (
-              <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
-                <p className="text-sm font-semibold text-amber-900 mb-3">
+              <div className="p-3 md:p-4 bg-amber-50 rounded-lg border border-amber-200">
+                <p className="text-xs md:text-sm font-semibold text-amber-900 mb-2 md:mb-3">
                   Selected Flavors ({selectedFlavors.length}):
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5 md:gap-2">
                   {selectedFlavors.map((flavor) => (
                     <span
                       key={flavor}
-                      className="px-4 py-2 bg-amber-200 text-amber-900 rounded-full text-sm font-medium"
+                      className="px-3 py-1 md:px-4 md:py-2 bg-amber-200 text-amber-900 rounded-full text-xs md:text-sm font-medium"
                     >
                       {flavor}
                     </span>
@@ -497,26 +521,26 @@ export default function AddProductPage() {
         </div>
 
         {/* Customization */}
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-8 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center">
-              <span className="text-pink-600 text-xl">✨</span>
+        <div className="bg-white rounded-lg md:rounded-xl border border-gray-200 md:border-2 p-4 md:p-6 lg:p-8 shadow-sm">
+          <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+            <div className="w-8 h-8 md:w-10 md:h-10 bg-pink-100 rounded-lg flex items-center justify-center">
+              <span className="text-pink-600 text-lg md:text-xl">✨</span>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900">
               Customization Options
             </h2>
           </div>
 
-          <div className="space-y-6">
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+          <div className="space-y-4 md:space-y-6">
+            <div className="flex items-center justify-between p-3 md:p-4 bg-gray-50 rounded-lg">
               <div>
                 <Label
                   htmlFor="customizationAvailable"
-                  className="text-base font-semibold"
+                  className="text-sm md:text-base font-semibold"
                 >
                   Customization Available
                 </Label>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-xs md:text-sm text-gray-600 mt-1">
                   Allow customers to customize this product
                 </p>
               </div>
@@ -533,7 +557,7 @@ export default function AddProductPage() {
               <div>
                 <Label
                   htmlFor="customizationNotes"
-                  className="text-base font-semibold"
+                  className="text-sm md:text-base font-semibold"
                 >
                   Customization Notes
                 </Label>
@@ -547,8 +571,8 @@ export default function AddProductPage() {
                     })
                   }
                   placeholder="e.g., Character cakes, edible prints, custom toppers..."
-                  rows={4}
-                  className="mt-2 text-base"
+                  rows={3}
+                  className="mt-2 text-sm md:text-base"
                 />
               </div>
             )}
@@ -556,22 +580,24 @@ export default function AddProductPage() {
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end gap-4 pb-8">
+        <div className="flex flex-col-reverse md:flex-row justify-end gap-3 md:gap-4 pt-4 md:pt-0">
           <Button
             type="button"
             variant="outline"
             onClick={() => router.back()}
             disabled={loading}
-            className="h-12 px-8 text-base"
+            className="h-11 md:h-12 px-6 text-sm md:text-base"
           >
             Cancel
           </Button>
           <Button
             type="submit"
             disabled={loading}
-            className="h-12 px-8 text-base bg-amber-600 hover:bg-amber-700"
+            className="h-11 md:h-12 px-6 text-sm md:text-base bg-amber-600 hover:bg-amber-700"
           >
-            {loading && <Loader2 className="w-5 h-5 mr-2 animate-spin" />}
+            {loading && (
+              <Loader2 className="w-4 h-4 md:w-5 md:h-5 mr-2 animate-spin" />
+            )}
             Create Product
           </Button>
         </div>

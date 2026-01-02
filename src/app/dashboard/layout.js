@@ -1,5 +1,7 @@
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata = {
@@ -7,27 +9,28 @@ export const metadata = {
   description: "Admin dashboard for managing bakery operations",
 };
 
-export default function DashboardLayout({ children }) {
-  return (
-    <div className="flex min-h-screen  bg-gray-50">
-      {/* Sidebar - Fixed */}
-      <div className="fixed">
-        <DashboardSidebar />
-      </div>
+export default async function DashboardLayout({ children }) {
+  const user = await currentUser();
 
-      {/* Main Content Area */}
-      <div className="flex flex-col flex-1">
-        {/* Header - Fixed */}
-        <div className="fixed w-full lg:pl-64 z-10">
-          <DashboardHeader />
-        </div>
-        {/* Main Content - Scrollable */}
-        <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto">
-          <div className="max-w-7xl mx-auto">{children}</div>
+  if (!user) redirect("/sign-in");
+  if (user.publicMetadata.isAdmin !== true) redirect("/unauthorized");
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* FIXED SIDEBAR */}
+      <DashboardSidebar />
+
+      {/* MAIN CONTENT AREA - ml-0 on mobile, ml-64 on desktop for sidebar */}
+      <div className="lg:ml-64 flex flex-col min-h-screen">
+        {/* STICKY HEADER */}
+        <DashboardHeader />
+
+        {/* MAIN CONTENT */}
+        <main className="flex-1 overflow-y-auto">
+          <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">{children}</div>
         </main>
       </div>
 
-      {/* Toaster */}
       <Toaster position="top-right" richColors />
     </div>
   );
