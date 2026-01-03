@@ -184,6 +184,7 @@ export async function PUT(request, { params }) {
 }
 
 // DELETE - Delete product (Admin only)
+// DELETE - Delete product (Admin only)
 export async function DELETE(request, { params }) {
   try {
     console.log("Starting product deletion...");
@@ -193,16 +194,19 @@ export async function DELETE(request, { params }) {
     const user = await currentUser();
     console.log("User:", user?.id, "Is Admin:", user?.publicMetadata?.isAdmin);
 
-    if (!user || user.publicMetadata.isAdmin !== true) {
+    if (!user || user.publicMetadata?.isAdmin !== true) {
       console.log("Unauthorized access attempt");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { slug } = params;
+    const { slug } = await params; // Note: need to await params in Next.js 14+
+
+    console.log("Deleting product with slug:", slug);
 
     const product = await Product.findOne({ slug });
 
     if (!product) {
+      console.log("Product not found for slug:", slug);
       return NextResponse.json(
         {
           error: "Product not found",
@@ -211,37 +215,57 @@ export async function DELETE(request, { params }) {
       );
     }
 
+    console.log("Product found:", product._id);
+
     // Delete images from ImageKit before deleting product
     if (product.images && product.images.length > 0) {
       console.log(`Deleting ${product.images.length} images from ImageKit...`);
       for (const imageUrl of product.images) {
-        // Extract fileId from ImageKit URL
-        const fileId = imageUrl.split("/").pop().split("?")[0];
         try {
+          // Extract fileId from ImageKit URL
+          // ImageKit URLs format: https://ik.imagekit.io/yourId/filename.jpg
+          const urlParts = imageUrl.split("/");
+          const filename = urlParts[urlParts.length - 1];
+          const fileId = filename.split("?")[0];
+
+          console.log("Attempting to delete image with ID:", fileId);
           await deleteFromImageKit(fileId);
           console.log("Image deleted from ImageKit:", fileId);
         } catch (error) {
-          console.error("Failed to delete image from ImageKit:", error);
+          console.error("Failed to delete image from ImageKit:", error.message);
           // Continue with product deletion even if image deletion fails
         }
       }
     }
 
-    await Product.findOneAndDelete({ slug });
+    // Delete the product from database
+    const deletedProduct = await Product.findOneAndDelete({ slug });
 
-    console.log("Product deleted successfully:", product._id);
+    if (!deletedProduct) {
+      console.log("Failed to delete product from database");
+      return NextResponse.json(
+        { error: "Failed to delete product" },
+        { status: 500 }
+      );
+    }
+
+    console.log("Product deleted successfully:", deletedProduct._id);
 
     return NextResponse.json(
       {
         success: true,
         message: "Product deleted successfully",
+        productId: deletedProduct._id,
       },
       { status: 200 }
     );
   } catch (error) {
     console.error("Error deleting product:", error);
     return NextResponse.json(
-      { error: "Internal server error: " + error.message },
+      {
+        error: "Internal server error",
+        message: error.message,
+      },
       { status: 500 }
     );
   }

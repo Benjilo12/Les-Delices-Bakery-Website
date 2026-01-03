@@ -23,7 +23,13 @@ const ProductSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ["Birthday Cakes", "Cupcakes", "Cake Loaves", "Pastries & Snacks"],
+      enum: [
+        "Birthday Cakes",
+        "Wedding Cakes",
+        "Cupcakes",
+        "Cake Loaves",
+        "Pastries & Snacks",
+      ],
       required: true,
     },
     description: {
@@ -58,6 +64,7 @@ const ProductSchema = new mongoose.Schema(
 );
 
 // ✅ FIXED: Use mongoose.models, not undefined "models"
-const Product = mongoose.models.Product || mongoose.model("Product", ProductSchema);
+const Product =
+  mongoose.models.Product || mongoose.model("Product", ProductSchema);
 
 export default Product;

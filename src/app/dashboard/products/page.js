@@ -20,6 +20,7 @@ import Image from "next/image";
 
 const categories = [
   "Birthday Cakes",
+  "Wedding Cakes",
   "Cupcakes",
   "Cake Loaves",
   "Pastries & Snacks",
@@ -39,6 +40,18 @@ const commonFlavors = [
   "Orange",
 ];
 
+// Function to reset all form states
+const resetForm = () => {
+  return {
+    name: "",
+    category: "",
+    description: "",
+    customizationAvailable: false,
+    customizationNotes: "",
+    isAvailable: true,
+  };
+};
+
 export default function AddProductPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -46,14 +59,7 @@ export default function AddProductPage() {
   const [imagePreviews, setImagePreviews] = useState([]);
 
   // Form state
-  const [formData, setFormData] = useState({
-    name: "",
-    category: "",
-    description: "",
-    customizationAvailable: false,
-    customizationNotes: "",
-    isAvailable: true,
-  });
+  const [formData, setFormData] = useState(resetForm());
 
   // Price options state
   const [priceOptions, setPriceOptions] = useState([{ label: "", price: "" }]);
@@ -117,6 +123,16 @@ export default function AddProductPage() {
     }
   };
 
+  // Reset all form fields
+  const resetAllFields = () => {
+    setFormData(resetForm());
+    setPriceOptions([{ label: "", price: "" }]);
+    setSelectedFlavors([]);
+    setImages([]);
+    setImagePreviews([]);
+    setCustomFlavor("");
+  };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -124,6 +140,17 @@ export default function AddProductPage() {
 
     const loadingToast = toast.loading("Creating product...", {
       description: "Please wait while we upload your product.",
+      style: {
+        background: "linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)",
+        border: "1px solid #fbbf24",
+        color: "#92400e",
+        fontWeight: 600,
+      },
+      icon: (
+        <div className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center">
+          <Loader2 className="w-4 h-4 text-white animate-spin" />
+        </div>
+      ),
     });
 
     try {
@@ -157,17 +184,62 @@ export default function AddProductPage() {
       toast.dismiss(loadingToast);
 
       if (response.ok) {
+        // Show success toast with custom styling
         toast.success("Product added successfully!", {
           description: `${formData.name} has been added to your menu.`,
           duration: 4000,
+          style: {
+            background: "linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)",
+            border: "1px solid #10b981",
+            color: "#065f46",
+            fontWeight: 600,
+          },
+          icon: (
+            <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+              <svg
+                className="w-4 h-4 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+          ),
         });
+
+        // Reset all form fields
+        resetAllFields();
+
+        // Option 1: Redirect after delay
         setTimeout(() => {
           router.push("/dashboard/products");
-        }, 1000);
+        }, 1500);
+
+        // Option 2: Stay on page with reset form (uncomment if you want to stay)
+        // setTimeout(() => {
+        //   // Form is already reset, user can add another product
+        // }, 1000);
       } else {
         toast.error("Failed to create product", {
           description: data.error || "Something went wrong. Please try again.",
           duration: 5000,
+          style: {
+            background: "linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)",
+            border: "1px solid #ef4444",
+            color: "#7f1d1d",
+            fontWeight: 600,
+          },
+          icon: (
+            <div className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center">
+              <X className="w-4 h-4 text-white" />
+            </div>
+          ),
         });
       }
     } catch (error) {
@@ -177,6 +249,17 @@ export default function AddProductPage() {
         description:
           "Unable to create product. Please check your connection and try again.",
         duration: 5000,
+        style: {
+          background: "linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)",
+          border: "1px solid #ef4444",
+          color: "#7f1d1d",
+          fontWeight: 600,
+        },
+        icon: (
+          <div className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center">
+            <X className="w-4 h-4 text-white" />
+          </div>
+        ),
       });
     } finally {
       setLoading(false);
