@@ -4,12 +4,31 @@ import Blog from "@/models/blog";
 import { currentUser } from "@clerk/nextjs/server";
 import { uploadToImageKit, deleteFromImageKit } from "@/lib/imagekit";
 
+// Helper function to generate slug
+function generateSlug(title) {
+  return title
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/--+/g, "-")
+    .trim();
+}
+
+// Helper function to calculate read time
+function calculateReadTime(content) {
+  const wordsPerMinute = 200;
+  const wordCount = content.trim().split(/\s+/).length;
+  return Math.ceil(wordCount / wordsPerMinute);
+}
+
 // GET - Fetch single blog by slug (No auth required)
 export async function GET(request, { params }) {
   try {
     await connect();
 
-    const { slug } = params;
+    // FIX: Add await to unwrap params Promise
+    const { slug } = await params;
+
     const user = await currentUser();
     const isAdmin = user?.publicMetadata?.isAdmin === true;
 
@@ -72,7 +91,9 @@ export async function PUT(request, { params }) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { slug } = params;
+    // FIX: Add await to unwrap params Promise
+    const { slug } = await params;
+
     const formData = await request.formData();
 
     const title = formData.get("title");
@@ -197,6 +218,7 @@ export async function PUT(request, { params }) {
   }
 }
 
+// DELETE - Delete blog (Admin only)
 export async function DELETE(request, { params }) {
   try {
     console.log("Starting blog deletion...");
@@ -211,11 +233,15 @@ export async function DELETE(request, { params }) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { slug } = params;
+    // FIX: Add await to unwrap params Promise
+    const { slug } = await params;
+
+    console.log("Deleting blog with slug:", slug);
 
     const blog = await Blog.findOne({ slug });
 
     if (!blog) {
+      console.log("Blog not found with slug:", slug);
       return NextResponse.json({ error: "Blog not found" }, { status: 404 });
     }
 

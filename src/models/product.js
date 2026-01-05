@@ -1,4 +1,5 @@
 // models/product.model.js
+// models/product.model.js
 import mongoose from "mongoose";
 
 const PriceOptionSchema = new mongoose.Schema(
@@ -25,7 +26,7 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       enum: [
         "Birthday Cakes",
-        "Wedding Cakes",
+        "Wedding Cakes", // Added this line
         "Cupcakes",
         "Cake Loaves",
         "Pastries & Snacks",
@@ -63,7 +64,6 @@ const ProductSchema = new mongoose.Schema(
   }
 );
 
-// ✅ FIXED: Use mongoose.models, not undefined "models"
 const Product =
   mongoose.models.Product || mongoose.model("Product", ProductSchema);
 

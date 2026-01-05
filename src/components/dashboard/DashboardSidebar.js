@@ -10,10 +10,9 @@ import {
   Package,
   FileText,
   Users,
-  Settings,
+  FolderKanban,
   Menu,
   X,
-  ChevronLeft,
 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 
@@ -27,14 +26,17 @@ const menuItems = [
   },
   { label: "Products", icon: CakeSlice, href: "/dashboard/products" },
   { label: "Inventory", icon: Package, href: "/dashboard/inventory" },
-  { label: "Blog", icon: FileText, href: "/dashboard/blog" },
+  { label: "Blog", icon: FileText, href: "/dashboard/blog/add" },
+  {
+    label: "Manage blogs",
+    icon: FolderKanban,
+    href: "/dashboard/blog/manage-blogs",
+  },
   { label: "Customers", icon: Users, href: "/dashboard/customers" },
-  { label: "Settings", icon: Settings, href: "/dashboard/settings" },
 ];
 
 export default function DashboardSidebar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
 
   // Get the current user from Clerk
@@ -58,31 +60,29 @@ export default function DashboardSidebar() {
         />
       )}
 
-      {/* SIDEBAR */}
+      {/* SIDEBAR - Fixed width (64 = w-64 = 256px) */}
       <aside
         className={`
           fixed inset-y-0 left-0 z-50
           flex flex-col
           bg-white border-r border-gray-200
-          transition-all duration-300
+          transition-transform duration-300
           h-screen
           shadow-lg
+          w-64
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-          ${isCollapsed ? "w-20" : "w-64"}
         `}
       >
         {/* HEADER */}
         <div className="h-16 px-4 flex items-center justify-between border-b">
-          {!isCollapsed && (
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center text-white font-bold">
-                LD
-              </div>
-              <span className="font-serif text-lg text-amber-900">
-                Les Délices
-              </span>
-            </Link>
-          )}
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center text-white font-bold">
+              LD
+            </div>
+            <span className="font-serif text-lg text-amber-900">
+              Les Délices
+            </span>
+          </Link>
 
           {/* MOBILE CLOSE */}
           <button
@@ -90,18 +90,6 @@ export default function DashboardSidebar() {
             className="lg:hidden p-2 rounded hover:bg-gray-100"
           >
             <X className="w-5 h-5" />
-          </button>
-
-          {/* DESKTOP COLLAPSE */}
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="hidden lg:block p-2 rounded hover:bg-gray-100"
-          >
-            <ChevronLeft
-              className={`w-5 h-5 transition-transform ${
-                isCollapsed ? "rotate-180" : ""
-              }`}
-            />
           </button>
         </div>
 
@@ -124,19 +112,14 @@ export default function DashboardSidebar() {
                           ? "bg-amber-50 text-amber-900 border-r-2 border-amber-500"
                           : "text-gray-700 hover:bg-gray-100"
                       }
-                      ${isCollapsed ? "justify-center" : ""}
                     `}
                   >
                     <Icon className="w-5 h-5" />
-                    {!isCollapsed && (
-                      <>
-                        <span className="flex-1">{item.label}</span>
-                        {item.badge && (
-                          <span className="text-xs bg-amber-100 px-2 py-0.5 rounded-full">
-                            {item.badge}
-                          </span>
-                        )}
-                      </>
+                    <span className="flex-1">{item.label}</span>
+                    {item.badge && (
+                      <span className="text-xs bg-amber-100 px-2 py-0.5 rounded-full">
+                        {item.badge}
+                      </span>
                     )}
                   </Link>
                 </li>
@@ -147,48 +130,33 @@ export default function DashboardSidebar() {
 
         {/* FOOTER */}
         <div className="p-4 border-t">
-          {!isCollapsed && (
-            <div className="bg-amber-50 p-3 rounded-lg">
-              {isLoaded && user ? (
-                <>
-                  <p className="text-sm font-semibold text-gray-900 truncate">
-                    {user.fullName ||
-                      user.firstName ||
-                      user.emailAddresses[0]?.emailAddress ||
-                      "Admin User"}
-                  </p>
-                  <p className="text-xs text-gray-600 mt-1">
-                    {/* Display role from public metadata or default to "Admin" */}
-                    {user.publicMetadata?.role === "super_admin"
-                      ? "Super Admin"
-                      : user.publicMetadata?.role === "manager"
-                      ? "Manager"
-                      : "Admin"}
-                  </p>
-                </>
-              ) : (
-                <>
-                  <div className="animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-
-          {/* Show user initials/avatar when sidebar is collapsed */}
-          {isCollapsed && isLoaded && user && (
-            <div className="flex justify-center">
-              <div className="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center text-white font-semibold text-sm">
-                {user.firstName?.charAt(0) ||
-                  user.emailAddresses[0]?.emailAddress
-                    ?.charAt(0)
-                    .toUpperCase() ||
-                  "A"}
-              </div>
-            </div>
-          )}
+          <div className="bg-amber-50 p-3 rounded-lg">
+            {isLoaded && user ? (
+              <>
+                <p className="text-sm font-semibold text-gray-900 truncate">
+                  {user.fullName ||
+                    user.firstName ||
+                    user.emailAddresses[0]?.emailAddress ||
+                    "Admin User"}
+                </p>
+                <p className="text-xs text-gray-600 mt-1">
+                  {/* Display role from public metadata or default to "Admin" */}
+                  {user.publicMetadata?.role === "super_admin"
+                    ? "Super Admin"
+                    : user.publicMetadata?.role === "manager"
+                    ? "Manager"
+                    : "Admin"}
+                </p>
+              </>
+            ) : (
+              <>
+                <div className="animate-pulse">
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </aside>
     </>

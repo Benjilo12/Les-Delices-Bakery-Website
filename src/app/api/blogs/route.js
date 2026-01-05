@@ -35,6 +35,11 @@ export async function GET(request) {
     const search = searchParams.get("search");
     const tag = searchParams.get("tag");
 
+    // Pagination parameters
+    const page = parseInt(searchParams.get("page")) || 1;
+    const limit = parseInt(searchParams.get("limit")) || 10;
+    const skip = (page - 1) * limit;
+
     // Build query
     let query = {};
 
@@ -59,12 +64,17 @@ export async function GET(request) {
       query.tags = tag;
     }
 
-    const blogs = await Blog.find(query).sort({
-      publishedAt: -1,
-      createdAt: -1,
-    });
+    // Get total count for pagination
+    const totalBlogs = await Blog.countDocuments(query);
+    const totalPages = Math.ceil(totalBlogs / limit);
 
-    // Get the latest blog
+    // Fetch blogs with pagination
+    const blogs = await Blog.find(query)
+      .sort({ publishedAt: -1, createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    // Get the latest blog (first one from sorted results)
     const latestBlog = blogs.length > 0 ? blogs[0] : null;
 
     return NextResponse.json(
@@ -72,7 +82,14 @@ export async function GET(request) {
         success: true,
         blogs,
         latestBlog,
-        count: blogs.length,
+        pagination: {
+          currentPage: page,
+          totalPages,
+          totalBlogs,
+          limit,
+          hasNextPage: page < totalPages,
+          hasPrevPage: page > 1,
+        },
       },
       { status: 200 }
     );

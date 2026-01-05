@@ -20,7 +20,7 @@ import Image from "next/image";
 
 const categories = [
   "Birthday Cakes",
-  "Wedding Cakes",
+  "Wedding Cakes", // Add this
   "Cupcakes",
   "Cake Loaves",
   "Pastries & Snacks",

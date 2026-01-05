@@ -26,9 +26,11 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import Image from "next/image";
 
+//
 const categories = [
   "All Categories",
   "Birthday Cakes",
+  "Wedding Cakes", // Add this
   "Cupcakes",
   "Cake Loaves",
   "Pastries & Snacks",
