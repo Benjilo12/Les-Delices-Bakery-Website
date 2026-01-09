@@ -20,3 +20,130 @@ body {
   box-sizing: border-box;
   margin: 0;
 }
+
+/* Custom Animations */
+/* Rising float animation (coming out effect) */
+/* Higher float animation */
+/* Slow float animation for sprinkles */
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-8px) translateX(3px);
+  }
+  50% {
+    transform: translateY(-12px) translateX(-3px);
+  }
+  75% {
+    transform: translateY(-8px) translateX(2px);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Existing animations remain */
+@keyframes float-high {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+    opacity: 1;
+  }
+  25% {
+    transform: translateY(-25px) translateX(5px) rotate(3deg);
+    opacity: 0.95;
+  }
+  50% {
+    transform: translateY(-40px) translateX(-5px) rotate(-2deg);
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(-25px) translateX(2px) rotate(1deg);
+    opacity: 0.95;
+  }
+}
+
+.animate-float-high {
+  animation: float-high 5s ease-in-out infinite;
+}
+
+/* Add more delay classes for staggered animations */
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-500 {
+  animation-delay: 500ms;
+}
+
+.animation-delay-700 {
+  animation-delay: 700ms;
+}
+
+.animation-delay-800 {
+  animation-delay: 800ms;
+}
+
+.animation-delay-900 {
+  animation-delay: 900ms;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1000ms;
+}
+
+.animation-delay-1200 {
+  animation-delay: 1200ms;
+}
+
+.animation-delay-1400 {
+  animation-delay: 1400ms;
+}
+
+.animation-delay-1500 {
+  animation-delay: 1500ms;
+}
+
+.animation-delay-1600 {
+  animation-delay: 1600ms;
+}
+
+.animation-delay-1800 {
+  animation-delay: 1800ms;
+}
+
+.animation-delay-1900 {
+  animation-delay: 1900ms;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2000ms;
+}
+
+.animation-delay-2100 {
+  animation-delay: 2100ms;
+}
+
+.animation-delay-2200 {
+  animation-delay: 2200ms;
+}
