@@ -1,5 +1,6 @@
 import React from "react";
 import { Truck, Croissant, ChefHat, Cake } from "lucide-react";
+import { Highlighter } from "./ui/highlighter";
 
 export default function LesDelicesBanner() {
   return (
@@ -66,7 +67,10 @@ export default function LesDelicesBanner() {
         {/* Title */}
         <div className="text-center mb-5">
           <h1 className="text-2xl md:text-4xl font-semibold text-gray-800 tracking-wider md:tracking-widest">
-            AUTHENTIC FRENCH PASTRIES BY LES DÉLICES
+            AUTHENTIC FRENCH PASTRIES BY
+            <Highlighter action="highlight" color="#FFD54F">
+              <span className="text-pink-900">LES DÉLICES</span>
+            </Highlighter>
           </h1>
         </div>
 
@@ -74,9 +78,15 @@ export default function LesDelicesBanner() {
         <div className="text-center text-gray-600 mb-10 md:mb-12 max-w-4xl mx-auto">
           <p className="text-sm md:text-base leading-relaxed">
             Accra&apos; home for artisan baking. Led by
-            <span className="font-semibold">Master Pastry Chef</span>, we refuse
-            industrial shortcuts. Every pastry is crafted using traditional
-            French recipes, 100% pure butter, and premium imported ingredients.
+            <span className="font-semibold ml-1 text-pink-700">
+              {" "}
+              <Highlighter action="highlight" color="#FFD54F">
+                Akorfa{" "}
+              </Highlighter>
+            </span>
+            , we refuse industrial shortcuts. Every pastry is crafted using
+            traditional French recipes, 100% pure butter, and premium imported
+            ingredients.
           </p>
         </div>
 
@@ -84,7 +94,7 @@ export default function LesDelicesBanner() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 mb-8">
           {/* Signature Celebrations */}
           <div className="text-center">
-            <h2 className="text-lg md:text-xl font-semibold text-slate-700 mb-3 md:mb-4 uppercase tracking-wide">
+            <h2 className="text-lg md:text-xl font-semibold text-amber-700 mb-3 md:mb-4 uppercase tracking-wide">
               Signature Celebrations
             </h2>
             <p className="text-sm md:text-base text-gray-600 leading-relaxed">
@@ -96,20 +106,24 @@ export default function LesDelicesBanner() {
 
           {/* Bespoke & Custom */}
           <div className="text-center">
-            <h2 className="text-lg md:text-xl font-semibold text-slate-700 mb-3 md:mb-4 uppercase tracking-wide">
+            <h2 className="text-lg md:text-xl font-semibold text-amber-700 mb-3 md:mb-4 uppercase tracking-wide">
               Bespoke & Custom
             </h2>
             <p className="text-sm md:text-base text-gray-600 leading-relaxed">
               Have a vision? Our chefs specialize in{" "}
-              <span className="font-semibold">custom cake design</span>. From
-              elegant multi-tier creations to personalized theme cakes, we turn
-              imagination into reality.
+              <span className="font-semibold  text-amber-500">
+                <Highlighter action="underline" color="#E91E63">
+                  custom cake design
+                </Highlighter>
+              </span>
+              . From elegant multi-tier creations to personalized theme cakes,
+              we turn imagination into reality.
             </p>
           </div>
 
           {/* Zero Preservatives */}
           <div className="text-center">
-            <h2 className="text-lg md:text-xl font-semibold text-slate-700 mb-3 md:mb-4 uppercase tracking-wide">
+            <h2 className="text-lg md:text-xl font-semibold text-amber-700 mb-3 md:mb-4 uppercase tracking-wide">
               Zero Preservatives
             </h2>
             <p className="text-sm md:text-base text-gray-600 leading-relaxed">
