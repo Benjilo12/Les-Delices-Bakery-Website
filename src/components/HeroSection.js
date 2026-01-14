@@ -5,7 +5,7 @@ import { Highlighter } from "./ui/highlighter";
 
 export default function HeroSection() {
   return (
-    <section className="relative bg-linear-to-br from-amber-50 to-amber-100 overflow-hidden min-h-[70vh] md:min-h-[70vh]">
+    <section className="relative bg-linear-to-br from-amber-50 to-amber-100 overflow-hidden min-h-[70vh] md:min-h-0">
       {/* Decorative elements - Hidden on mobile to save space */}
       <div className="hidden md:block absolute top-0 left-0 w-64 h-64 bg-amber-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
       <div className="hidden md:block absolute top-0 right-0 w-64 h-64 bg-amber-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>

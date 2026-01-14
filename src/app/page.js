@@ -1,4 +1,5 @@
 import HeroSection from "@/components/HeroSection";
+import LesDelicesBanner from "@/components/LesDelicesBanner";
 import Navbar from "@/components/Navbar";
 import Topbar from "@/components/Topbar";
 
@@ -9,6 +10,7 @@ function page() {
       <Navbar />
       <div>
         <HeroSection />
+        <LesDelicesBanner />
       </div>
     </>
   );
