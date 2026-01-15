@@ -9,17 +9,12 @@ import { useState } from "react";
 export default function ProductCard({ product }) {
   const [isFavorite, setIsFavorite] = useState(false);
 
-  // Get the first price from priceOptions array
-  const firstPriceOption = product.priceOptions?.[0];
-  const price = firstPriceOption?.price || product.price || 0;
-
-  // Format price with currency symbol
+  const price = product.priceOptions?.[0]?.price || product.price || 0;
   const formattedPrice = `₵${price.toLocaleString("en-GH", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}`;
 
-  // Get product code from slug or ID
   const productCode =
     product.slug?.toUpperCase() ||
     product._id?.slice(-6).toUpperCase() ||
@@ -32,24 +27,21 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <div className="group bg-white">
-      {/* Product Image Container */}
-      <div className="relative aspect-square overflow-hidden mb-6 bg-gray-50">
-        {/* New Arrival Badge - Top Left */}
-        <div className="absolute top-4 left-0 z-10 bg-amber-500 text-white px-4 py-1.5 text-xs font-medium italic">
+    <div className="group bg-white w-full">
+      {/* Image Container - Aspect Square to keep size manageable for 4-per-row */}
+      <div className="relative aspect-square overflow-hidden mb-4 bg-gray-50 rounded-sm">
+        {/* New Arrival Badge */}
+        <div className="absolute top-3 left-0 z-10 bg-amber-500 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest italic">
           New Arrival
         </div>
 
-        {/* Love Icon - Top Right */}
         <button
           onClick={toggleFavorite}
-          className="absolute top-4 right-4 z-10 bg-white rounded-full p-2.5 shadow-sm hover:shadow-md transition-all"
+          className="absolute top-3 right-3 z-10 bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-sm transition-all cursor-pointer"
         >
           <Heart
-            className={`w-5 h-5 transition-all ${
-              isFavorite
-                ? "fill-red-500 text-red-500"
-                : "text-gray-400 hover:text-red-500"
+            className={`w-4 h-4 ${
+              isFavorite ? "fill-red-500 text-red-500" : "text-gray-400"
             }`}
           />
         </button>
@@ -59,41 +51,42 @@ export default function ProductCard({ product }) {
             src={product.images[0]}
             alt={product.name}
             fill
-            className="object-cover"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, 25vw"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <div className="text-center">
-              <span className="text-4xl mb-2">🎂</span>
-              <p className="text-sm text-gray-400">No Image</p>
-            </div>
+          <div className="w-full h-full flex items-center justify-center text-2xl">
+            🎂
           </div>
         )}
       </div>
 
-      {/* Product Details */}
+      {/* Details */}
       <div className="px-1">
-        {/* Product Code and Arrow */}
-        <div className="flex items-center justify-between mb-2">
-          <div className="text-sm text-gray-600 font-normal">{productCode}</div>
+        <div className="flex items-center justify-between mb-1">
+          <div className="text-[10px] text-gray-500 font-medium tracking-wider uppercase">
+            {productCode}
+          </div>
           <Link
             href={`/products/${product.slug || product._id}`}
-            className="flex items-center justify-center w-8 h-8 rounded-full border border-gray-300 hover:border-amber-900 hover:bg-amber-900 transition-all group-hover:border-amber-900"
+            className="flex items-center justify-center w-7 h-7 rounded-full border border-gray-200 hover:bg-amber-900 hover:text-white transition-all"
           >
-            <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-white transition-colors" />
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
-        {/* Product Name */}
+        {/* Shortened Name: font-medium and single line truncation */}
         <Link href={`/products/${product.slug || product._id}`}>
-          <h3 className="text-base font-normal text-amber-900 mb-1 line-clamp-2 min-h-12 hover:text-amber-600 transition-colors">
+          <h3
+            className="text-sm font-medium text-gray-900 mb-1 truncate hover:text-amber-700 transition-colors"
+            title={product.name}
+          >
             {product.name}
           </h3>
         </Link>
 
         {/* Price */}
-        <div className="text-lg font-normal text-amber-700">
+        <div className="text-base font-bold text-amber-800">
           {formattedPrice}
         </div>
       </div>
