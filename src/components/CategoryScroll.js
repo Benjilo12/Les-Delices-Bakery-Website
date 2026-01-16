@@ -1,6 +1,7 @@
 // src/components/CategoryScroll.jsx
 import Image from "next/image";
 import Link from "next/link";
+import { Highlighter } from "./ui/highlighter";
 
 const categories = [
   { name: "Birthday Cakes", image: "/images/cakeloaf.jpg" },
@@ -12,7 +13,7 @@ const categories = [
 
 export default function CategoryScroll() {
   return (
-    <section className="py-12 bg-white">
+    <section className="py-5 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header Section - Now in a Row */}
         <div className="flex flex-col items-center mb-12">
@@ -33,8 +34,10 @@ export default function CategoryScroll() {
           </div>
 
           {/* Subtitle */}
-          <p className="text-gray-400 tracking-[0.2em] uppercase text-[10px] md:text-xs font-medium">
-            Bangkok Same Day Delivery
+          <p className="text-pink-600 tracking-[0.2em] uppercase text-[10px] md:text-xs font-medium">
+            <Highlighter action="hightlight" color="#FFD54F">
+              Accra 48hours Delivery
+            </Highlighter>
           </p>
         </div>
 
