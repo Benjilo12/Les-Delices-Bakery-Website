@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import ProductCard from "./ProductCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Highlighter } from "./ui/highlighter";
+import Link from "next/link";
 
 export default function ProductCarousel() {
   const [products, setProducts] = useState([]);
@@ -165,9 +166,12 @@ export default function ProductCarousel() {
 
         {/* View Collection Button */}
         <div className="text-center mt-16">
-          <button className="bg-amber-700 hover:bg-amber-800 text-white px-8 py-4 text-sm font-medium tracking-widest uppercase transition-all rounded cursor-pointer shadow-lg hover:shadow-xl active:translate-y-0.5">
+          <Link
+            href="/menu"
+            className="bg-amber-700 hover:bg-amber-800 text-white px-8 py-4 text-sm font-medium tracking-widest uppercase transition-all rounded cursor-pointer shadow-lg hover:shadow-xl active:translate-y-0.5"
+          >
             VIEW SIGNATURE COLLECTION
-          </button>
+          </Link>
         </div>
       </div>
     </section>

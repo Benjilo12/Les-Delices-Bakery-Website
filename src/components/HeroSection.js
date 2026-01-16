@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Highlighter } from "./ui/highlighter";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -46,9 +47,12 @@ export default function HeroSection() {
               <button className="px-6 py-2.5 md:px-8 md:py-3 lg:px-10 lg:py-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 text-sm md:text-base">
                 Order Now
               </button>
-              <button className="px-6 py-2.5 md:px-8 md:py-3 lg:px-10 lg:py-3 bg-white hover:bg-amber-50 text-amber-700 font-semibold rounded-full border-2 border-amber-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 text-sm md:text-base">
+              <Link
+                href="/menu"
+                className="px-6 py-2.5 md:px-8 md:py-3 lg:px-10 lg:py-3 bg-white hover:bg-amber-50 text-amber-700 font-semibold rounded-full border-2 border-amber-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 text-sm md:text-base"
+              >
                 View Menu
-              </button>
+              </Link>
             </div>
 
             {/* Features/Stats - Hidden on mobile, shown on md+ */}

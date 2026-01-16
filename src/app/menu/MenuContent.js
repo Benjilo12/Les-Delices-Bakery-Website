@@ -36,7 +36,7 @@ export default function MenuContent() {
     totalProducts: 0,
   });
 
-  const PRODUCTS_PER_PAGE = 8;
+  const PRODUCTS_PER_PAGE = 12;
 
   useEffect(() => {
     fetchProducts();
@@ -97,7 +97,7 @@ export default function MenuContent() {
                   <button
                     key={cat.name}
                     onClick={() => updateParams(cat.name, null)}
-                    className={`group relative whitespace-nowrap px-5 py-3.5 text-left text-sm font-medium transition-all duration-200 rounded-lg
+                    className={`group relative whitespace-nowrap px-5 py-3.5 text-left text-sm font-medium transition-all duration-200 rounded-lg cursor-pointer
                       ${
                         currentCategory === cat.name
                           ? "bg-amber-700 text-white shadow-md shadow-amber-700/30"

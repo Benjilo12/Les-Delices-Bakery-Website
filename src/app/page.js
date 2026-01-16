@@ -1,3 +1,4 @@
+import CategoryScroll from "@/components/CategoryScroll";
 import HeroSection from "@/components/HeroSection";
 import LesDelicesBanner from "@/components/LesDelicesBanner";
 import Navbar from "@/components/Navbar";
@@ -12,6 +13,7 @@ function page() {
       <div>
         <HeroSection />
         <LesDelicesBanner />
+        <CategoryScroll />
         <ProductCarousel />
       </div>
     </>
