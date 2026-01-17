@@ -1,3 +1,4 @@
+import AboutSection from "@/components/AboutSection";
 import CategoryScroll from "@/components/CategoryScroll";
 import HeroSection from "@/components/HeroSection";
 import LesDelicesBanner from "@/components/LesDelicesBanner";
@@ -15,6 +16,7 @@ function page() {
         <LesDelicesBanner />
         <CategoryScroll />
         <ProductCarousel />
+        <AboutSection />
       </div>
     </>
   );

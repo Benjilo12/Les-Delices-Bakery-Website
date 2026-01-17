@@ -6,6 +6,7 @@ import ProductCard from "./ProductCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Highlighter } from "./ui/highlighter";
 import Link from "next/link";
+import ProductSkeleton from "./ProductSkeleton";
 
 export default function ProductCarousel() {
   const [products, setProducts] = useState([]);
@@ -54,21 +55,8 @@ export default function ProductCarousel() {
     setCurrentSlide((prev) => (prev <= 0 ? maxOffset : prev - 1));
   };
 
-  // Skeleton Card UI
-  const ProductSkeleton = () => (
-    <div className="w-full animate-pulse px-2">
-      <div className="aspect-square bg-gray-200 rounded-sm mb-4"></div>
-      <div className="flex justify-between mb-2">
-        <div className="h-3 bg-gray-200 rounded w-1/4"></div>
-        <div className="h-6 w-6 bg-gray-200 rounded-full"></div>
-      </div>
-      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-      <div className="h-5 bg-gray-200 rounded w-1/2"></div>
-    </div>
-  );
-
   return (
-    <section className="py-10 bg-gray-50 overflow-hidden w-full">
+    <section className="py-15 bg-gray-50 overflow-hidden w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="flex items-center justify-center gap-4 mb-12">
