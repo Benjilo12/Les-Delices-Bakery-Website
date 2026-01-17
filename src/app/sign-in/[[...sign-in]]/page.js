@@ -9,7 +9,7 @@ export default function SignInPage() {
         Changed lg:w-[30%] to lg:w-[40%] for better spacing on 14-inch screens
         Added h-screen and overflow-y-auto so the form is always accessible
       */}
-      <div className="w-full lg:w-[40%] xl:w-[35%] h-screen overflow-y-auto flex flex-col justify-center items-center lg:items-start p-6 sm:p-10 lg:pl-12 xl:pl-20 bg-white">
+      <div className="w-full lg:w-[40%] xl:w-[40%] h-screen overflow-y-auto flex flex-col justify-center items-center lg:items-start p-6 sm:p-10 lg:pl-12 xl:pl-20 bg-white">
         <div className="w-full max-w-100 py-8">
           {/* Logo */}
           <div className="mb-8 text-center lg:text-left">
@@ -67,7 +67,8 @@ export default function SignInPage() {
               and{" "}
               <a href="/privacy" className="text-amber-600 hover:underline">
                 Privacy Policy
-              </a>.
+              </a>
+              .
             </p>
           </div>
         </div>
@@ -76,7 +77,7 @@ export default function SignInPage() {
       {/* RIGHT SIDE: Image 
         Width adjusted to lg:w-[60%] to accommodate the wider left side
       */}
-      <div className="hidden lg:flex lg:w-[60%] xl:w-[65%] relative overflow-hidden h-screen">
+      <div className="hidden lg:flex lg:w-[60%] xl:w-[60%] relative overflow-hidden h-screen">
         <div className="absolute inset-0">
           <Image
             src="/images/bakery-background.jpg"
@@ -96,7 +97,9 @@ export default function SignInPage() {
             <blockquote className="text-2xl xl:text-4xl font-serif italic text-white leading-tight mb-10">
               “At{" "}
               <span className="text-amber-500">
-                <Highlighter action="hightlight" color="#E91E63">Les Délices By Akorfa</Highlighter>
+                <Highlighter action="hightlight" color="#E91E63">
+                  Les Délices By Akorfa
+                </Highlighter>
               </span>
               , we believe life’s best moments deserve a sweet touch that is
               both delicious and thoughtfully crafted.”
@@ -125,19 +128,19 @@ export default function SignInPage() {
             {/* Features - adjusted gap for smaller laptop screens */}
             <div className="mt-10 grid grid-cols-2 gap-4 xl:gap-6">
               <div className="flex items-center gap-3 text-amber-50 text-sm xl:text-base">
-                <span className="shrink-0 text-lg">🎂</span> 
+                <span className="shrink-0 text-lg">🎂</span>
                 <span className="font-light">Artisanal Quality</span>
               </div>
               <div className="flex items-center gap-3 text-amber-50 text-sm xl:text-base">
-                <span className="shrink-0 text-lg">🌿</span> 
+                <span className="shrink-0 text-lg">🌿</span>
                 <span className="font-light">Wholesome Ingredients</span>
               </div>
               <div className="flex items-center gap-3 text-amber-50 text-sm xl:text-base">
-                <span className="shrink-0 text-lg">🎨</span> 
+                <span className="shrink-0 text-lg">🎨</span>
                 <span className="font-light">Custom Designs</span>
               </div>
               <div className="flex items-center gap-3 text-amber-50 text-sm xl:text-base">
-                <span className="shrink-0 text-lg">🚚</span> 
+                <span className="shrink-0 text-lg">🚚</span>
                 <span className="font-light">Handcrafted in Accra</span>
               </div>
             </div>
