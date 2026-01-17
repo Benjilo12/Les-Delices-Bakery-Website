@@ -8,7 +8,8 @@ export default function UserMenu() {
   return (
     <>
       <SignedOut>
-        <SignInButton mode="modal">
+        {/* Removed mode="modal" to force a redirect to your custom sign-in page */}
+        <SignInButton>
           <Button
             variant="ghost"
             size="sm"
