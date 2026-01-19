@@ -1,6 +1,7 @@
 import { Highlighter } from "@/components/ui/highlighter";
 import { SignIn } from "@clerk/nextjs";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function SignInPage() {
   return (
@@ -17,9 +18,12 @@ export default function SignInPage() {
               <div className="w-8 h-8 bg-linear-to-r from-amber-600 to-amber-800 rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-bold">LD</span>
               </div>
-              <h1 className="text-2xl font-serif italic text-amber-900">
+              <Link
+                href="/"
+                className="text-2xl font-serif italic text-amber-900"
+              >
                 Les Délices
-              </h1>
+              </Link>
             </div>
             <p className="text-gray-600 text-sm">Join our sweet community</p>
           </div>

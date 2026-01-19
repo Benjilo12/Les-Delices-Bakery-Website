@@ -1,31 +1,31 @@
 import { Highlighter } from "@/components/ui/highlighter";
-import { SignUp } from "@clerk/nextjs";
+import { SignIn } from "@clerk/nextjs"; // 1. Corrected Import
 import Image from "next/image";
 
-export default function SignUnPage() {
+export default function SignInPage() {
   return (
     <div className="flex min-h-screen overflow-hidden bg-white">
-      {/* LEFT SIDE: Sign In 
-        Changed lg:w-[30%] to lg:w-[40%] for better spacing on 14-inch screens
-        Added h-screen and overflow-y-auto so the form is always accessible
-      */}
+      {/* LEFT SIDE: Sign In */}
       <div className="w-full lg:w-[40%] xl:w-[35%] h-screen overflow-y-auto flex flex-col justify-center items-center lg:items-start p-6 sm:p-10 lg:pl-12 xl:pl-20 bg-white">
-        <div className="w-full max-w-100 py-8">
+        <div className="w-full max-w-md py-8">
+          {" "}
+          {/* 2. Fixed max-width class */}
           {/* Logo */}
           <div className="mb-8 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 bg-linear-to-r from-amber-600 to-amber-800 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-amber-600 to-amber-800 rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-bold">LD</span>
               </div>
               <h1 className="text-2xl font-serif italic text-amber-900">
                 Les Délices
               </h1>
             </div>
-            <p className="text-gray-600 text-sm">Join our sweet community</p>
+            <p className="text-gray-600 text-sm">
+              Welcome back to our community
+            </p>
           </div>
-
-          {/* Clerk Sign Up */}
-          <SignUp
+          {/* Clerk Sign In - 3. Changed component to SignIn */}
+          <SignIn
             appearance={{
               elements: {
                 rootBox: "w-full",
@@ -52,11 +52,10 @@ export default function SignUnPage() {
               },
             }}
             routing="path"
-            path="/sign-in"
-            signInUrl="/sign-in"
+            path="/sign-in" // Matches your folder structure
+            signUpUrl="/sign-up"
             redirectUrl="/"
           />
-
           {/* Terms */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <p className="text-[11px] text-gray-500 leading-relaxed">
@@ -74,9 +73,7 @@ export default function SignUnPage() {
         </div>
       </div>
 
-      {/* RIGHT SIDE: Image 
-        Width adjusted to lg:w-[60%] to accommodate the wider left side
-      */}
+      {/* RIGHT SIDE: Image */}
       <div className="hidden lg:flex lg:w-[60%] xl:w-[65%] relative overflow-hidden h-screen">
         <div className="absolute inset-0">
           <Image
@@ -87,8 +84,7 @@ export default function SignUnPage() {
             priority
             sizes="65vw"
           />
-          {/* Using standard Tailwind gradient syntax for better compatibility */}
-          <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/50 to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/40" />
         </div>
 
         {/* Overlay Content */}
@@ -125,7 +121,6 @@ export default function SignUnPage() {
               </div>
             </div>
 
-            {/* Features - adjusted gap for smaller laptop screens */}
             <div className="mt-10 grid grid-cols-2 gap-4 xl:gap-6">
               <div className="flex items-center gap-3 text-amber-50 text-sm xl:text-base">
                 <span className="shrink-0 text-lg">🎂</span>
