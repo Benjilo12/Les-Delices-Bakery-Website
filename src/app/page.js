@@ -1,5 +1,6 @@
 import AboutSection from "@/components/AboutSection";
 import CategoryScroll from "@/components/CategoryScroll";
+import CustomerReviews from "@/components/CustomerReviews";
 import HeroSection from "@/components/HeroSection";
 import LesDelicesBanner from "@/components/LesDelicesBanner";
 import Navbar from "@/components/Navbar";
@@ -17,6 +18,7 @@ function page() {
         <CategoryScroll />
         <ProductCarousel />
         <AboutSection />
+        <CustomerReviews />
       </div>
     </>
   );
