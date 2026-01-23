@@ -131,7 +131,7 @@ export default function BlogSection() {
             {data.recentBlogs.map((blog) => (
               <Link
                 key={blog._id}
-                href={`/blogs/${blog.slug}`}
+                href={`/blog/${blog.slug}`}
                 className="group block bg-white/80 hover:bg-white p-5 rounded-2xl border border-amber-100 hover:border-amber-200 transition-all hover:shadow-lg"
               >
                 <div className="flex gap-6 items-start">
@@ -162,7 +162,7 @@ export default function BlogSection() {
             {/* View All Button (replaces newsletter) */}
             <div className="mt-8">
               <Link
-                href="/blogs"
+                href="/blog"
                 className="group block bg-linear-to-r from-amber-700 to-amber-800 text-white p-6 rounded-2xl hover:from-amber-800 hover:to-amber-900 transition-all shadow-lg hover:shadow-xl text-center"
               >
                 <div className="flex flex-col items-center">

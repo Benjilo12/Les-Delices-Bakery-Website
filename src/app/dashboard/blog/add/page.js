@@ -43,13 +43,16 @@ export default function AddBlogPage() {
   const [loading, setLoading] = useState(false);
   const [featuredImage, setFeaturedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+
+  // FIXED: isPublished is now true by default
   const [formData, setFormData] = useState({
     title: "",
     excerpt: "",
     content: "",
     category: "",
-    isPublished: false,
+    isPublished: true,
   });
+
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
   const [author, setAuthor] = useState({
@@ -68,7 +71,7 @@ export default function AddBlogPage() {
         ["clean"],
       ],
     }),
-    []
+    [],
   );
 
   const formats = [
@@ -89,9 +92,7 @@ export default function AddBlogPage() {
     if (file) {
       setFeaturedImage(file);
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
+      reader.onloadend = () => setImagePreview(reader.result);
       reader.readAsDataURL(file);
     }
   };
@@ -116,29 +117,25 @@ export default function AddBlogPage() {
     e.preventDefault();
     setLoading(true);
 
-    const loadingToast = toast.loading("Creating blog post...", {
-      description: "Please wait while we publish your content.",
+    const loadingToast = toast.loading("Publishing blog post...", {
+      description: "Please wait while we upload your content.",
       style: {
         background: "#FEF3C7",
         border: "2px solid #F59E0B",
         color: "#92400E",
-        fontWeight: 600,
       },
-      icon: (
-        <div className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center">
-          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-        </div>
-      ),
     });
 
     try {
       const formDataToSend = new FormData();
-
       formDataToSend.append("title", formData.title);
       formDataToSend.append("excerpt", formData.excerpt);
       formDataToSend.append("content", formData.content);
       formDataToSend.append("category", formData.category);
-      formDataToSend.append("isPublished", formData.isPublished);
+
+      // We send "true" to ensure it shows on the public page
+      formDataToSend.append("isPublished", "true");
+
       formDataToSend.append("tags", JSON.stringify(tags));
       formDataToSend.append("author", JSON.stringify(author));
 
@@ -155,47 +152,25 @@ export default function AddBlogPage() {
       toast.dismiss(loadingToast);
 
       if (response.ok) {
-        toast.success("Blog post created successfully!", {
-          description: `${formData.title} has been ${
-            formData.isPublished ? "published" : "saved as draft"
-          }.`,
+        toast.success("Blog published!", {
+          description: `${formData.title} is now live for everyone.`,
           duration: 4000,
           style: {
             background: "#D1FAE5",
             border: "2px solid #10B981",
             color: "#065F46",
-            fontWeight: 600,
           },
         });
 
-        setTimeout(() => {
-          router.push("/dashboard/blog");
-        }, 1000);
+        setTimeout(() => router.push("/dashboard/blog"), 1500);
       } else {
-        toast.error("Failed to create blog post", {
-          description: data.error || "Something went wrong. Please try again.",
-          duration: 5000,
-          style: {
-            background: "#FEE2E2",
-            border: "2px solid #EF4444",
-            color: "#7F1D1D",
-            fontWeight: 600,
-          },
+        toast.error("Error", {
+          description: data.error || "Failed to publish.",
         });
       }
     } catch (error) {
-      console.error("Error:", error);
       toast.dismiss(loadingToast);
-      toast.error("Network Error", {
-        description: "Unable to create blog post. Check your connection.",
-        duration: 5000,
-        style: {
-          background: "#FEE2E2",
-          border: "2px solid #EF4444",
-          color: "#7F1D1D",
-          fontWeight: 600,
-        },
-      });
+      toast.error("Network Error", { description: "Check your connection." });
     } finally {
       setLoading(false);
     }
@@ -203,11 +178,11 @@ export default function AddBlogPage() {
 
   const remainingChars = 200 - formData.excerpt.length;
   const selectedCategory = categories.find(
-    (cat) => cat.value === formData.category
+    (cat) => cat.value === formData.category,
   );
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-5xl mx-auto py-10">
       <BlogFormHeader router={router} />
 
       <form onSubmit={handleSubmit} className="space-y-10">

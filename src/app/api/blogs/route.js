@@ -27,26 +27,20 @@ export async function GET(request) {
   try {
     await connect();
 
-    const user = await currentUser();
-    const isAdmin = user?.publicMetadata?.isAdmin === true;
-
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
     const search = searchParams.get("search");
     const tag = searchParams.get("tag");
 
-    // Pagination parameters
+    // Pagination
     const page = parseInt(searchParams.get("page")) || 1;
     const limit = parseInt(searchParams.get("limit")) || 10;
     const skip = (page - 1) * limit;
 
-    // Build query
-    let query = {};
-
-    // Non-admin users only see published blogs
-    if (!isAdmin) {
-      query.isPublished = true;
-    }
+    // Public query (everyone can see)
+    let query = {
+      isPublished: true,
+    };
 
     if (category) {
       query.category = category;
@@ -64,17 +58,14 @@ export async function GET(request) {
       query.tags = tag;
     }
 
-    // Get total count for pagination
     const totalBlogs = await Blog.countDocuments(query);
     const totalPages = Math.ceil(totalBlogs / limit);
 
-    // Fetch blogs with pagination
     const blogs = await Blog.find(query)
       .sort({ publishedAt: -1, createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
-    // Get the latest blog (first one from sorted results)
     const latestBlog = blogs.length > 0 ? blogs[0] : null;
 
     return NextResponse.json(
@@ -91,7 +82,7 @@ export async function GET(request) {
           hasPrevPage: page > 1,
         },
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error fetching blogs:", error);
@@ -100,7 +91,7 @@ export async function GET(request) {
         success: false,
         error: "Failed to fetch blogs",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -148,7 +139,7 @@ export async function POST(request) {
       console.log("Missing required fields");
       return NextResponse.json(
         { error: "Title, excerpt, content, and category are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -156,7 +147,7 @@ export async function POST(request) {
     if (excerpt.length > 200) {
       return NextResponse.json(
         { error: "Excerpt must be 200 characters or less" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -172,7 +163,7 @@ export async function POST(request) {
           error:
             "A blog with this title already exists. Please choose a different title.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -188,7 +179,7 @@ export async function POST(request) {
         console.error("Image upload failed:", imageError);
         return NextResponse.json(
           { error: "Image upload failed" },
-          { status: 500 }
+          { status: 500 },
         );
       }
     }
@@ -225,7 +216,7 @@ export async function POST(request) {
         blog,
         message: "Blog created successfully",
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("Error creating blog:", error);
@@ -237,13 +228,13 @@ export async function POST(request) {
           error:
             "A blog with this title already exists. Please choose a different title.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     return NextResponse.json(
       { error: "Internal server error: " + error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

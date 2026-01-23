@@ -1,23 +1,22 @@
 import { NextResponse } from "next/server";
 import { connect } from "@/mongodb/mongoose";
 import Blog from "@/models/blog";
-import { currentUser } from "@clerk/nextjs/server";
 
-// GET - Fetch blogs by category (No auth required, only published)
+// GET - Fetch blogs by category (Public access - no authentication required)
 export async function GET(request, { params }) {
   try {
     await connect();
 
     const { category } = params;
-    const user = await currentUser();
-    const isAdmin = user?.publicMetadata?.isAdmin === true;
 
-    let query = { category };
+    // Decode URL-encoded category (if needed)
+    const decodedCategory = decodeURIComponent(category);
 
-    // Non-admin users only see published blogs
-    if (!isAdmin) {
-      query.isPublished = true;
-    }
+    // Build query - ALWAYS show only published blogs to public
+    const query = {
+      category: decodedCategory,
+      isPublished: true,
+    };
 
     const blogs = await Blog.find(query).sort({
       publishedAt: -1,
@@ -27,11 +26,11 @@ export async function GET(request, { params }) {
     return NextResponse.json(
       {
         success: true,
-        category,
+        category: decodedCategory,
         blogs,
         count: blogs.length,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error fetching blogs by category:", error);
@@ -40,7 +39,7 @@ export async function GET(request, { params }) {
         success: false,
         error: "Failed to fetch blogs",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

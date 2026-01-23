@@ -26,18 +26,14 @@ export async function GET(request, { params }) {
   try {
     await connect();
 
-    // FIX: Add await to unwrap params Promise
+    // Get slug from params
     const { slug } = await params;
 
-    const user = await currentUser();
-    const isAdmin = user?.publicMetadata?.isAdmin === true;
-
-    let query = { slug };
-
-    // Non-admin users can only view published blogs
-    if (!isAdmin) {
-      query.isPublished = true;
-    }
+    // Build query - ALWAYS show only published blogs to public
+    const query = {
+      slug,
+      isPublished: true,
+    };
 
     const blog = await Blog.findOne(query);
 
@@ -45,24 +41,22 @@ export async function GET(request, { params }) {
       return NextResponse.json(
         {
           success: false,
-          error: "Blog not found",
+          error: "Blog not found or not published",
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
-    // Increment view count (only for published blogs and non-admin users)
-    if (blog.isPublished && !isAdmin) {
-      blog.views += 1;
-      await blog.save();
-    }
+    // Increment view count for all visitors
+    blog.views += 1;
+    await blog.save();
 
     return NextResponse.json(
       {
         success: true,
         blog,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error fetching blog:", error);
@@ -71,7 +65,7 @@ export async function GET(request, { params }) {
         success: false,
         error: "Failed to fetch blog",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -147,7 +141,7 @@ export async function PUT(request, { params }) {
         console.error("Image upload failed:", imageError);
         return NextResponse.json(
           { error: "Image upload failed" },
-          { status: 500 }
+          { status: 500 },
         );
       }
     }
@@ -163,7 +157,7 @@ export async function PUT(request, { params }) {
         if (existingBlog) {
           return NextResponse.json(
             { error: "A blog with this title already exists" },
-            { status: 400 }
+            { status: 400 },
           );
         }
       }
@@ -196,7 +190,7 @@ export async function PUT(request, { params }) {
     const updatedBlog = await Blog.findOneAndUpdate(
       { slug },
       { $set: updateData },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     console.log("Blog updated successfully:", updatedBlog._id);
@@ -207,13 +201,13 @@ export async function PUT(request, { params }) {
         blog: updatedBlog,
         message: "Blog updated successfully",
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error updating blog:", error);
     return NextResponse.json(
       { error: "Internal server error: " + error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -267,13 +261,13 @@ export async function DELETE(request, { params }) {
         success: true,
         message: "Blog deleted successfully",
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error deleting blog:", error);
     return NextResponse.json(
       { error: "Internal server error: " + error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
