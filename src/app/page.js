@@ -1,4 +1,5 @@
 import AboutSection from "@/components/AboutSection";
+import BlogSection from "@/components/BlogSection";
 import CategoryScroll from "@/components/CategoryScroll";
 import CustomerReviews from "@/components/CustomerReviews";
 import HeroSection from "@/components/HeroSection";
@@ -19,6 +20,7 @@ function page() {
         <ProductCarousel />
         <AboutSection />
         <CustomerReviews />
+        <BlogSection />
       </div>
     </>
   );
