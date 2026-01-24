@@ -5,6 +5,7 @@ import CustomerReviews from "@/components/CustomerReviews";
 import HeroSection from "@/components/HeroSection";
 import LesDelicesBanner from "@/components/LesDelicesBanner";
 import Navbar from "@/components/Navbar";
+import PaymentInfoSection from "@/components/PaymentInfoSection";
 import ProductCarousel from "@/components/ProductCarousel";
 import Topbar from "@/components/Topbar";
 
@@ -21,6 +22,7 @@ function page() {
         <AboutSection />
         <CustomerReviews />
         <BlogSection />
+        <PaymentInfoSection />
       </div>
     </>
   );

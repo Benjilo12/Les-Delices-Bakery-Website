@@ -80,7 +80,7 @@ export default function BlogSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Featured Article */}
           <div className="lg:col-span-8 relative group">
-            <Link href={`/blogs/${data.latestBlog.slug}`} className="block">
+            <Link href={`/blog/${data.latestBlog.slug}`} className="block">
               <div className="relative h-100 md:h-150 rounded-4xl overflow-hidden shadow-2xl">
                 <Image
                   src={data.latestBlog.featuredImage || "/placeholder-cake.jpg"}

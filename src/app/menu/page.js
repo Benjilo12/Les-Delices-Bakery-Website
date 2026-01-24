@@ -1,5 +1,6 @@
 import MenuContent from "./MenuContent";
 import Navbar from "@/components/Navbar";
+
 import { Suspense } from "react";
 
 function page() {
