@@ -85,7 +85,7 @@ export default function BlogPageContent() {
       <Navbar />
 
       {/* Hero Header */}
-      <header className="pt-40 pb-20 px-6">
+      <header className="pt-20 pb-20 px-6">
         <div className="max-w-7xl mx-auto border-b border-gray-100 pb-12">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
             <div className="max-w-2xl">

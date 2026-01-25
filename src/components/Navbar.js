@@ -9,10 +9,6 @@ import UserMenu from "./navbar/UserMenu";
 import MobileMenu from "./navbar/MobileMenu";
 
 export default function Navbar() {
-  // TODO: Replace with actual cart/wishlist counts from your state management
-  const cartCount = 3;
-  const wishlistCount = 5;
-
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-backdrop-filter:bg-white/60">
       <div className="container mx-auto px-4">
@@ -34,8 +30,8 @@ export default function Navbar() {
           {/* Right: User Actions */}
           <div className="flex items-center gap-4">
             <UserMenu />
-            <WishlistIcon count={wishlistCount} />
-            <CartIcon count={cartCount} />
+            <WishlistIcon />
+            <CartIcon />
           </div>
         </div>
       </div>
