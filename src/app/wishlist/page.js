@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import PaymentBanner from "@/components/PaymentBanner";
 import { useWishlist, useCart, useUI } from "@/lib/store";
 import {
   Heart,
@@ -25,14 +26,9 @@ export default function WishlistPage() {
   const { addToCart } = useCart();
   const { formatPrice } = useUI();
 
-  const [isClient, setIsClient] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(9); // Changed to 9 items per page
-  const [viewMode, setViewMode] = useState("grid"); // "grid" or "list"
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const [itemsPerPage, setItemsPerPage] = useState(9);
+  const [viewMode, setViewMode] = useState("grid");
 
   // Calculate pagination
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -40,7 +36,6 @@ export default function WishlistPage() {
   const currentItems = wishlist.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(wishlist.length / itemsPerPage);
 
-  // Pagination functions
   const nextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -101,8 +96,6 @@ export default function WishlistPage() {
         {/* Breadcrumb */}
         <div className="border-b border-gray-100 bg-white">
           <div className="max-w-7xl mx-auto px-4 py-3">
-            {" "}
-            {/* Changed back to 7xl */}
             <nav className="flex items-center gap-2 text-sm text-gray-500">
               <Link href="/" className="hover:text-amber-700 transition-colors">
                 Home
@@ -121,8 +114,6 @@ export default function WishlistPage() {
         </div>
 
         <main className="max-w-7xl mx-auto px-4 py-8">
-          {" "}
-          {/* Changed back to 7xl */}
           <div className="mb-8">
             <Link
               href="/menu"
@@ -132,11 +123,10 @@ export default function WishlistPage() {
               Continue Shopping
             </Link>
           </div>
+
           <div className="flex flex-col lg:flex-row gap-8">
-            {/* Main Content - Adjusted width */}
+            {/* Main Content */}
             <div className="lg:w-3/4">
-              {" "}
-              {/* Changed from xl:w-4/5 to lg:w-3/4 */}
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 {/* Header with Controls */}
                 <div className="p-6 border-b border-gray-100">
@@ -160,7 +150,6 @@ export default function WishlistPage() {
                               ? "bg-white text-amber-600 shadow-sm"
                               : "text-gray-500 hover:text-gray-700"
                           }`}
-                          aria-label="Grid view"
                         >
                           <Grid3x3 className="w-4 h-4" />
                         </button>
@@ -171,13 +160,12 @@ export default function WishlistPage() {
                               ? "bg-white text-amber-600 shadow-sm"
                               : "text-gray-500 hover:text-gray-700"
                           }`}
-                          aria-label="List view"
                         >
                           <List className="w-4 h-4" />
                         </button>
                       </div>
 
-                      {/* Items Per Page Selector */}
+                      {/* Items Per Page */}
                       <div className="flex items-center gap-2">
                         <span className="text-sm text-gray-600">Show:</span>
                         <select
@@ -188,8 +176,7 @@ export default function WishlistPage() {
                           }}
                           className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-amber-500"
                         >
-                          <option value={9}>9</option>{" "}
-                          {/* Changed default to 9 */}
+                          <option value={9}>9</option>
                           <option value={18}>18</option>
                           <option value={27}>27</option>
                           <option value={36}>36</option>
@@ -204,7 +191,7 @@ export default function WishlistPage() {
                         {wishlist.length > 0 && (
                           <button
                             onClick={handleRemoveAll}
-                            className="text-sm text-red-600 hover:text-red-700 flex items-center gap-1 cursor-pointer"
+                            className="text-sm text-red-600 hover:text-red-700 flex items-center gap-1"
                           >
                             <Trash2 className="w-4 h-4" />
                             Clear All
@@ -225,8 +212,8 @@ export default function WishlistPage() {
                       Your wishlist is empty
                     </h2>
                     <p className="text-gray-500 mb-6 max-w-md mx-auto">
-                      Save your favorite products here to easily find them later
-                      or compare options.
+                      Save your favorite products here to easily find them
+                      later.
                     </p>
                     <Link
                       href="/menu"
@@ -253,23 +240,18 @@ export default function WishlistPage() {
                               </p>
                             </div>
                           </div>
-                          <div className="flex items-center gap-3">
-                            <button
-                              onClick={handleAddAllToCart}
-                              className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap"
-                            >
-                              <PlusCircle className="w-4 h-4" />
-                              Add All to Cart ({availableProducts.length})
-                            </button>
-                            <span className="text-sm text-gray-600">
-                              Page {currentPage} of {totalPages}
-                            </span>
-                          </div>
+                          <button
+                            onClick={handleAddAllToCart}
+                            className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+                          >
+                            <PlusCircle className="w-4 h-4" />
+                            Add All to Cart ({availableProducts.length})
+                          </button>
                         </div>
                       </div>
                     )}
 
-                    {/* Unavailable Products Notice */}
+                    {/* Unavailable Notice */}
                     {unavailableProducts.length > 0 && (
                       <div className="p-4 bg-red-50 border-b border-red-100">
                         <div className="flex items-start gap-3">
@@ -281,20 +263,18 @@ export default function WishlistPage() {
                               currently unavailable
                             </p>
                             <p className="text-xs text-red-700 mt-1">
-                              Some items in your wishlist are out of stock or
-                              temporarily unavailable.
+                              Some items are out of stock or temporarily
+                              unavailable.
                             </p>
                           </div>
                         </div>
                       </div>
                     )}
 
-                    {/* Products Grid/List View */}
+                    {/* Products Grid/List */}
                     <div className="p-6">
                       {viewMode === "grid" ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                          {" "}
-                          {/* Removed xl:grid-cols-4 */}
                           {currentItems.map((product) => (
                             <WishlistItem
                               key={product._id}
@@ -319,98 +299,71 @@ export default function WishlistPage() {
                         </div>
                       )}
 
-                      {/* Pagination Controls - Always show if there are items */}
-                      {wishlist.length > 0 && (
+                      {/* Pagination */}
+                      {wishlist.length > 0 && totalPages > 1 && (
                         <div className="mt-8 pt-6 border-t border-gray-200">
                           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div className="text-sm text-gray-600">
                               Showing {indexOfFirstItem + 1}-
                               {Math.min(indexOfLastItem, wishlist.length)} of{" "}
-                              {wishlist.length} items
+                              {wishlist.length}
                             </div>
 
                             <div className="flex items-center gap-2">
-                              {/* Previous Button */}
                               <button
                                 onClick={prevPage}
                                 disabled={currentPage === 1}
-                                className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-                                aria-label="Previous page"
+                                className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                               >
                                 <ChevronLeft className="w-4 h-4" />
                               </button>
 
-                              {/* Page Numbers */}
-                              <div className="flex items-center gap-1">
-                                {Array.from(
-                                  { length: totalPages },
-                                  (_, i) => i + 1,
-                                ).map((page) => {
-                                  if (
-                                    page === 1 ||
-                                    page === totalPages ||
-                                    (page >= currentPage - 1 &&
-                                      page <= currentPage + 1)
-                                  ) {
-                                    return (
-                                      <button
-                                        key={page}
-                                        onClick={() => goToPage(page)}
-                                        className={`w-8 h-8 rounded-lg text-sm font-medium ${
-                                          currentPage === page
-                                            ? "bg-amber-600 text-white"
-                                            : "border border-gray-300 text-gray-700 hover:bg-gray-50"
-                                        }`}
-                                      >
-                                        {page}
-                                      </button>
-                                    );
-                                  } else if (
-                                    page === currentPage - 2 ||
-                                    page === currentPage + 2
-                                  ) {
-                                    return (
-                                      <span
-                                        key={page}
-                                        className="px-2 text-gray-500"
-                                      >
-                                        ...
-                                      </span>
-                                    );
-                                  }
-                                  return null;
-                                })}
-                              </div>
+                              {Array.from(
+                                { length: totalPages },
+                                (_, i) => i + 1,
+                              ).map((page) => {
+                                if (
+                                  page === 1 ||
+                                  page === totalPages ||
+                                  (page >= currentPage - 1 &&
+                                    page <= currentPage + 1)
+                                ) {
+                                  return (
+                                    <button
+                                      key={page}
+                                      onClick={() => goToPage(page)}
+                                      className={`w-8 h-8 rounded-lg text-sm font-medium ${
+                                        currentPage === page
+                                          ? "bg-amber-600 text-white"
+                                          : "border border-gray-300 hover:bg-gray-50"
+                                      }`}
+                                    >
+                                      {page}
+                                    </button>
+                                  );
+                                } else if (
+                                  page === currentPage - 2 ||
+                                  page === currentPage + 2
+                                ) {
+                                  return (
+                                    <span
+                                      key={page}
+                                      className="px-2 text-gray-500"
+                                    >
+                                      ...
+                                    </span>
+                                  );
+                                }
+                                return null;
+                              })}
 
-                              {/* Next Button */}
                               <button
                                 onClick={nextPage}
                                 disabled={currentPage === totalPages}
-                                className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-                                aria-label="Next page"
+                                className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                               >
                                 <ChevronRightIcon className="w-4 h-4" />
                               </button>
-                            </div>
-
-                            {/* Items Per Page Selector (Mobile) */}
-                            <div className="flex items-center gap-2 sm:hidden">
-                              <span className="text-sm text-gray-600">
-                                Items per page:
-                              </span>
-                              <select
-                                value={itemsPerPage}
-                                onChange={(e) => {
-                                  setItemsPerPage(Number(e.target.value));
-                                  setCurrentPage(1);
-                                }}
-                                className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                              >
-                                <option value={9}>9</option>
-                                <option value={18}>18</option>
-                                <option value={27}>27</option>
-                                <option value={36}>36</option>
-                              </select>
                             </div>
                           </div>
                         </div>
@@ -419,14 +372,16 @@ export default function WishlistPage() {
                   </>
                 )}
               </div>
+
+              {/* Payment Banner - NOW PLACED HERE */}
+              <div className="mt-8">
+                <PaymentBanner />
+              </div>
             </div>
 
-            {/* Sidebar - Adjusted width */}
+            {/* Sidebar */}
             <div className="lg:w-1/4">
-              {" "}
-              {/* Changed from xl:w-1/5 to lg:w-1/4 */}
               <div className="sticky top-8 space-y-6">
-                {/* Summary Card */}
                 <div className="bg-white rounded-xl border border-gray-200 p-6">
                   <h3 className="font-medium text-gray-900 mb-4">
                     Wishlist Summary
@@ -438,13 +393,13 @@ export default function WishlistPage() {
                       <span className="font-medium">{wishlist.length}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Available Items</span>
+                      <span className="text-gray-600">Available</span>
                       <span className="font-medium text-green-600">
                         {availableProducts.length}
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Unavailable Items</span>
+                      <span className="text-gray-600">Unavailable</span>
                       <span className="font-medium text-red-600">
                         {unavailableProducts.length}
                       </span>
@@ -464,16 +419,16 @@ export default function WishlistPage() {
                   {availableProducts.length > 0 && (
                     <button
                       onClick={handleAddAllToCart}
-                      className="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                      className="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 mb-3"
                     >
                       <ShoppingBag className="w-5 h-5" />
-                      Add All Available to Cart
+                      Add All to Cart
                     </button>
                   )}
 
                   <Link
                     href="/menu"
-                    className="w-full mt-3 py-2.5 border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                    className="w-full py-2.5 border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
                   >
                     <PlusCircle className="w-4 h-4" />
                     Add More Items
@@ -488,20 +443,17 @@ export default function WishlistPage() {
   );
 }
 
-// Grid View Item Component
+// Grid View Item
 function WishlistItem({ product, formatPrice, toggleWishlist, addToCart }) {
   return (
     <div className="group relative border border-gray-200 rounded-xl overflow-hidden hover:border-amber-300 transition-all">
-      {/* Remove Button */}
       <button
         onClick={() => toggleWishlist(product)}
-        className="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg hover:shadow-xl transition-all hover:scale-110 cursor-pointer"
-        aria-label="Remove from wishlist"
+        className="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg hover:shadow-xl transition-all hover:scale-110"
       >
         <Heart className="w-4 h-4 fill-red-500 text-red-500" />
       </button>
 
-      {/* Product Image */}
       <div className="relative aspect-square bg-gray-50">
         {product.images?.[0] ? (
           <Image
@@ -509,7 +461,7 @@ function WishlistItem({ product, formatPrice, toggleWishlist, addToCart }) {
             alt={product.name}
             fill
             className="object-cover"
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
           />
         ) : (
           <div className="absolute inset-0 bg-amber-50 flex items-center justify-center">
@@ -526,7 +478,6 @@ function WishlistItem({ product, formatPrice, toggleWishlist, addToCart }) {
         )}
       </div>
 
-      {/* Product Details */}
       <div className="p-4">
         <Link href={`/products/${product.slug || product._id}`}>
           <h3 className="font-medium text-gray-900 mb-1 hover:text-amber-700 transition-colors truncate">
@@ -543,19 +494,17 @@ function WishlistItem({ product, formatPrice, toggleWishlist, addToCart }) {
           </span>
         </div>
 
-        {/* Add to Cart Button */}
         {product.isAvailable && product.priceOptions?.length > 0 ? (
           <button
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={() =>
               addToCart(
                 product,
                 product.priceOptions[0],
                 1,
-                product.customizationNotes || "",
+                "",
                 product.availableFlavors?.[0] || "",
-              );
-            }}
+              )
+            }
             className="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
           >
             <ShoppingBag className="w-4 h-4" />
@@ -566,7 +515,7 @@ function WishlistItem({ product, formatPrice, toggleWishlist, addToCart }) {
             disabled
             className="w-full py-2 bg-gray-200 text-gray-500 text-sm font-medium rounded-lg cursor-not-allowed"
           >
-            Currently Unavailable
+            Unavailable
           </button>
         )}
       </div>
@@ -574,20 +523,17 @@ function WishlistItem({ product, formatPrice, toggleWishlist, addToCart }) {
   );
 }
 
-// List View Item Component
+// List View Item
 function WishlistItemList({ product, formatPrice, toggleWishlist, addToCart }) {
   return (
-    <div className="flex items-center gap-4 p-4 border border-gray-200 rounded-xl hover:border-amber-300 transition-all group">
-      {/* Remove Button */}
+    <div className="flex items-center gap-4 p-4 border border-gray-200 rounded-xl hover:border-amber-300 transition-all">
       <button
         onClick={() => toggleWishlist(product)}
-        className="self-start p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-sm hover:shadow-md transition-all hover:scale-110 cursor-pointer"
-        aria-label="Remove from wishlist"
+        className="self-start p-2 bg-white rounded-full shadow-sm hover:shadow-md transition-all"
       >
         <Heart className="w-4 h-4 fill-red-500 text-red-500" />
       </button>
 
-      {/* Product Image */}
       <div className="relative w-20 h-20 shrink-0 bg-gray-50 rounded-lg overflow-hidden">
         {product.images?.[0] ? (
           <Image
@@ -604,7 +550,6 @@ function WishlistItemList({ product, formatPrice, toggleWishlist, addToCart }) {
         )}
       </div>
 
-      {/* Product Details */}
       <div className="flex-1 min-w-0">
         <Link href={`/products/${product.slug || product._id}`}>
           <h3 className="font-medium text-gray-900 hover:text-amber-700 transition-colors truncate">
@@ -626,20 +571,18 @@ function WishlistItemList({ product, formatPrice, toggleWishlist, addToCart }) {
         )}
       </div>
 
-      {/* Action Buttons */}
       <div className="shrink-0">
         {product.isAvailable && product.priceOptions?.length > 0 ? (
           <button
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={() =>
               addToCart(
                 product,
                 product.priceOptions[0],
                 1,
-                product.customizationNotes || "",
+                "",
                 product.availableFlavors?.[0] || "",
-              );
-            }}
+              )
+            }
             className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap"
           >
             <ShoppingBag className="w-4 h-4" />
@@ -648,7 +591,7 @@ function WishlistItemList({ product, formatPrice, toggleWishlist, addToCart }) {
         ) : (
           <button
             disabled
-            className="px-4 py-2 bg-gray-200 text-gray-500 text-sm font-medium rounded-lg cursor-not-allowed whitespace-nowrap"
+            className="px-4 py-2 bg-gray-200 text-gray-500 text-sm font-medium rounded-lg cursor-not-allowed"
           >
             Unavailable
           </button>

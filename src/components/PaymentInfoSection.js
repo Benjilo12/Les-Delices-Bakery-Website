@@ -55,7 +55,7 @@ export default function PaymentInfoSection() {
                   alt="Visa, Mastercard, MoMo, AT Money"
                   fill
                   className="object-contain"
-                  sizes="(max-width: 768px) 100vw, 500px"
+                  sizes="(max-width: 768px) 100vw, 800px"
                 />
               </div>
             </div>
