@@ -71,7 +71,7 @@ export async function GET(request) {
           hasPrevPage: page > 1,
         },
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -80,12 +80,13 @@ export async function GET(request) {
         success: false,
         error: "Failed to fetch products",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 // POST - Create new product (Admin only)
+
 export async function POST(request) {
   try {
     console.log("Starting product creation...");
@@ -134,7 +135,7 @@ export async function POST(request) {
       });
       return NextResponse.json(
         { error: "Name and category are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -159,7 +160,7 @@ export async function POST(request) {
             console.error("Image upload failed:", imageError);
             return NextResponse.json(
               { error: "Image upload failed" },
-              { status: 500 }
+              { status: 500 },
             );
           }
         }
@@ -189,7 +190,7 @@ export async function POST(request) {
         product,
         message: "Product created successfully",
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("Error creating product:", error);
@@ -201,13 +202,13 @@ export async function POST(request) {
           error:
             "A product with this name already exists. Please choose a different name.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     return NextResponse.json(
       { error: "Internal server error: " + error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
