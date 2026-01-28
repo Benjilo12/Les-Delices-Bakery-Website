@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
@@ -97,13 +97,16 @@ export default function WishlistPage() {
         <div className="border-b border-gray-100 bg-white">
           <div className="max-w-7xl mx-auto px-4 py-3">
             <nav className="flex items-center gap-2 text-sm text-gray-500">
-              <Link href="/" className="hover:text-amber-700 transition-colors">
+              <Link
+                href="/"
+                className="hover:text-amber-700 transition-colors cursor-pointer"
+              >
                 Home
               </Link>
               <ChevronRight className="w-4 h-4 text-gray-300" />
               <Link
                 href="/menu"
-                className="hover:text-amber-700 transition-colors"
+                className="hover:text-amber-700 transition-colors cursor-pointer"
               >
                 Menu
               </Link>
@@ -114,10 +117,11 @@ export default function WishlistPage() {
         </div>
 
         <main className="max-w-7xl mx-auto px-4 py-8">
+          {/* Continue Shopping with light golden brown background */}
           <div className="mb-8">
             <Link
               href="/menu"
-              className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-amber-700 group"
+              className="inline-flex items-center gap-2 bg-amber-100 hover:bg-amber-200 text-amber-900 px-4 py-3 rounded-lg font-medium transition-colors cursor-pointer group"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               Continue Shopping
@@ -145,7 +149,7 @@ export default function WishlistPage() {
                       <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
                         <button
                           onClick={() => setViewMode("grid")}
-                          className={`p-2 rounded-md transition-all ${
+                          className={`p-2 rounded-md transition-all cursor-pointer ${
                             viewMode === "grid"
                               ? "bg-white text-amber-600 shadow-sm"
                               : "text-gray-500 hover:text-gray-700"
@@ -155,7 +159,7 @@ export default function WishlistPage() {
                         </button>
                         <button
                           onClick={() => setViewMode("list")}
-                          className={`p-2 rounded-md transition-all ${
+                          className={`p-2 rounded-md transition-all cursor-pointer ${
                             viewMode === "list"
                               ? "bg-white text-amber-600 shadow-sm"
                               : "text-gray-500 hover:text-gray-700"
@@ -174,7 +178,7 @@ export default function WishlistPage() {
                             setItemsPerPage(Number(e.target.value));
                             setCurrentPage(1);
                           }}
-                          className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                          className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer"
                         >
                           <option value={9}>9</option>
                           <option value={18}>18</option>
@@ -191,7 +195,7 @@ export default function WishlistPage() {
                         {wishlist.length > 0 && (
                           <button
                             onClick={handleRemoveAll}
-                            className="text-sm text-red-600 hover:text-red-700 flex items-center gap-1"
+                            className="text-sm text-red-600 hover:text-red-700 flex items-center gap-1 cursor-pointer"
                           >
                             <Trash2 className="w-4 h-4" />
                             Clear All
@@ -217,7 +221,7 @@ export default function WishlistPage() {
                     </p>
                     <Link
                       href="/menu"
-                      className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                      className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer"
                     >
                       <Cake className="w-5 h-5" />
                       Start Shopping
@@ -242,7 +246,7 @@ export default function WishlistPage() {
                           </div>
                           <button
                             onClick={handleAddAllToCart}
-                            className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+                            className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors cursor-pointer"
                           >
                             <PlusCircle className="w-4 h-4" />
                             Add All to Cart ({availableProducts.length})
@@ -313,7 +317,7 @@ export default function WishlistPage() {
                               <button
                                 onClick={prevPage}
                                 disabled={currentPage === 1}
-                                className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                                className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 cursor-pointer"
                               >
                                 <ChevronLeft className="w-4 h-4" />
                               </button>
@@ -332,7 +336,7 @@ export default function WishlistPage() {
                                     <button
                                       key={page}
                                       onClick={() => goToPage(page)}
-                                      className={`w-8 h-8 rounded-lg text-sm font-medium ${
+                                      className={`w-8 h-8 rounded-lg text-sm font-medium cursor-pointer ${
                                         currentPage === page
                                           ? "bg-amber-600 text-white"
                                           : "border border-gray-300 hover:bg-gray-50"
@@ -360,7 +364,7 @@ export default function WishlistPage() {
                               <button
                                 onClick={nextPage}
                                 disabled={currentPage === totalPages}
-                                className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                                className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 cursor-pointer"
                               >
                                 <ChevronRightIcon className="w-4 h-4" />
                               </button>
@@ -373,7 +377,7 @@ export default function WishlistPage() {
                 )}
               </div>
 
-              {/* Payment Banner - NOW PLACED HERE */}
+              {/* Payment Banner */}
               <div className="mt-8">
                 <PaymentBanner />
               </div>
@@ -419,7 +423,7 @@ export default function WishlistPage() {
                   {availableProducts.length > 0 && (
                     <button
                       onClick={handleAddAllToCart}
-                      className="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 mb-3"
+                      className="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 mb-3 cursor-pointer"
                     >
                       <ShoppingBag className="w-5 h-5" />
                       Add All to Cart
@@ -428,7 +432,7 @@ export default function WishlistPage() {
 
                   <Link
                     href="/menu"
-                    className="w-full py-2.5 border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                    className="w-full py-2.5 border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <PlusCircle className="w-4 h-4" />
                     Add More Items
@@ -449,7 +453,7 @@ function WishlistItem({ product, formatPrice, toggleWishlist, addToCart }) {
     <div className="group relative border border-gray-200 rounded-xl overflow-hidden hover:border-amber-300 transition-all">
       <button
         onClick={() => toggleWishlist(product)}
-        className="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg hover:shadow-xl transition-all hover:scale-110"
+        className="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg hover:shadow-xl transition-all hover:scale-110 cursor-pointer"
       >
         <Heart className="w-4 h-4 fill-red-500 text-red-500" />
       </button>
@@ -479,7 +483,10 @@ function WishlistItem({ product, formatPrice, toggleWishlist, addToCart }) {
       </div>
 
       <div className="p-4">
-        <Link href={`/products/${product.slug || product._id}`}>
+        <Link
+          href={`/products/${product.slug || product._id}`}
+          className="cursor-pointer"
+        >
           <h3 className="font-medium text-gray-900 mb-1 hover:text-amber-700 transition-colors truncate">
             {product.name}
           </h3>
@@ -505,7 +512,7 @@ function WishlistItem({ product, formatPrice, toggleWishlist, addToCart }) {
                 product.availableFlavors?.[0] || "",
               )
             }
-            className="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+            className="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
           >
             <ShoppingBag className="w-4 h-4" />
             Add to Cart
@@ -529,7 +536,7 @@ function WishlistItemList({ product, formatPrice, toggleWishlist, addToCart }) {
     <div className="flex items-center gap-4 p-4 border border-gray-200 rounded-xl hover:border-amber-300 transition-all">
       <button
         onClick={() => toggleWishlist(product)}
-        className="self-start p-2 bg-white rounded-full shadow-sm hover:shadow-md transition-all"
+        className="self-start p-2 bg-white rounded-full shadow-sm hover:shadow-md transition-all cursor-pointer"
       >
         <Heart className="w-4 h-4 fill-red-500 text-red-500" />
       </button>
@@ -551,7 +558,10 @@ function WishlistItemList({ product, formatPrice, toggleWishlist, addToCart }) {
       </div>
 
       <div className="flex-1 min-w-0">
-        <Link href={`/products/${product.slug || product._id}`}>
+        <Link
+          href={`/products/${product.slug || product._id}`}
+          className="cursor-pointer"
+        >
           <h3 className="font-medium text-gray-900 hover:text-amber-700 transition-colors truncate">
             {product.name}
           </h3>
@@ -583,7 +593,7 @@ function WishlistItemList({ product, formatPrice, toggleWishlist, addToCart }) {
                 product.availableFlavors?.[0] || "",
               )
             }
-            className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap"
+            className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap cursor-pointer"
           >
             <ShoppingBag className="w-4 h-4" />
             Add to Cart

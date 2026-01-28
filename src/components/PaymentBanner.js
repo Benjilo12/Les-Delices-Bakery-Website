@@ -11,7 +11,7 @@ const PaymentBanner = () => {
             Accept all major payments
           </h2>
           <p className="text-gray-500 text-base">
-            Receive payments via card or mobile money, right at your shop.
+            Receive payments via card or mobile money
           </p>
         </div>
 
@@ -31,7 +31,7 @@ const PaymentBanner = () => {
         {/* Paystack Button Section */}
         <div className="flex flex-col items-center justify-center gap-2">
           <div className="flex justify-center">
-            <button className="flex items-center gap-1 bg-[#4ba2c5] hover:bg-[#3d8eb0] text-white px-6 py-3 rounded-md font-semibold text-sm tracking-wide uppercase transition-all shadow hover:shadow-md active:scale-[0.98]">
+            <button className="flex items-center gap-1  text-sky-600 px-6 py-3 rounded-md font-semibold text-sm tracking-wide uppercase transition-all shadow hover:shadow-md active:scale-[0.98]">
               {/* Paystack Logo placeholder - Add your logo file to /public/images/ */}
               <div className="relative w-5 h-5">
                 <Image

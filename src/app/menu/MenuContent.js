@@ -12,6 +12,7 @@ import {
   PackageOpen,
 } from "lucide-react";
 import MenuBanner from "@/components/menu/MenuBanner";
+import PaymentBanner from "@/components/PaymentBanner";
 
 const categories = [
   { name: "All Categories", icon: "🍰" },
@@ -82,7 +83,7 @@ export default function MenuContent() {
     <main className="min-h-screen bg-linear-to-b from-gray-50 to-white">
       <MenuBanner />
 
-      <div className="max-w-400 mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-400 mx-auto px-4 sm:px-6 lg:px-8 py-12 mb-6">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* SIDEBAR FILTER */}
           <aside className="w-full lg:w-72 shrink-0">
@@ -249,6 +250,7 @@ export default function MenuContent() {
           </div>
         </div>
       </div>
+      <PaymentBanner />
     </main>
   );
 }

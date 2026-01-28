@@ -26,6 +26,7 @@ import {
 import { useCart, useWishlist, useUI } from "@/lib/store";
 import ProductCard from "@/components/ProductCard";
 import Navbar from "@/components/Navbar";
+import PaymentBanner from "@/components/PaymentBanner";
 
 export default function ProductDetailClient({ product, relatedProducts }) {
   const { addToCart } = useCart();
@@ -107,20 +108,23 @@ export default function ProductDetailClient({ product, relatedProducts }) {
         <div className="border-b border-gray-100 bg-white sticky top-0 z-40 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 py-3">
             <nav className="flex items-center gap-2 text-xs sm:text-sm text-gray-500">
-              <Link href="/" className="hover:text-amber-700 transition-colors">
+              <Link
+                href="/"
+                className="hover:text-amber-700 transition-colors cursor-pointer"
+              >
                 Home
               </Link>
               <ChevronRight className="w-3 h-3 text-gray-300" />
               <Link
                 href="/menu"
-                className="hover:text-amber-700 transition-colors"
+                className="hover:text-amber-700 transition-colors cursor-pointer"
               >
                 Menu
               </Link>
               <ChevronRight className="w-3 h-3 text-gray-300" />
               <Link
                 href={`/menu?category=${encodeURIComponent(product.category)}`}
-                className="hover:text-amber-700 transition-colors"
+                className="hover:text-amber-700 transition-colors cursor-pointer"
               >
                 {product.category}
               </Link>
@@ -136,7 +140,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
           {/* Back Button */}
           <Link
             href="/menu"
-            className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-amber-700 mb-6 group transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-amber-700 mb-6 group transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Menu
@@ -164,7 +168,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                 {/* Wishlist Heart */}
                 <button
                   onClick={() => toggleWishlist(product)}
-                  className="absolute top-4 right-4 p-3 bg-white/95 backdrop-blur-md rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 z-10"
+                  className="absolute top-4 right-4 p-3 bg-white/95 backdrop-blur-md rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 z-10 cursor-pointer"
                 >
                   <Heart
                     className={`w-5 h-5 transition-all ${isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"}`}
@@ -187,7 +191,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                     <button
                       key={index}
                       onClick={() => setSelectedImage(index)}
-                      className={`relative w-20 h-20 rounded-xl overflow-hidden shrink-0 transition-all ${selectedImage === index ? "ring-3 ring-amber-500 ring-offset-2 scale-105" : "opacity-60 hover:opacity-100"}`}
+                      className={`relative w-20 h-20 rounded-xl overflow-hidden shrink-0 transition-all cursor-pointer ${selectedImage === index ? "ring-3 ring-amber-500 ring-offset-2 scale-105" : "opacity-60 hover:opacity-100"}`}
                     >
                       <Image
                         src={image}
@@ -230,7 +234,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                 )}
 
                 {/* Category Tagline */}
-                <div className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-200">
+                <div className="p-4 bg-linear-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-200">
                   <div className="flex items-start gap-3">
                     <Sparkles className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                     <div>
@@ -264,39 +268,39 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                   )}
                 </div>
 
-                {/* Size Selection */}
+                {/* Size Selection - HORIZONTAL ROW */}
                 <div className="space-y-3 mb-6">
-                  <h3 className="text-sm font-semibold text-gray-900">
+                  <h3 className="text-sm font-semibold text-gray-900 mb-3">
                     Select Size
                   </h3>
-                  {product.priceOptions?.map((option, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedPriceOption(option)}
-                      className={`w-full p-4 rounded-xl border-2 transition-all text-left ${selectedPriceOption?.label === option.label ? "border-amber-500 bg-amber-50 shadow-sm" : "border-gray-200 hover:border-amber-300"}`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          {selectedPriceOption?.label === option.label && (
-                            <div className="w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center">
-                              <Check className="w-3 h-3 text-white" />
-                            </div>
-                          )}
-                          <div>
+                  <div className="flex flex-wrap gap-3">
+                    {product.priceOptions?.map((option, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedPriceOption(option)}
+                        className={`flex-1 min-w-30 p-4 rounded-xl border-2 transition-all cursor-pointer ${selectedPriceOption?.label === option.label ? "border-amber-500 bg-amber-50 shadow-sm" : "border-gray-200 hover:border-amber-300"}`}
+                      >
+                        <div className="flex flex-col items-center text-center gap-2">
+                          <div className="flex items-center gap-2">
+                            {selectedPriceOption?.label === option.label && (
+                              <div className="w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center">
+                                <Check className="w-3 h-3 text-white" />
+                              </div>
+                            )}
                             <div className="font-semibold text-gray-900">
                               {option.label}
                             </div>
-                            <div className="text-xs text-gray-500 mt-0.5">
-                              Perfect for gatherings
-                            </div>
+                          </div>
+                          <div className="text-xl font-bold text-amber-700">
+                            {formatPrice(option.price)}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            Perfect for gatherings
                           </div>
                         </div>
-                        <div className="text-xl font-bold text-amber-700">
-                          {formatPrice(option.price)}
-                        </div>
-                      </div>
-                    </button>
-                  ))}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Flavor Selection */}
@@ -310,7 +314,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                         <button
                           key={index}
                           onClick={() => setSelectedFlavor(flavor)}
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedFlavor === flavor ? "bg-amber-600 text-white shadow-md" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${selectedFlavor === flavor ? "bg-amber-600 text-white shadow-md" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
                         >
                           {flavor}
                         </button>
@@ -388,7 +392,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                         value={customizationNote}
                         onChange={(e) => setCustomizationNote(e.target.value)}
                         placeholder="E.g., 'Happy Birthday Sarah!', dietary requirements, custom design ideas..."
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:ring-4 focus:ring-amber-100 outline-none text-sm resize-none"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:ring-4 focus:ring-amber-100 outline-none text-sm resize-none cursor-text"
                         rows={3}
                         maxLength={200}
                       />
@@ -409,7 +413,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                         setQuantity((prev) => Math.max(1, prev - 1))
                       }
                       disabled={quantity <= 1}
-                      className="p-3 text-gray-600 hover:text-gray-900 disabled:opacity-30"
+                      className="p-3 text-gray-600 hover:text-gray-900 disabled:opacity-30 cursor-pointer"
                     >
                       <Minus className="w-4 h-4" />
                     </button>
@@ -418,7 +422,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                     </span>
                     <button
                       onClick={() => setQuantity((prev) => prev + 1)}
-                      className="p-3 text-gray-600 hover:text-gray-900"
+                      className="p-3 text-gray-600 hover:text-gray-900 cursor-pointer"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -434,7 +438,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                 <button
                   onClick={handleAddToCart}
                   disabled={!isAvailable}
-                  className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all ${isAvailable ? "bg-amber-600 hover:bg-amber-700 text-white shadow-lg hover:shadow-xl hover:scale-[1.02]" : "bg-gray-200 text-gray-400 cursor-not-allowed"}`}
+                  className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all cursor-pointer ${isAvailable ? "bg-amber-600 hover:bg-amber-700 text-white shadow-lg hover:shadow-xl hover:scale-[1.02]" : "bg-gray-200 text-gray-400 cursor-not-allowed"}`}
                 >
                   <ShoppingBag className="w-5 h-5" />
                   {isAvailable
@@ -459,7 +463,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                 </div>
 
                 {/* Payment Security */}
-                <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200">
+                <div className="p-4 bg-linear-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200">
                   <div className="flex items-center justify-center gap-2 mb-2">
                     <Lock className="w-4 h-4 text-green-600" />
                     <span className="text-xs font-bold text-green-800 uppercase">
@@ -509,7 +513,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                 </div>
                 <Link
                   href={`/menu?category=${encodeURIComponent(product.category)}`}
-                  className="text-amber-700 hover:text-amber-800 font-medium text-sm flex items-center gap-1"
+                  className="text-amber-700 hover:text-amber-800 font-medium text-sm flex items-center gap-1 cursor-pointer"
                 >
                   View All
                   <ChevronRight className="w-4 h-4" />
@@ -524,6 +528,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
           )}
         </main>
       </div>
+      <PaymentBanner />
     </>
   );
 }
@@ -533,7 +538,7 @@ function ExpandableSection({ icon, title, badge, isOpen, onToggle, children }) {
     <div className="border-2 border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
       <button
         onClick={onToggle}
-        className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+        className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors cursor-pointer"
       >
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center text-amber-600">

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { Highlighter } from "./ui/highlighter";
 
 const reviews = [
   {
@@ -71,7 +72,12 @@ export default function CustomerReviews() {
         {/* Centered Title */}
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-serif italic text-gray-900">
-            Customer Reviews
+            Customer{" "}
+            <span className="text-pink-500">
+              <Highlighter action="highlight" color="#FFEDC2">
+                Reviews
+              </Highlighter>{" "}
+            </span>
           </h2>
           <div className="w-20 h-0.5 bg-amber-600 mx-auto mt-4"></div>
         </div>
