@@ -1,208 +1,264 @@
+// app/api/orders/[orderNumber]/route.js
 import { NextResponse } from "next/server";
 import { connect } from "@/mongodb/mongoose";
 import Order from "@/models/order";
+import Product from "@/models/product";
 import { currentUser } from "@clerk/nextjs/server";
 
-// GET - Fetch single order
-export async function GET(request, { params }) {
+export async function POST(request) {
   try {
+    console.log("=== Starting order creation ===");
     await connect();
 
     const user = await currentUser();
 
     if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const { orderNumber } = params;
-    const isAdmin = user.publicMetadata.isAdmin === true;
-
-    const order = await Order.findOne({ orderNumber }).populate(
-      "items.product"
-    );
-
-    if (!order) {
-      return NextResponse.json({ error: "Order not found" }, { status: 404 });
-    }
-
-    // Check if user owns this order or is admin
-    if (!isAdmin && order.userId !== user.id) {
-      return NextResponse.json(
-        { error: "You don't have permission to view this order" },
-        { status: 403 }
-      );
-    }
-
-    return NextResponse.json(
-      {
-        success: true,
-        order,
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Error fetching order:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch order" },
-      { status: 500 }
-    );
-  }
-}
-
-// PATCH - Update order status (Admin only)
-export async function PATCH(request, { params }) {
-  try {
-    console.log("Starting order update...");
-    await connect();
-
-    const user = await currentUser();
-
-    if (!user || user.publicMetadata.isAdmin !== true) {
       console.log("Unauthorized access attempt");
       return NextResponse.json(
-        { error: "Unauthorized - Admin only" },
-        { status: 401 }
+        {
+          success: false,
+          error: "Unauthorized",
+        },
+        { status: 401 },
       );
     }
 
-    const { orderNumber } = params;
     const body = await request.json();
 
     const {
-      status,
-      paymentStatus,
-      paymentMethod,
-      paymentReference,
-      adminNotes,
-      cancellationReason,
+      items,
+      deliveryMethod,
+      deliveryAddress,
+      eventDate,
+      eventType,
+      specialInstructions,
+      customerPhone,
     } = body;
 
-    console.log("Update data received:", {
-      orderNumber,
-      status,
-      paymentStatus,
+    console.log("Order data received:", {
+      userId: user.id,
+      itemsCount: items?.length,
+      deliveryMethod,
+      eventDate,
+      deliveryAddress: deliveryAddress || "No address provided",
     });
 
-    const order = await Order.findOne({ orderNumber });
-
-    if (!order) {
-      return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    // Validation
+    if (!items || items.length === 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Order must contain at least one item",
+        },
+        { status: 400 },
+      );
     }
 
-    // Update fields
-    const updateData = {};
-
-    if (status) {
-      updateData.status = status;
-
-      // Update timestamp based on status
-      if (status === "confirmed" && !order.confirmedAt) {
-        updateData.confirmedAt = new Date();
-      } else if (status === "completed" && !order.completedAt) {
-        updateData.completedAt = new Date();
-      } else if (status === "cancelled" && !order.cancelledAt) {
-        updateData.cancelledAt = new Date();
-        if (cancellationReason) {
-          updateData.cancellationReason = cancellationReason;
-        }
-      }
+    if (!deliveryMethod || !eventDate || !customerPhone) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Missing required fields: deliveryMethod, eventDate, or customerPhone",
+        },
+        { status: 400 },
+      );
     }
 
-    if (paymentStatus) updateData.paymentStatus = paymentStatus;
-    if (paymentMethod) updateData.paymentMethod = paymentMethod;
-    if (paymentReference) updateData.paymentReference = paymentReference;
-    if (adminNotes !== undefined) updateData.adminNotes = adminNotes;
-
-    const updatedOrder = await Order.findOneAndUpdate(
-      { orderNumber },
-      { $set: updateData },
-      { new: true, runValidators: true }
-    ).populate("items.product");
-
-    console.log("Order updated successfully:", orderNumber);
-
-    return NextResponse.json(
-      {
-        success: true,
-        order: updatedOrder,
-        message: "Order updated successfully",
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Error updating order:", error);
-    return NextResponse.json(
-      { error: "Internal server error: " + error.message },
-      { status: 500 }
-    );
-  }
-}
-
-// DELETE - Cancel order (User can cancel pending orders, Admin can delete any)
-export async function DELETE(request, { params }) {
-  try {
-    console.log("Starting order cancellation...");
-    await connect();
-
-    const user = await currentUser();
-
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const { orderNumber } = params;
-    const isAdmin = user.publicMetadata.isAdmin === true;
-
-    const order = await Order.findOne({ orderNumber });
-
-    if (!order) {
-      return NextResponse.json({ error: "Order not found" }, { status: 404 });
-    }
-
-    // Check permissions
-    if (!isAdmin) {
-      // Users can only cancel their own pending orders
-      if (order.userId !== user.id) {
+    if (deliveryMethod === "delivery") {
+      if (!deliveryAddress || !deliveryAddress.street) {
+        console.log("Invalid delivery address:", deliveryAddress);
         return NextResponse.json(
-          { error: "You don't have permission to cancel this order" },
-          { status: 403 }
-        );
-      }
-
-      if (order.status !== "pending") {
-        return NextResponse.json(
-          { error: "Only pending orders can be cancelled" },
-          { status: 400 }
+          {
+            success: false,
+            error: "Delivery address is required for delivery orders",
+          },
+          { status: 400 },
         );
       }
     }
 
-    // If admin, delete order. If user, just cancel it
-    if (isAdmin) {
-      await Order.findOneAndDelete({ orderNumber });
-      console.log("Order deleted by admin:", orderNumber);
-    } else {
-      order.status = "cancelled";
-      order.cancelledAt = new Date();
-      order.cancellationReason = "Cancelled by customer";
-      await order.save();
-      console.log("Order cancelled by user:", orderNumber);
+    const eventDateTime = new Date(eventDate);
+
+    // Process order items
+    let subtotal = 0;
+    const processedItems = [];
+
+    for (const item of items) {
+      const product = await Product.findById(item.product);
+
+      if (!product) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: `Product not found: ${item.product}`,
+          },
+          { status: 404 },
+        );
+      }
+
+      if (!product.isAvailable) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: `Product not available: ${product.name}`,
+          },
+          { status: 400 },
+        );
+      }
+
+      const basePrice =
+        (item.selectedOption?.price || product.price) * (item.quantity || 1);
+      const customizationCost = item.customization?.additionalCost || 0;
+      const itemTotal = basePrice + customizationCost;
+
+      processedItems.push({
+        product: item.product,
+        productName: product.name,
+        selectedOption: item.selectedOption || {
+          label: `${product.name} - Standard`,
+          price: product.price,
+        },
+        quantity: item.quantity || 1,
+        selectedFlavors: item.selectedFlavors || [],
+        customization: {
+          requested: item.customization?.requested || false,
+          details: item.customization?.details || "",
+          additionalCost: customizationCost,
+        },
+        itemTotal,
+      });
+
+      subtotal += itemTotal;
     }
+
+    const deliveryFee = deliveryMethod === "delivery" ? 50 : 0;
+    const totalAmount = subtotal + deliveryFee;
+
+    // Get customer info
+    const customerName =
+      `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Customer";
+    const customerEmail = user.emailAddresses[0]?.emailAddress || "";
+
+    if (!customerEmail) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "User email is required",
+        },
+        { status: 400 },
+      );
+    }
+
+    // Generate order number manually before creating
+    const date = new Date();
+    const dateStr = date.toISOString().slice(0, 10).replace(/-/g, "");
+
+    const startOfDay = new Date(date.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+
+    const count = await Order.countDocuments({
+      createdAt: {
+        $gte: startOfDay,
+        $lt: endOfDay,
+      },
+    });
+
+    const orderNumber = `LD-${dateStr}-${String(count + 1).padStart(4, "0")}`;
+    console.log("Manually generated order number:", orderNumber);
+
+    // Create order data
+    const orderData = {
+      orderNumber,
+      userId: user.id,
+      customerName,
+      customerEmail,
+      customerPhone,
+      items: processedItems,
+      subtotal,
+      deliveryFee,
+      totalAmount,
+      deliveryMethod,
+      deliveryAddress:
+        deliveryMethod === "delivery" ? deliveryAddress : undefined,
+      eventDate: eventDateTime,
+      eventType: eventType || "Birthday",
+      specialInstructions: specialInstructions || "",
+      status: "pending",
+      paymentStatus: "pending",
+    };
+
+    console.log("Creating order in database...");
+    console.log("Order data:", JSON.stringify(orderData, null, 2));
+
+    const order = await Order.create(orderData);
+
+    console.log("Order created successfully:", {
+      id: order._id,
+      orderNumber: order.orderNumber,
+      status: order.status,
+    });
 
     return NextResponse.json(
       {
         success: true,
-        message: isAdmin
-          ? "Order deleted successfully"
-          : "Order cancelled successfully",
+        order: {
+          _id: order._id,
+          orderNumber: order.orderNumber,
+          customerName: order.customerName,
+          customerEmail: order.customerEmail,
+          customerPhone: order.customerPhone,
+          items: processedItems,
+          subtotal: order.subtotal,
+          deliveryFee: order.deliveryFee,
+          totalAmount: order.totalAmount,
+          deliveryMethod: order.deliveryMethod,
+          deliveryAddress: order.deliveryAddress,
+          eventDate: order.eventDate,
+          eventType: order.eventType,
+          status: order.status,
+          paymentStatus: order.paymentStatus,
+          createdAt: order.createdAt,
+        },
+        message: "Order placed successfully",
       },
-      { status: 200 }
+      { status: 201 },
     );
   } catch (error) {
-    console.error("Error cancelling/deleting order:", error);
+    console.error("=== Error creating order ===");
+    console.error("Error:", error);
+    console.error("Stack:", error.stack);
+
+    // More specific error messages
+    if (error.name === "ValidationError") {
+      const errors = Object.values(error.errors).map((err) => err.message);
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Validation failed",
+          details: errors,
+        },
+        { status: 400 },
+      );
+    }
+
+    if (error.code === 11000) {
+      // Duplicate key error
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Duplicate order number detected. Please try again.",
+        },
+        { status: 400 },
+      );
+    }
+
     return NextResponse.json(
-      { error: "Internal server error: " + error.message },
-      { status: 500 }
+      {
+        success: false,
+        error: "Failed to create order: " + error.message,
+      },
+      { status: 500 },
     );
   }
 }

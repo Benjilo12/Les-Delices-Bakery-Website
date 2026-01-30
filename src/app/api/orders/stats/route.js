@@ -1,3 +1,4 @@
+// lesdelices/src/app/api/orders/stats/route.js
 import { NextResponse } from "next/server";
 import { connect } from "@/mongodb/mongoose";
 import Order from "@/models/order";
@@ -13,7 +14,7 @@ export async function GET(request) {
     if (!user || user.publicMetadata.isAdmin !== true) {
       return NextResponse.json(
         { error: "Unauthorized - Admin only" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -72,13 +73,13 @@ export async function GET(request) {
         period,
         stats,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error fetching order stats:", error);
     return NextResponse.json(
       { error: "Failed to fetch statistics" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

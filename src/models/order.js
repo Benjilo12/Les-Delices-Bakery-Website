@@ -1,3 +1,4 @@
+// models/order.js
 import mongoose, { Schema } from "mongoose";
 
 const OrderItemSchema = new Schema(
@@ -12,7 +13,7 @@ const OrderItemSchema = new Schema(
       required: true,
     },
     selectedOption: {
-      label: { type: String, required: true }, // e.g., "8 Inch - 2 Flavors"
+      label: { type: String, required: true },
       price: { type: Number, required: true },
     },
     quantity: {
@@ -27,7 +28,7 @@ const OrderItemSchema = new Schema(
     ],
     customization: {
       requested: { type: Boolean, default: false },
-      details: { type: String }, // Customer's customization requests
+      details: { type: String },
       additionalCost: { type: Number, default: 0 },
     },
     itemTotal: {
@@ -44,12 +45,12 @@ const OrderSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      // Generate format: LD-YYYYMMDD-XXXX
+      index: true,
     },
 
     // Customer Information (from Clerk)
     userId: {
-      type: String, // Clerk User ID
+      type: String,
       required: true,
       index: true,
     },
@@ -104,6 +105,7 @@ const OrderSchema = new Schema(
     eventType: {
       type: String,
       enum: ["Birthday", "Anniversary", "Wedding", "Corporate", "Other"],
+      default: "Birthday",
     },
     specialInstructions: {
       type: String,
@@ -113,13 +115,13 @@ const OrderSchema = new Schema(
     status: {
       type: String,
       enum: [
-        "pending", // Order placed, awaiting confirmation
-        "confirmed", // Order confirmed by bakery
-        "in-progress", // Being prepared
-        "ready", // Ready for pickup/delivery
-        "out-for-delivery", // Out for delivery
-        "completed", // Order fulfilled
-        "cancelled", // Order cancelled
+        "pending",
+        "confirmed",
+        "in-progress",
+        "ready",
+        "out-for-delivery",
+        "completed",
+        "cancelled",
       ],
       default: "pending",
     },
@@ -150,28 +152,29 @@ const OrderSchema = new Schema(
     cancellationReason: String,
   },
   {
-    timestamps: true, // createdAt, updatedAt
+    timestamps: true,
   }
 );
 
-// Index for efficient queries
-OrderSchema.index({ userId: 1, createdAt: -1 });
-OrderSchema.index({ orderNumber: 1 });
-OrderSchema.index({ status: 1 });
-OrderSchema.index({ eventDate: 1 });
-
 // Generate order number before saving
-OrderSchema.pre("save", async function (next) {
+OrderSchema.pre("save", function (next) {
   if (this.isNew && !this.orderNumber) {
-    const date = new Date();
-    const dateStr = date.toISOString().slice(0, 10).replace(/-/g, "");
-    const count = await mongoose.model("Order").countDocuments({
-      createdAt: {
-        $gte: new Date(date.setHours(0, 0, 0, 0)),
-        $lt: new Date(date.setHours(23, 59, 59, 999)),
-      },
-    });
-    this.orderNumber = `LD-${dateStr}-${String(count + 1).padStart(4, "0")}`;
+    try {
+      const date = new Date();
+      const dateStr = date.toISOString().slice(0, 10).replace(/-/g, "");
+      
+      // Generate a simple timestamp-based order number for now
+      // In production, you should use a counter but this will work for testing
+      const timestamp = Date.now().toString().slice(-6);
+      const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      
+      this.orderNumber = `LD-${dateStr}-${timestamp}${random}`;
+      console.log("Generated order number:", this.orderNumber);
+    } catch (error) {
+      console.error("Error generating order number:", error);
+      // Fallback order number
+      this.orderNumber = `LD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    }
   }
   next();
 });
