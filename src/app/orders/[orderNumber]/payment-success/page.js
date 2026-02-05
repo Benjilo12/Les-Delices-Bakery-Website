@@ -97,7 +97,7 @@ export default function PaymentSuccessPage() {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-white">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-linear-to-b from-amber-50 to-white">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-amber-600 mb-6"></div>
           <h2 className="text-xl font-semibold text-gray-900 mb-2">
             Verifying your payment...
@@ -114,7 +114,7 @@ export default function PaymentSuccessPage() {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-orange-50 to-white px-4">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-linear-to-b from-orange-50 to-white px-4">
           <div className="max-w-md w-full bg-white rounded-2xl shadow-lg border border-orange-200 p-8">
             <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mb-6 mx-auto">
               <AlertCircle className="w-8 h-8 text-orange-500" />
@@ -161,7 +161,7 @@ export default function PaymentSuccessPage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+      <div className="min-h-screen bg-linear-to-b from-green-50 to-white">
         <div className="max-w-2xl mx-auto px-4 py-16">
           <div className="text-center">
             {/* Success Icon */}
@@ -175,7 +175,7 @@ export default function PaymentSuccessPage() {
             </h1>
 
             <p className="text-lg text-gray-600 mb-8">
-              Thank you for your order! We've received your payment and are
+              Thank you for your order! We&apos;ve received your payment and are
               preparing your delicious treats.
             </p>
 

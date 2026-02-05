@@ -37,7 +37,6 @@ import { toast } from "sonner";
 
 // Helper functions
 function OrderStatusBadge({ status }) {
-  // Updated to match API status values (snake_case)
   const statusConfig = {
     pending: {
       label: "Pending",
@@ -224,7 +223,6 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateNote, setUpdateNote] = useState("");
 
-  // Updated status options to match API
   const statusOptions = [
     { value: "pending", label: "Pending", color: "yellow" },
     { value: "confirmed", label: "Confirmed", color: "green" },
@@ -796,7 +794,7 @@ export default function DashboardOrdersPage() {
     processing: 0,
     ready: 0,
     out_for_delivery: 0,
-    completed: 0, // Changed from delivered
+    completed: 0,
     cancelled: 0,
     totalRevenue: 0,
   });
@@ -1134,7 +1132,7 @@ export default function DashboardOrdersPage() {
     return (
       <div className="flex min-h-screen bg-gray-50">
         <DashboardSidebar />
-        <div className="flex-1 ml-0 lg:ml-64">
+        <div className="flex-1 lg:pl-64 w-full">
           <div className="p-8">
             <div className="animate-pulse">
               <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
@@ -1155,10 +1153,10 @@ export default function DashboardOrdersPage() {
     <div className="flex min-h-screen bg-gray-50">
       <DashboardSidebar />
 
-      {/* Main Content - EXTRA WIDE */}
-      <main className="flex-1 ml-0 lg:ml-64">
-        <div className="p-4 md:p-8">
-          {/* Header */}
+      {/* Main Content - Wider layout */}
+      <main className="flex-1 lg:pl-64 w-full">
+        <div className="p-4 md:p-6 lg:p-8 w-full max-w-full">
+          {/* Header - Full width */}
           <div className="mb-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
               <div>
@@ -1197,8 +1195,8 @@ export default function DashboardOrdersPage() {
               </div>
             </div>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            {/* Stats Cards - Full width grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <StatsCard
                 title="Total Orders"
                 value={stats.total}
@@ -1222,18 +1220,18 @@ export default function DashboardOrdersPage() {
               />
               <StatsCard
                 title="Delivered"
-                value={stats.completed} // Changed from stats.delivered
+                value={stats.completed}
                 icon={CheckCircle}
                 color="bg-emerald-50 text-emerald-600"
                 trend={8}
               />
             </div>
 
-            {/* Filters and Search */}
-            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm mb-6">
-              <div className="flex flex-col md:flex-row gap-4">
-                {/* Search */}
-                <div className="flex-1">
+            {/* Filters and Search - Full width */}
+            <div className="bg-white p-4 md:p-6 rounded-xl border border-gray-200 shadow-sm mb-6 w-full">
+              <div className="flex flex-col lg:flex-row gap-4 w-full">
+                {/* Search - Takes more space */}
+                <div className="flex-1 min-w-0">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
@@ -1246,12 +1244,12 @@ export default function DashboardOrdersPage() {
                   </div>
                 </div>
 
-                {/* Filters */}
-                <div className="flex gap-3">
+                {/* Filters - Compact but responsive */}
+                <div className="flex flex-wrap gap-3">
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent min-w-[140px]"
                   >
                     <option value="all">All Status</option>
                     <option value="pending">Pending</option>
@@ -1259,14 +1257,14 @@ export default function DashboardOrdersPage() {
                     <option value="processing">Processing</option>
                     <option value="ready">Ready</option>
                     <option value="out_for_delivery">Out for Delivery</option>
-                    <option value="completed">Delivered</option> {/* Changed */}
+                    <option value="completed">Delivered</option>
                     <option value="cancelled">Cancelled</option>
                   </select>
 
                   <select
                     value={dateFilter}
                     onChange={(e) => setDateFilter(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent min-w-[140px]"
                   >
                     <option value="all">All Time</option>
                     <option value="today">Today</option>
@@ -1278,7 +1276,7 @@ export default function DashboardOrdersPage() {
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent min-w-[140px]"
                   >
                     <option value="newest">Newest First</option>
                     <option value="oldest">Oldest First</option>
@@ -1290,7 +1288,7 @@ export default function DashboardOrdersPage() {
             </div>
           </div>
 
-          {/* Orders Table - EXTREMELY WIDE LAYOUT */}
+          {/* Orders Table - EXTRA WIDE LAYOUT */}
           {loading ? (
             <div className="text-center py-12">
               <div className="w-16 h-16 border-4 border-amber-200 border-t-amber-600 rounded-full animate-spin mx-auto mb-4"></div>
@@ -1336,29 +1334,29 @@ export default function DashboardOrdersPage() {
             </div>
           ) : (
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-              {/* Table Header - ULTRA WIDE COLUMN SIZES */}
-              <div className="grid grid-cols-14 gap-2 p-4 border-b border-gray-200 bg-gray-50 font-medium text-sm text-gray-700">
-                <div className="col-span-3">Order Details</div>
-                <div className="col-span-3">Customer Information</div>
-                <div className="col-span-2">Dates</div>
+              {/* Table Header - WIDER COLUMN DISTRIBUTION */}
+              <div className="grid grid-cols-12 gap-2 p-4 border-b border-gray-200 bg-gray-50 font-medium text-sm text-gray-700">
+                <div className="col-span-3 pl-2">Order Details</div>
+                <div className="col-span-2">Customer</div>
+                <div className="col-span-1">Dates</div>
                 <div className="col-span-1">Amount</div>
                 <div className="col-span-1">Items</div>
                 <div className="col-span-1">Status</div>
                 <div className="col-span-1">Payment</div>
-                <div className="col-span-2 text-right">Actions</div>
+                <div className="col-span-2 text-right pr-2">Actions</div>
               </div>
 
-              {/* Table Body - EXTRA WIDE */}
+              {/* Table Body - WIDER LAYOUT */}
               <div className="divide-y divide-gray-200">
                 {currentOrders.map((order) => {
                   const isExpanded = expandedOrders[order._id];
 
                   return (
                     <div key={order._id}>
-                      {/* Row - WIDE LAYOUT */}
-                      <div className="grid grid-cols-14 gap-2 p-4 hover:bg-gray-50 transition-colors items-center">
-                        {/* Order Details - 3 columns */}
-                        <div className="col-span-3">
+                      {/* Row - MORE SPACIOUS */}
+                      <div className="grid grid-cols-12 gap-2 p-4 hover:bg-gray-50 transition-colors items-center">
+                        {/* Order Details - 3 columns - SHIFTED LEFT */}
+                        <div className="col-span-3 pl-2">
                           <div className="font-medium text-gray-900 text-lg">
                             {order.orderNumber}
                           </div>
@@ -1372,8 +1370,8 @@ export default function DashboardOrdersPage() {
                           </div>
                         </div>
 
-                        {/* Customer Information - 3 columns */}
-                        <div className="col-span-3">
+                        {/* Customer Information - 2 columns */}
+                        <div className="col-span-2">
                           <div className="font-medium text-gray-900">
                             {order.customerName}
                           </div>
@@ -1385,13 +1383,13 @@ export default function DashboardOrdersPage() {
                           </div>
                         </div>
 
-                        {/* Dates - 2 columns */}
-                        <div className="col-span-2">
+                        {/* Dates - 1 column */}
+                        <div className="col-span-1">
                           <div className="text-sm text-gray-900">
                             📅 {formatDateShort(order.createdAt)}
                           </div>
                           <div className="text-xs text-gray-500 mt-1">
-                            🎯 Event: {formatDateShort(order.eventDate)}
+                            🎯 {formatDateShort(order.eventDate)}
                           </div>
                         </div>
 
@@ -1423,7 +1421,7 @@ export default function DashboardOrdersPage() {
                         </div>
 
                         {/* Actions - 2 columns */}
-                        <div className="col-span-2 flex justify-end items-center gap-2">
+                        <div className="col-span-2 flex justify-end items-center gap-2 pr-2">
                           <button
                             onClick={() => toggleOrderExpansion(order._id)}
                             className="p-2 hover:bg-gray-100 rounded transition-colors"
@@ -1454,11 +1452,11 @@ export default function DashboardOrdersPage() {
                         </div>
                       </div>
 
-                      {/* Expanded Details - FULL WIDTH */}
+                      {/* Expanded Details - WIDER LAYOUT */}
                       {isExpanded && (
                         <div className="px-4 pb-4 bg-gray-50 border-t border-gray-200">
                           <div className="p-6 bg-white rounded-lg border border-gray-200">
-                            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                               {/* Contact Info */}
                               <div>
                                 <h4 className="font-medium text-gray-900 mb-3">
@@ -1561,7 +1559,7 @@ export default function DashboardOrdersPage() {
                               </div>
 
                               {/* Quick Actions */}
-                              <div className="col-span-2">
+                              <div>
                                 <h4 className="font-medium text-gray-900 mb-3">
                                   Quick Actions
                                 </h4>
@@ -1613,7 +1611,7 @@ export default function DashboardOrdersPage() {
                 })}
               </div>
 
-              {/* Pagination */}
+              {/* Pagination - Full width */}
               <div className="flex items-center justify-between p-4 border-t border-gray-200">
                 <div className="text-sm text-gray-600">
                   Showing {indexOfFirstItem + 1}-

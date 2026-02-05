@@ -340,13 +340,16 @@ export default function CartPage() {
         <div className="border-b border-gray-100 bg-white">
           <div className="max-w-7xl mx-auto px-4 py-3">
             <nav className="flex items-center gap-2 text-sm text-gray-500">
-              <Link href="/" className="hover:text-amber-700 transition-colors">
+              <Link
+                href="/"
+                className="hover:text-amber-700 transition-colors cursor-pointer"
+              >
                 Home
               </Link>
               <ChevronRight className="w-4 h-4 text-gray-300" />
               <Link
                 href="/menu"
-                className="hover:text-amber-700 transition-colors"
+                className="hover:text-amber-700 transition-colors cursor-pointer"
               >
                 Menu
               </Link>
@@ -371,7 +374,7 @@ export default function CartPage() {
             <div className="flex items-center gap-4">
               <Link
                 href="/menu"
-                className="inline-flex items-center gap-2 bg-amber-100 hover:bg-amber-200 text-amber-900 px-4 py-3 rounded-lg font-medium transition-colors"
+                className="inline-flex items-center gap-2 bg-amber-100 hover:bg-amber-200 text-amber-900 px-4 py-3 rounded-lg font-medium transition-colors cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Continue Shopping
@@ -380,7 +383,7 @@ export default function CartPage() {
               {cart.length > 0 && (
                 <button
                   onClick={handleClearCart}
-                  className="inline-flex items-center gap-2 text-red-600 hover:text-red-700 text-sm font-medium"
+                  className="inline-flex items-center gap-2 text-red-600 hover:text-red-700 text-sm font-medium cursor-pointer"
                 >
                   <Trash2 className="w-4 h-4" />
                   Clear Cart
@@ -408,7 +411,7 @@ export default function CartPage() {
                   </div>
                 </div>
                 <SignInButton mode="modal" redirectUrl="/cart">
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer">
                     Sign In
                   </button>
                 </SignInButton>
@@ -516,7 +519,7 @@ export default function CartPage() {
                           name="deliveryArea"
                           value={formData.deliveryArea}
                           onChange={handleInputChange}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors appearance-none bg-white"
+                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors appearance-none bg-white cursor-pointer"
                           required
                         >
                           <option value="Accra">Accra</option>
@@ -562,7 +565,7 @@ export default function CartPage() {
                         value={formData.eventDate}
                         onChange={handleInputChange}
                         min={new Date().toISOString().split("T")[0]}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors cursor-pointer"
                         required
                       />
                       <p className="text-xs text-gray-500 mt-1">
@@ -578,7 +581,7 @@ export default function CartPage() {
                         name="eventType"
                         value={formData.eventType}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors cursor-pointer"
                       >
                         <option value="Birthday">Birthday</option>
                         <option value="Wedding">Wedding</option>
@@ -691,7 +694,7 @@ export default function CartPage() {
                       <p className="text-sm text-red-700">{paymentError}</p>
                       <button
                         onClick={() => setPaymentError("")}
-                        className="text-xs text-red-600 hover:text-red-800 mt-1 font-medium"
+                        className="text-xs text-red-600 hover:text-red-800 mt-1 font-medium cursor-pointer"
                       >
                         Dismiss
                       </button>
@@ -734,9 +737,9 @@ export default function CartPage() {
                       <button
                         onClick={handleInitializePayment}
                         disabled={!canProceedToPayment || isLoading}
-                        className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all ${
+                        className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all cursor-pointer ${
                           canProceedToPayment && !isLoading
-                            ? "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                            ? "bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                             : "bg-gray-200 text-gray-400 cursor-not-allowed"
                         }`}
                       >
@@ -756,9 +759,9 @@ export default function CartPage() {
                       <button
                         onClick={handlePaystackPayment}
                         disabled={isProcessingPayment}
-                        className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all ${
+                        className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all cursor-pointer ${
                           !isProcessingPayment
-                            ? "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                            ? "bg-linear-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                             : "bg-gray-200 text-gray-400 cursor-not-allowed"
                         }`}
                       >
@@ -799,7 +802,7 @@ export default function CartPage() {
                 </div>
 
                 {/* Delivery Info */}
-                <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-200 p-6">
+                <div className="bg-linear-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-200 p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <Sparkles className="w-5 h-5 text-amber-600" />
                     <h3 className="font-semibold text-amber-900">
@@ -942,7 +945,7 @@ function CartItem({ item, onRemove, onQuantityChange, formatPrice }) {
           </div>
           <button
             onClick={onRemove}
-            className="text-gray-400 hover:text-red-500 transition-colors p-1"
+            className="text-gray-400 hover:text-red-500 transition-colors p-1 cursor-pointer"
             aria-label="Remove item"
           >
             <Trash2 className="w-4 h-4" />
@@ -964,7 +967,7 @@ function CartItem({ item, onRemove, onQuantityChange, formatPrice }) {
           <div className="flex items-center border border-gray-300 rounded-lg">
             <button
               onClick={() => onQuantityChange(-1)}
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors rounded-l"
+              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors rounded-l cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={item.quantity <= 1}
             >
               <Minus className="w-3 h-3" />
@@ -974,7 +977,7 @@ function CartItem({ item, onRemove, onQuantityChange, formatPrice }) {
             </span>
             <button
               onClick={() => onQuantityChange(1)}
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors rounded-r"
+              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors rounded-r cursor-pointer"
             >
               <Plus className="w-3 h-3" />
             </button>
@@ -1008,7 +1011,7 @@ function EmptyCart() {
       </p>
       <Link
         href="/menu"
-        className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-8 py-4 rounded-xl font-medium text-lg transition-colors transform hover:-translate-y-0.5 hover:shadow-lg"
+        className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-8 py-4 rounded-xl font-medium text-lg transition-colors transform hover:-translate-y-0.5 hover:shadow-lg cursor-pointer"
       >
         <Cake className="w-5 h-5" />
         Start Shopping

@@ -475,7 +475,7 @@ function WishlistItem({ product, formatPrice, toggleWishlist, addToCart }) {
 
         {!product.isAvailable && (
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <span className="bg-white/90 text-gray-900 px-3 py-1 rounded text-xs font-medium">
+            <span className="bg-white/90 text-gray-900 px-3 py-1 rounded text-xs font-medium cursor-pointer">
               Out of Stock
             </span>
           </div>
@@ -493,7 +493,7 @@ function WishlistItem({ product, formatPrice, toggleWishlist, addToCart }) {
         </Link>
 
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded">
+          <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded cursor-pointer">
             {product.category}
           </span>
           <span className="text-lg font-bold text-amber-800">
@@ -567,7 +567,7 @@ function WishlistItemList({ product, formatPrice, toggleWishlist, addToCart }) {
           </h3>
         </Link>
         <div className="flex items-center gap-3 mt-1">
-          <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">
+          <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded cursor-pointer">
             {product.category}
           </span>
           <span className="text-base font-bold text-amber-800">
@@ -575,7 +575,7 @@ function WishlistItemList({ product, formatPrice, toggleWishlist, addToCart }) {
           </span>
         </div>
         {!product.isAvailable && (
-          <span className="text-xs text-red-600 mt-1 inline-block">
+          <span className="text-xs text-red-600 mt-1 inline-block cursor-pointer">
             Out of Stock
           </span>
         )}
