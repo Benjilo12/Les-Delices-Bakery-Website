@@ -1,6 +1,14 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-export default clerkMiddleware();
+// Define protected routes - only cart and orders
+const isProtectedRoute = createRouteMatcher(["/cart(.*)", "/orders(.*)"]);
+
+export default clerkMiddleware(async (auth, request) => {
+  // Protect only cart and orders pages
+  if (isProtectedRoute(request)) {
+    await auth.protect();
+  }
+});
 
 export const config = {
   matcher: [

@@ -1,15 +1,13 @@
-import { Highlighter } from "@/components/ui/highlighter";
-import { SignIn } from "@clerk/nextjs"; // 1. Corrected Import
+// app/sign-up/page.js
+import { SignUp } from "@clerk/nextjs";
 import Image from "next/image";
 
-export default function SignInPage() {
+export default function SignUpPage() {
   return (
     <div className="flex min-h-screen overflow-hidden bg-white">
-      {/* LEFT SIDE: Sign In */}
+      {/* LEFT SIDE: Sign Up */}
       <div className="w-full lg:w-[40%] xl:w-[35%] h-screen overflow-y-auto flex flex-col justify-center items-center lg:items-start p-6 sm:p-10 lg:pl-12 xl:pl-20 bg-white">
         <div className="w-full max-w-md py-8">
-          {" "}
-          {/* 2. Fixed max-width class */}
           {/* Logo */}
           <div className="mb-8 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 mb-2">
@@ -20,46 +18,42 @@ export default function SignInPage() {
                 Les Délices
               </h1>
             </div>
-            <p className="text-gray-600 text-sm">
-              Welcome back to our community
-            </p>
+            <p className="text-gray-600 text-sm">Join our sweet community</p>
           </div>
-          {/* Clerk Sign In - 3. Changed component to SignIn */}
-          <SignIn
+
+          {/* Clerk Sign Up */}
+          <SignUp
             appearance={{
               elements: {
-                rootBox: "w-full",
+                rootBox: "w-full mx-auto",
                 card: "shadow-none border-0 p-0 bg-transparent w-full",
                 headerTitle: "text-2xl font-bold text-gray-900 mb-1",
                 headerSubtitle: "text-gray-500 mb-6",
                 socialButtonsBlockButton:
-                  "border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors",
+                  "border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors text-gray-700",
                 socialButtonsBlockButtonText: "text-gray-700 font-medium",
                 dividerLine: "bg-gray-200",
                 dividerText: "text-gray-500",
-                formFieldLabel: "text-gray-700 font-medium text-sm",
+                formFieldLabel: "text-gray-700 font-medium text-sm mb-2",
                 formFieldInput:
-                  "border border-gray-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 rounded-lg",
+                  "border border-gray-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 rounded-lg w-full px-3 py-2",
                 formButtonPrimary:
-                  "bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-medium py-3 rounded-lg transition-all",
+                  "bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-medium py-3 rounded-lg w-full transition-all",
                 footerActionLink:
                   "text-amber-600 hover:text-amber-700 font-medium",
-              },
-              variables: {
-                colorPrimary: "#d97706",
-                colorText: "#374151",
-                colorTextSecondary: "#6b7280",
+                footer: "mt-4",
               },
             }}
             routing="path"
-            path="/sign-in" // Matches your folder structure
-            signUpUrl="/sign-up"
+            path="/sign-up"
+            signInUrl="/sign-in"
             redirectUrl="/"
           />
+
           {/* Terms */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <p className="text-[11px] text-gray-500 leading-relaxed">
-              By signing in, you agree to our{" "}
+              By creating an account, you agree to our{" "}
               <a href="/terms" className="text-amber-600 hover:underline">
                 Terms of Service
               </a>{" "}
@@ -91,58 +85,66 @@ export default function SignInPage() {
         <div className="relative z-10 w-full flex flex-col justify-center p-12 xl:p-24">
           <div className="max-w-2xl">
             <blockquote className="text-2xl xl:text-4xl font-serif italic text-white leading-tight mb-10">
-              “At{" "}
-              <span className="text-amber-500">
-                <Highlighter action="hightlight" color="#E91E63">
-                  Les Délices By Akorfa
-                </Highlighter>
-              </span>
-              , we believe life’s best moments deserve a sweet touch that is
-              both delicious and thoughtfully crafted.”
+              "Create an account to unlock exclusive benefits at{" "}
+              <span className="text-amber-500">Les Délices</span>
+              !"
             </blockquote>
 
-            <div className="flex items-center gap-4">
-              <div className="relative w-12 h-12 xl:w-14 xl:h-14 rounded-full overflow-hidden border-2 border-amber-300">
-                <Image
-                  src="/images/profile.png"
-                  alt="Mrs. Eleanor Dartey"
-                  fill
-                  className="object-cover"
-                  sizes="56px"
-                />
+            <div className="space-y-6">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center mt-0.5">
+                  <span className="text-amber-400">✓</span>
+                </div>
+                <div>
+                  <h4 className="font-bold text-white mb-1">Order Tracking</h4>
+                  <p className="text-amber-100/80 text-sm">
+                    Track your orders in real-time
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="font-bold text-white text-base xl:text-lg leading-none">
-                  Mrs. Eleanor Dartey
-                </p>
-                <p className="text-amber-200 text-xs uppercase tracking-widest mt-1">
-                  CEO & Founder
-                </p>
-              </div>
-            </div>
 
-            <div className="mt-10 grid grid-cols-2 gap-4 xl:gap-6">
-              <div className="flex items-center gap-3 text-amber-50 text-sm xl:text-base">
-                <span className="shrink-0 text-lg">🎂</span>
-                <span className="font-light">Artisanal Quality</span>
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center mt-0.5">
+                  <span className="text-amber-400">✓</span>
+                </div>
+                <div>
+                  <h4 className="font-bold text-white mb-1">Fast Checkout</h4>
+                  <p className="text-amber-100/80 text-sm">
+                    Save your details for faster checkout
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-3 text-amber-50 text-sm xl:text-base">
-                <span className="shrink-0 text-lg">🌿</span>
-                <span className="font-light">Wholesome Ingredients</span>
+
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center mt-0.5">
+                  <span className="text-amber-400">✓</span>
+                </div>
+                <div>
+                  <h4 className="font-bold text-white mb-1">Order History</h4>
+                  <p className="text-amber-100/80 text-sm">
+                    Access your complete order history
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-3 text-amber-50 text-sm xl:text-base">
-                <span className="shrink-0 text-lg">🎨</span>
-                <span className="font-light">Custom Designs</span>
-              </div>
-              <div className="flex items-center gap-3 text-amber-50 text-sm xl:text-base">
-                <span className="shrink-0 text-lg">🚚</span>
-                <span className="font-light">Handcrafted in Accra</span>
+
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center mt-0.5">
+                  <span className="text-amber-400">✓</span>
+                </div>
+                <div>
+                  <h4 className="font-bold text-white mb-1">
+                    Exclusive Offers
+                  </h4>
+                  <p className="text-amber-100/80 text-sm">
+                    Get special discounts and early access to new products
+                  </p>
+                </div>
               </div>
             </div>
 
             <div className="mt-12 xl:mt-16 pt-8 border-t border-white/20">
               <p className="text-amber-100/60 text-[10px] xl:text-xs uppercase tracking-[0.2em]">
-                Handcrafted with love in Accra, Ghana
+                Join 5,000+ happy customers
               </p>
             </div>
           </div>

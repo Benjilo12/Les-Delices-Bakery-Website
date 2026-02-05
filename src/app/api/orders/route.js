@@ -10,8 +10,130 @@ function generateOrderNumber() {
   const date = new Date();
   const dateStr = date.toISOString().slice(0, 10).replace(/-/g, "");
   const timestamp = Date.now().toString().slice(-6);
-  const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+  const random = Math.floor(Math.random() * 1000)
+    .toString()
+    .padStart(3, "0");
   return `LD-${dateStr}-${timestamp}${random}`;
+}
+
+// Add this GET function to your /app/api/orders/route.js file
+export async function GET(request) {
+  try {
+    console.log("=== Starting orders fetch ===");
+    await connect();
+
+    const user = await currentUser();
+
+    if (!user) {
+      console.log("Unauthorized access attempt");
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Unauthorized",
+        },
+        { status: 401 },
+      );
+    }
+
+    // Get query parameters
+    const { searchParams } = new URL(request.url);
+    const status = searchParams.get("status");
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "20");
+    const search = searchParams.get("search");
+
+    // Build query
+    let query = {};
+
+    // If user is not admin, only show their orders
+    // You might want to check user roles here
+    // For now, showing all orders to authenticated users
+    // query.userId = user.id; // Uncomment to show only user's orders
+
+    // Apply status filter
+    if (status && status !== "all") {
+      query.status = status;
+    }
+
+    // Apply search filter
+    if (search) {
+      query.$or = [
+        { orderNumber: { $regex: search, $options: "i" } },
+        { customerName: { $regex: search, $options: "i" } },
+        { customerEmail: { $regex: search, $options: "i" } },
+        { customerPhone: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    // Calculate pagination
+    const skip = (page - 1) * limit;
+
+    // Fetch orders with pagination
+    const [orders, totalOrders] = await Promise.all([
+      Order.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+      Order.countDocuments(query),
+    ]);
+
+    console.log(`Fetched ${orders.length} orders`);
+
+    // Calculate stats
+    const stats = {
+      total: await Order.countDocuments({}),
+      pending: await Order.countDocuments({ status: "pending" }),
+      confirmed: await Order.countDocuments({ status: "confirmed" }),
+      processing: await Order.countDocuments({ status: "processing" }),
+      ready: await Order.countDocuments({ status: "ready" }),
+      out_for_delivery: await Order.countDocuments({
+        status: "out_for_delivery",
+      }),
+      delivered: await Order.countDocuments({ status: "delivered" }),
+      cancelled: await Order.countDocuments({ status: "cancelled" }),
+    };
+
+    // Calculate revenue
+    const revenueResult = await Order.aggregate([
+      {
+        $match: {
+          paymentStatus: "paid",
+          status: { $nin: ["cancelled", "refunded"] },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$totalAmount" },
+        },
+      },
+    ]);
+
+    const totalRevenue = revenueResult[0]?.totalRevenue || 0;
+
+    return NextResponse.json({
+      success: true,
+      orders,
+      pagination: {
+        page,
+        limit,
+        total: totalOrders,
+        pages: Math.ceil(totalOrders / limit),
+      },
+      stats: {
+        ...stats,
+        totalRevenue,
+      },
+    });
+  } catch (error) {
+    console.error("=== Error fetching orders ===");
+    console.error("Error:", error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Failed to fetch orders: " + error.message,
+      },
+      { status: 500 },
+    );
+  }
 }
 
 export async function POST(request) {
@@ -23,10 +145,13 @@ export async function POST(request) {
 
     if (!user) {
       console.log("Unauthorized access attempt");
-      return NextResponse.json({ 
-        success: false,
-        error: "Unauthorized" 
-      }, { status: 401 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Unauthorized",
+        },
+        { status: 401 },
+      );
     }
 
     const body = await request.json();
@@ -52,21 +177,22 @@ export async function POST(request) {
     // Validation
     if (!items || items.length === 0) {
       return NextResponse.json(
-        { 
+        {
           success: false,
-          error: "Order must contain at least one item" 
+          error: "Order must contain at least one item",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (!deliveryMethod || !eventDate || !customerPhone) {
       return NextResponse.json(
-        { 
+        {
           success: false,
-          error: "Missing required fields: deliveryMethod, eventDate, or customerPhone" 
+          error:
+            "Missing required fields: deliveryMethod, eventDate, or customerPhone",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -74,11 +200,11 @@ export async function POST(request) {
       if (!deliveryAddress || !deliveryAddress.street) {
         console.log("Invalid delivery address:", deliveryAddress);
         return NextResponse.json(
-          { 
+          {
             success: false,
-            error: "Delivery address is required for delivery orders" 
+            error: "Delivery address is required for delivery orders",
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
     }
@@ -96,35 +222,36 @@ export async function POST(request) {
       } catch (error) {
         console.error("Error finding product:", error);
         return NextResponse.json(
-          { 
+          {
             success: false,
-            error: `Invalid product ID: ${item.product}` 
+            error: `Invalid product ID: ${item.product}`,
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
-      
+
       if (!product) {
         return NextResponse.json(
-          { 
+          {
             success: false,
-            error: `Product not found: ${item.product}` 
+            error: `Product not found: ${item.product}`,
           },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
       if (!product.isAvailable) {
         return NextResponse.json(
-          { 
+          {
             success: false,
-            error: `Product not available: ${product.name}` 
+            error: `Product not available: ${product.name}`,
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
-      const basePrice = (item.selectedOption?.price || product.price) * (item.quantity || 1);
+      const basePrice =
+        (item.selectedOption?.price || product.price) * (item.quantity || 1);
       const customizationCost = item.customization?.additionalCost || 0;
       const itemTotal = basePrice + customizationCost;
 
@@ -152,16 +279,17 @@ export async function POST(request) {
     const totalAmount = subtotal + deliveryFee;
 
     // Get customer info
-    const customerName = `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Customer";
+    const customerName =
+      `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Customer";
     const customerEmail = user.emailAddresses[0]?.emailAddress || "";
 
     if (!customerEmail) {
       return NextResponse.json(
-        { 
+        {
           success: false,
-          error: "User email is required" 
+          error: "User email is required",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -181,7 +309,8 @@ export async function POST(request) {
       deliveryFee,
       totalAmount,
       deliveryMethod,
-      deliveryAddress: deliveryMethod === "delivery" ? deliveryAddress : undefined,
+      deliveryAddress:
+        deliveryMethod === "delivery" ? deliveryAddress : undefined,
       eventDate: eventDateTime,
       eventType: eventType || "Birthday",
       specialInstructions: specialInstructions || "",
@@ -190,10 +319,13 @@ export async function POST(request) {
     };
 
     console.log("Creating order in database...");
-    console.log("Order data with orderNumber:", JSON.stringify(orderData, null, 2));
-    
+    console.log(
+      "Order data with orderNumber:",
+      JSON.stringify(orderData, null, 2),
+    );
+
     const order = await Order.create(orderData);
-    
+
     console.log("Order created successfully:", {
       id: order._id,
       orderNumber: order.orderNumber,
@@ -223,7 +355,7 @@ export async function POST(request) {
         },
         message: "Order placed successfully",
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("=== Error creating order ===");
@@ -231,40 +363,41 @@ export async function POST(request) {
     console.error("Error message:", error.message);
     console.error("Error code:", error.code);
     console.error("Error stack:", error.stack);
-    
-    if (error.name === 'ValidationError') {
-      const errors = Object.values(error.errors).map(err => ({
+
+    if (error.name === "ValidationError") {
+      const errors = Object.values(error.errors).map((err) => ({
         field: err.path,
-        message: err.message
+        message: err.message,
       }));
       console.error("Validation errors:", errors);
       return NextResponse.json(
-        { 
+        {
           success: false,
           error: "Validation failed",
-          details: errors
+          details: errors,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
-    
-    if (error.code === 11000) { // Duplicate key error
+
+    if (error.code === 11000) {
+      // Duplicate key error
       console.error("Duplicate key error:", error.keyValue);
       return NextResponse.json(
-        { 
+        {
           success: false,
-          error: "Duplicate order number detected. Please try again."
+          error: "Duplicate order number detected. Please try again.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
-    
+
     return NextResponse.json(
-      { 
+      {
         success: false,
-        error: "Failed to create order: " + error.message 
+        error: "Failed to create order: " + error.message,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
