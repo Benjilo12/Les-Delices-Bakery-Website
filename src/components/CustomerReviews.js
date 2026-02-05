@@ -73,8 +73,8 @@ export default function CustomerReviews() {
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-serif italic text-gray-900">
             Customer{" "}
-            <span className="text-pink-500">
-              <Highlighter action="highlight" color="#FFEDC2">
+            <span className="text-pink-900">
+              <Highlighter action="highlight" color="#FFD54F">
                 Reviews
               </Highlighter>{" "}
             </span>

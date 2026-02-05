@@ -1,7 +1,14 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Clock, Calendar, User } from "lucide-react";
+import {
+  ArrowLeft,
+  Clock,
+  Calendar,
+  User,
+  ArrowRight,
+  Utensils,
+} from "lucide-react";
 import Navbar from "@/components/Navbar";
 
 async function getBlog(slug) {
@@ -18,8 +25,6 @@ async function getBlog(slug) {
     return null;
   }
 }
-
-// ... (keep your imports and getBlog function the same)
 
 export default async function BlogDetailsPage({ params }) {
   const { slug } = await params;
@@ -41,10 +46,7 @@ export default async function BlogDetailsPage({ params }) {
 
   return (
     <>
-      {" "}
-      {/* ✅ Added Fragment Wrapper */}
       <Navbar />
-      {/* Added pt-20 to prevent Navbar from covering the "Back to Journal" link */}
       <article className="min-h-screen bg-[#FDFCFB] pt-10 pb-20 overflow-x-hidden">
         {/* Top Progress Bar - ensure it sits just below or on top of Navbar */}
         <div className="" />
@@ -126,9 +128,35 @@ export default async function BlogDetailsPage({ params }) {
             dangerouslySetInnerHTML={{ __html: blog.content }}
           />
 
+          {/* Simple Menu Link Section - Added at the bottom */}
+          <div className="mt-16 pt-8 border-t border-gray-100">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-200">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <Utensils className="w-5 h-5 text-amber-600" />
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Discover Our Menu
+                  </h3>
+                </div>
+                <p className="text-gray-600 max-w-xl">
+                  Inspired by this post? Explore our full menu featuring fresh,
+                  locally-sourced ingredients, seasonal specials, and exquisite
+                  flavors crafted with passion.
+                </p>
+              </div>
+              <Link
+                href="/menu"
+                className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-medium transition-colors group whitespace-nowrap"
+              >
+                View Full Menu
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </div>
+
           {/* Tags Section */}
           {blog.tags?.length > 0 && (
-            <div className="mt-20 border-t border-gray-100 pt-10">
+            <div className="mt-12 border-t border-gray-100 pt-10">
               <h3 className="mb-6 text-[10px] font-bold uppercase tracking-widest text-gray-400">
                 Related Topics
               </h3>
@@ -146,7 +174,7 @@ export default async function BlogDetailsPage({ params }) {
           )}
 
           {/* Payment Gateway Trust Badge */}
-          <div className="mt-16 py-8 border-t border-gray-100 flex flex-col items-center">
+          <div className="mt-12 py-8 border-t border-gray-100 flex flex-col items-center">
             <p className="text-xs text-gray-400 uppercase tracking-widest mb-4">
               Secure Payments Accepted
             </p>
