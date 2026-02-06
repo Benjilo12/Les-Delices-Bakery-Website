@@ -1,35 +1,99 @@
+// components/navbar/SearchBar.js
 "use client";
 
 import { useState } from "react";
-import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 
 export default function SearchBar() {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
 
-  // const handleSearch = (e) => {
-  //   e.preventDefault();
-  //   if (searchQuery.trim()) {
-  //     router.push(`/menu?search=${encodeURIComponent(searchQuery)}`);
-  //   }
-  // };
+  // Category mapping with synonyms for better search
+  const categoryMap = [
+    { 
+      name: "Birthday Cakes", 
+      keywords: ["birthday", "birthday cake", "birthday cakes", "celebration cake"] 
+    },
+    { 
+      name: "Wedding Cakes", 
+      keywords: ["wedding", "wedding cake", "wedding cakes", "bridal", "marriage"] 
+    },
+    { 
+      name: "Cupcakes", 
+      keywords: ["cupcake", "cupcakes", "small cake", "mini cake"] 
+    },
+    { 
+      name: "Cake Loaves", 
+      keywords: ["loaf", "loaves", "cake loaf", "loaf cake", "bread cake"] 
+    },
+    { 
+      name: "Pastries & Snacks", 
+      keywords: ["pastry", "pastries", "snack", "snacks", "biscuit", "cookie"] 
+    },
+  ];
+
+  const placeholders = [
+    "Find Something Pretty...",
+    "Search Birthday Cakes...",
+    "Looking for Wedding Cakes?",
+    "Find Cupcakes...",
+    "Search for Cake Loaves...",
+    "Looking for Pastries & Snacks?",
+    "Find custom cakes...",
+    "Looking for desserts...",
+    "Search catering options...",
+    "Find vegan options...",
+  ];
+
+  const handleChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+
+    const searchTerm = searchQuery.toLowerCase().trim();
+    
+    // Check for category matches
+    let matchedCategory = null;
+    
+    for (const category of categoryMap) {
+      // Check if search term matches category name
+      if (category.name.toLowerCase().includes(searchTerm) || 
+          searchTerm.includes(category.name.toLowerCase())) {
+        matchedCategory = category.name;
+        break;
+      }
+      
+      // Check for keyword matches
+      for (const keyword of category.keywords) {
+        if (searchTerm.includes(keyword) || keyword.includes(searchTerm)) {
+          matchedCategory = category.name;
+          break;
+        }
+      }
+      
+      if (matchedCategory) break;
+    }
+
+    if (matchedCategory) {
+      // Redirect to menu with category filter
+      router.push(`/menu?category=${encodeURIComponent(matchedCategory)}`);
+    } else {
+      // Redirect to menu with search filter
+      router.push(`/menu?search=${encodeURIComponent(searchQuery)}`);
+    }
+  };
 
   return (
-    <form className="hidden md:flex items-center bg-amber-100 rounded-full px-4 py-2 w-full max-w-md">
-      <input
-        type="text"
-        placeholder="Find Something Pretty..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className=" outline-none text-sm flex-1 text-gray-500 placeholder:text-gray-500"
+    <div className="hidden md:flex items-center w-full max-w-md">
+      <PlaceholdersAndVanishInput
+        placeholders={placeholders}
+        onChange={handleChange}
+        onSubmit={handleSubmit}
       />
-      <button
-        type="submit"
-        className="text-gray-600 hover:text-pink-600 cursor-pointer"
-      >
-        <Search className="w-5 h-5" />
-      </button>
-    </form>
+    </div>
   );
 }

@@ -14,7 +14,7 @@ function page() {
     <>
       <Topbar />
       <Navbar />
-      <div>
+      <div className="overflow-hidden">
         <HeroSection />
         <LesDelicesBanner />
         <CategoryScroll />

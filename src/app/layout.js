@@ -3,8 +3,6 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 import localFont from "next/font/local";
 
-
-
 const raleway = localFont({
   src: "./fonts/Raleway.woff2",
   variable: "--font-raleway",
@@ -21,7 +19,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${raleway.variable} antialiased`}>
         <ClerkProvider>
-       <main>{children}</main>
+          <main className="overflow-hidden">{children}</main>
         </ClerkProvider>
       </body>
     </html>

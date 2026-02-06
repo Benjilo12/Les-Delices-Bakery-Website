@@ -1,3 +1,4 @@
+// app/dashboard/orders/page.js - COMBINED VERSION
 "use client";
 
 import { useState, useEffect } from "react";
@@ -30,6 +31,9 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  TrendingUp,
+  Users,
+  ExternalLink,
 } from "lucide-react";
 import { useUser, useAuth } from "@clerk/nextjs";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
@@ -48,8 +52,8 @@ function OrderStatusBadge({ status }) {
       icon: CheckCircle,
       className: "bg-green-100 text-green-800 border border-green-200",
     },
-    processing: {
-      label: "Processing",
+    "in-progress": {
+      label: "In Progress",
       icon: Package,
       className: "bg-blue-100 text-blue-800 border border-blue-200",
     },
@@ -58,13 +62,13 @@ function OrderStatusBadge({ status }) {
       icon: CheckCircle,
       className: "bg-indigo-100 text-indigo-800 border border-indigo-200",
     },
-    out_for_delivery: {
+    "out-for-delivery": {
       label: "Out for Delivery",
       icon: Truck,
       className: "bg-purple-100 text-purple-800 border border-purple-200",
     },
     completed: {
-      label: "Delivered",
+      label: "Completed",
       icon: CheckCircle,
       className: "bg-emerald-100 text-emerald-800 border border-emerald-200",
     },
@@ -158,7 +162,35 @@ function formatDateShort(dateString) {
   }
 }
 
-// Order Actions Dropdown
+// Stats Card Component (from second layout)
+function StatsCard({ title, value, icon: Icon, color, trend }) {
+  return (
+    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="text-2xl font-bold text-gray-900">{value}</div>
+          <div className="text-sm text-gray-500">{title}</div>
+          {trend && (
+            <div
+              className={`text-xs mt-1 ${
+                trend > 0 ? "text-green-600" : "text-red-600"
+              }`}
+            >
+              {trend > 0 ? "↑" : "↓"} {Math.abs(trend)}% from last month
+            </div>
+          )}
+        </div>
+        <div
+          className={`w-12 h-12 rounded-lg ${color} flex items-center justify-center`}
+        >
+          <Icon className="w-6 h-6" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Order Actions Dropdown (from second layout)
 function OrderActions({ order, onAction }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -216,7 +248,7 @@ function OrderActions({ order, onAction }) {
   );
 }
 
-// Order Detail Modal
+// Order Detail Modal (from second layout with first layout's status values)
 function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
   const [activeTab, setActiveTab] = useState("details");
   const [newStatus, setNewStatus] = useState(order?.status || "");
@@ -226,10 +258,10 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
   const statusOptions = [
     { value: "pending", label: "Pending", color: "yellow" },
     { value: "confirmed", label: "Confirmed", color: "green" },
-    { value: "processing", label: "Processing", color: "blue" },
+    { value: "in-progress", label: "In Progress", color: "blue" },
     { value: "ready", label: "Ready", color: "indigo" },
-    { value: "out_for_delivery", label: "Out for Delivery", color: "purple" },
-    { value: "completed", label: "Delivered", color: "emerald" },
+    { value: "out-for-delivery", label: "Out for Delivery", color: "purple" },
+    { value: "completed", label: "Completed", color: "emerald" },
     { value: "cancelled", label: "Cancelled", color: "red" },
   ];
 
@@ -296,6 +328,7 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
             <X className="w-5 h-5" />
           </button>
         </div>
+
         {/* Tabs */}
         <div className="border-b border-gray-200">
           <div className="flex px-6 overflow-x-auto">
@@ -314,6 +347,7 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
             ))}
           </div>
         </div>
+
         {/* Content */}
         <div className="overflow-y-auto max-h-[60vh] p-6">
           {activeTab === "details" && (
@@ -369,14 +403,16 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
                               {order.deliveryAddress.street}
                             </div>
                           )}
+                          {order.deliveryAddress.area && (
+                            <div>{order.deliveryAddress.area}</div>
+                          )}
                           {order.deliveryAddress.city && (
                             <div>{order.deliveryAddress.city}</div>
                           )}
-                          {order.deliveryAddress.state && (
-                            <div>{order.deliveryAddress.state}</div>
-                          )}
-                          {order.deliveryAddress.country && (
-                            <div>{order.deliveryAddress.country}</div>
+                          {order.deliveryAddress.additionalInfo && (
+                            <div className="text-sm text-gray-600 mt-2">
+                              {order.deliveryAddress.additionalInfo}
+                            </div>
                           )}
                         </div>
                       </div>
@@ -637,14 +673,14 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
                           "Order received, awaiting confirmation"}
                         {option.value === "confirmed" &&
                           "Order confirmed, preparing items"}
-                        {option.value === "processing" &&
+                        {option.value === "in-progress" &&
                           "Items being prepared"}
                         {option.value === "ready" &&
                           "Order ready for pickup/delivery"}
-                        {option.value === "out_for_delivery" &&
+                        {option.value === "out-for-delivery" &&
                           "On the way to customer"}
                         {option.value === "completed" &&
-                          "Successfully delivered"}
+                          "Successfully delivered/completed"}
                         {option.value === "cancelled" && "Order cancelled"}
                       </div>
                     </button>
@@ -707,7 +743,7 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
                     onClick={() => {
                       if (
                         window.confirm(
-                          `Mark order ${order.orderNumber} as delivered?`,
+                          `Mark order ${order.orderNumber} as completed?`,
                         )
                       ) {
                         setNewStatus("completed");
@@ -717,7 +753,7 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
                     className="flex items-center justify-center gap-2 p-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg border border-emerald-200 transition-colors"
                   >
                     <CheckCircle className="w-4 h-4" />
-                    Mark Delivered
+                    Mark Completed
                   </button>
                   <button
                     onClick={() => {
@@ -745,33 +781,7 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
   );
 }
 
-// Stats Card Component
-function StatsCard({ title, value, icon: Icon, color, trend }) {
-  return (
-    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-      <div className="flex items-center justify-between">
-        <div>
-          <div className="text-2xl font-bold text-gray-900">{value}</div>
-          <div className="text-sm text-gray-500">{title}</div>
-          {trend && (
-            <div
-              className={`text-xs mt-1 ${trend > 0 ? "text-green-600" : "text-red-600"}`}
-            >
-              {trend > 0 ? "↑" : "↓"} {Math.abs(trend)}% from last month
-            </div>
-          )}
-        </div>
-        <div
-          className={`w-12 h-12 rounded-lg ${color} flex items-center justify-center`}
-        >
-          <Icon className="w-6 h-6" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Main Component
+// Main Component - FIRST LAYOUT with SECOND LAYOUT'S FEATURES
 export default function DashboardOrdersPage() {
   const { isLoaded, user } = useUser();
   const { getToken } = useAuth();
@@ -780,20 +790,15 @@ export default function DashboardOrdersPage() {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [dateFilter, setDateFilter] = useState("all");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
-  const [sortBy, setSortBy] = useState("newest");
-  const [expandedOrders, setExpandedOrders] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
   const [stats, setStats] = useState({
     total: 0,
     pending: 0,
     confirmed: 0,
-    processing: 0,
+    "in-progress": 0,
     ready: 0,
-    out_for_delivery: 0,
+    "out-for-delivery": 0,
     completed: 0,
     cancelled: 0,
     totalRevenue: 0,
@@ -806,7 +811,6 @@ export default function DashboardOrdersPage() {
         setLoading(true);
         const token = await getToken();
 
-        // Build query parameters
         const params = new URLSearchParams();
         if (statusFilter !== "all") {
           params.append("status", statusFilter);
@@ -814,8 +818,7 @@ export default function DashboardOrdersPage() {
         if (searchTerm) {
           params.append("search", searchTerm);
         }
-        params.append("page", currentPage.toString());
-        params.append("limit", itemsPerPage.toString());
+        params.append("limit", "50");
 
         const queryString = params.toString();
         const url = `/api/orders${queryString ? `?${queryString}` : ""}`;
@@ -855,9 +858,9 @@ export default function DashboardOrdersPage() {
     if (isLoaded) {
       fetchOrders();
     }
-  }, [isLoaded, getToken, statusFilter, searchTerm, currentPage]);
+  }, [isLoaded, getToken, statusFilter, searchTerm]);
 
-  // Handle order actions
+  // Handle order actions (from second layout)
   const handleOrderAction = async (action, order) => {
     switch (action) {
       case "view":
@@ -922,7 +925,9 @@ export default function DashboardOrdersPage() {
                       <tr>
                         <td>${item.productName}</td>
                         <td>${item.quantity}</td>
-                        <td>${formatPrice(item.selectedOption?.price || 0)}</td>
+                        <td>${formatPrice(
+                          item.selectedOption?.price || 0,
+                        )}</td>
                         <td>${formatPrice(item.itemTotal)}</td>
                       </tr>
                     `,
@@ -1011,14 +1016,6 @@ export default function DashboardOrdersPage() {
     }
   };
 
-  // Toggle order expansion
-  const toggleOrderExpansion = (orderId) => {
-    setExpandedOrders((prev) => ({
-      ...prev,
-      [orderId]: !prev[orderId],
-    }));
-  };
-
   // Handle status update
   const handleStatusUpdate = (orderId, newStatus) => {
     setOrders((prev) =>
@@ -1062,7 +1059,7 @@ export default function DashboardOrdersPage() {
     }
   };
 
-  // Export orders to CSV
+  // Export orders to CSV (from second layout)
   const exportToCSV = () => {
     toast.loading("Exporting orders to CSV...");
 
@@ -1110,29 +1107,11 @@ export default function DashboardOrdersPage() {
     }, 500);
   };
 
-  // Handle pagination
-  const totalPages = Math.ceil(orders.length / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentOrders = orders.slice(indexOfFirstItem, indexOfLastItem);
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
   if (!isLoaded) {
     return (
       <div className="flex min-h-screen bg-gray-50">
         <DashboardSidebar />
-        <div className="flex-1 lg:pl-64 w-full">
+        <div className="flex-1 ml-0 lg:ml-64">
           <div className="p-8">
             <div className="animate-pulse">
               <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
@@ -1153,10 +1132,9 @@ export default function DashboardOrdersPage() {
     <div className="flex min-h-screen bg-gray-50">
       <DashboardSidebar />
 
-      {/* Main Content - Wider layout */}
-      <main className="flex-1 lg:pl-64 w-full">
-        <div className="p-4 md:p-6 lg:p-8 w-full max-w-full">
-          {/* Header - Full width */}
+      <main className="flex-1 ml-0 lg:ml-64">
+        <div className="p-4 md:p-8">
+          {/* Header with Stats Cards from second layout */}
           <div className="mb-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
               <div>
@@ -1195,7 +1173,7 @@ export default function DashboardOrdersPage() {
               </div>
             </div>
 
-            {/* Stats Cards - Full width grid */}
+            {/* Stats Cards Grid from second layout */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <StatsCard
                 title="Total Orders"
@@ -1219,7 +1197,7 @@ export default function DashboardOrdersPage() {
                 trend={-5}
               />
               <StatsCard
-                title="Delivered"
+                title="Completed"
                 value={stats.completed}
                 icon={CheckCircle}
                 color="bg-emerald-50 text-emerald-600"
@@ -1227,11 +1205,11 @@ export default function DashboardOrdersPage() {
               />
             </div>
 
-            {/* Filters and Search - Full width */}
-            <div className="bg-white p-4 md:p-6 rounded-xl border border-gray-200 shadow-sm mb-6 w-full">
-              <div className="flex flex-col lg:flex-row gap-4 w-full">
-                {/* Search - Takes more space */}
-                <div className="flex-1 min-w-0">
+            {/* Filters and Search - First layout style */}
+            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm mb-6">
+              <div className="flex flex-col md:flex-row gap-4">
+                {/* Search */}
+                <div className="flex-1">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
@@ -1244,51 +1222,28 @@ export default function DashboardOrdersPage() {
                   </div>
                 </div>
 
-                {/* Filters - Compact but responsive */}
-                <div className="flex flex-wrap gap-3">
+                {/* Status Filter */}
+                <div className="flex gap-3">
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent min-w-[140px]"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                   >
                     <option value="all">All Status</option>
                     <option value="pending">Pending</option>
                     <option value="confirmed">Confirmed</option>
-                    <option value="processing">Processing</option>
+                    <option value="in-progress">In Progress</option>
                     <option value="ready">Ready</option>
-                    <option value="out_for_delivery">Out for Delivery</option>
-                    <option value="completed">Delivered</option>
+                    <option value="out-for-delivery">Out for Delivery</option>
+                    <option value="completed">Completed</option>
                     <option value="cancelled">Cancelled</option>
-                  </select>
-
-                  <select
-                    value={dateFilter}
-                    onChange={(e) => setDateFilter(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent min-w-[140px]"
-                  >
-                    <option value="all">All Time</option>
-                    <option value="today">Today</option>
-                    <option value="week">This Week</option>
-                    <option value="month">This Month</option>
-                    <option value="year">This Year</option>
-                  </select>
-
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent min-w-[140px]"
-                  >
-                    <option value="newest">Newest First</option>
-                    <option value="oldest">Oldest First</option>
-                    <option value="price-high">Price: High to Low</option>
-                    <option value="price-low">Price: Low to High</option>
                   </select>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Orders Table - EXTRA WIDE LAYOUT */}
+          {/* Orders Table - First layout style */}
           {loading ? (
             <div className="text-center py-12">
               <div className="w-16 h-16 border-4 border-amber-200 border-t-amber-600 rounded-full animate-spin mx-auto mb-4"></div>
@@ -1334,318 +1289,116 @@ export default function DashboardOrdersPage() {
             </div>
           ) : (
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-              {/* Table Header - WIDER COLUMN DISTRIBUTION */}
-              <div className="grid grid-cols-12 gap-2 p-4 border-b border-gray-200 bg-gray-50 font-medium text-sm text-gray-700">
-                <div className="col-span-3 pl-2">Order Details</div>
-                <div className="col-span-2">Customer</div>
-                <div className="col-span-1">Dates</div>
+              {/* Table Header - First layout 14 columns */}
+              <div className="grid grid-cols-14 gap-2 p-4 border-b border-gray-200 bg-gray-50 font-medium text-sm text-gray-700">
+                <div className="col-span-3">Order Details</div>
+                <div className="col-span-3">Customer Information</div>
+                <div className="col-span-2">Dates</div>
                 <div className="col-span-1">Amount</div>
                 <div className="col-span-1">Items</div>
                 <div className="col-span-1">Status</div>
                 <div className="col-span-1">Payment</div>
-                <div className="col-span-2 text-right pr-2">Actions</div>
+                <div className="col-span-2 text-right">Actions</div>
               </div>
 
-              {/* Table Body - WIDER LAYOUT */}
+              {/* Table Body - First layout style */}
               <div className="divide-y divide-gray-200">
-                {currentOrders.map((order) => {
-                  const isExpanded = expandedOrders[order._id];
-
-                  return (
-                    <div key={order._id}>
-                      {/* Row - MORE SPACIOUS */}
-                      <div className="grid grid-cols-12 gap-2 p-4 hover:bg-gray-50 transition-colors items-center">
-                        {/* Order Details - 3 columns - SHIFTED LEFT */}
-                        <div className="col-span-3 pl-2">
-                          <div className="font-medium text-gray-900 text-lg">
-                            {order.orderNumber}
-                          </div>
-                          <div className="text-sm text-gray-600 mt-1">
-                            {order.deliveryMethod === "delivery"
-                              ? "🚚 Delivery"
-                              : "🏪 Pickup"}
-                          </div>
-                          <div className="text-xs text-gray-500 mt-1">
-                            {order.eventType || "No event type"}
-                          </div>
-                        </div>
-
-                        {/* Customer Information - 2 columns */}
-                        <div className="col-span-2">
-                          <div className="font-medium text-gray-900">
-                            {order.customerName}
-                          </div>
-                          <div className="text-sm text-gray-600 truncate">
-                            {order.customerEmail}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            📱 {order.customerPhone}
-                          </div>
-                        </div>
-
-                        {/* Dates - 1 column */}
-                        <div className="col-span-1">
-                          <div className="text-sm text-gray-900">
-                            📅 {formatDateShort(order.createdAt)}
-                          </div>
-                          <div className="text-xs text-gray-500 mt-1">
-                            🎯 {formatDateShort(order.eventDate)}
-                          </div>
-                        </div>
-
-                        {/* Amount - 1 column */}
-                        <div className="col-span-1">
-                          <div className="font-bold text-gray-900 text-lg">
-                            {formatPrice(order.totalAmount)}
-                          </div>
-                        </div>
-
-                        {/* Items Count - 1 column */}
-                        <div className="col-span-1">
-                          <div className="flex items-center gap-1">
-                            <Package className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm text-gray-900">
-                              {order.items?.length || 0}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Status - 1 column */}
-                        <div className="col-span-1">
-                          <OrderStatusBadge status={order.status} />
-                        </div>
-
-                        {/* Payment - 1 column */}
-                        <div className="col-span-1">
-                          <PaymentStatusBadge status={order.paymentStatus} />
-                        </div>
-
-                        {/* Actions - 2 columns */}
-                        <div className="col-span-2 flex justify-end items-center gap-2 pr-2">
-                          <button
-                            onClick={() => toggleOrderExpansion(order._id)}
-                            className="p-2 hover:bg-gray-100 rounded transition-colors"
-                            aria-label={
-                              isExpanded ? "Collapse details" : "Expand details"
-                            }
-                          >
-                            {isExpanded ? (
-                              <ChevronUp className="w-4 h-4 text-gray-500" />
-                            ) : (
-                              <ChevronDown className="w-4 h-4 text-gray-500" />
-                            )}
-                          </button>
-                          <button
-                            onClick={() => {
-                              setSelectedOrder(order);
-                              setDetailModalOpen(true);
-                            }}
-                            className="p-2 hover:bg-amber-50 text-amber-600 rounded transition-colors"
-                            aria-label="View details"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </button>
-                          <OrderActions
-                            order={order}
-                            onAction={handleOrderAction}
-                          />
-                        </div>
+                {orders.map((order) => (
+                  <div
+                    key={order._id}
+                    className="grid grid-cols-14 gap-2 p-4 hover:bg-gray-50 transition-colors items-center"
+                  >
+                    {/* Order Details */}
+                    <div className="col-span-3">
+                      <div className="font-medium text-gray-900 text-lg">
+                        {order.orderNumber}
                       </div>
-
-                      {/* Expanded Details - WIDER LAYOUT */}
-                      {isExpanded && (
-                        <div className="px-4 pb-4 bg-gray-50 border-t border-gray-200">
-                          <div className="p-6 bg-white rounded-lg border border-gray-200">
-                            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                              {/* Contact Info */}
-                              <div>
-                                <h4 className="font-medium text-gray-900 mb-3">
-                                  Contact Information
-                                </h4>
-                                <div className="space-y-3">
-                                  <div>
-                                    <div className="text-xs text-gray-500 mb-1">
-                                      Customer
-                                    </div>
-                                    <div className="font-medium">
-                                      {order.customerName}
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <div className="text-xs text-gray-500 mb-1">
-                                      Email
-                                    </div>
-                                    <div className="text-sm break-all">
-                                      {order.customerEmail}
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <div className="text-xs text-gray-500 mb-1">
-                                      Phone
-                                    </div>
-                                    <div className="text-sm">
-                                      {order.customerPhone}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* Delivery Info */}
-                              <div>
-                                <h4 className="font-medium text-gray-900 mb-3">
-                                  Delivery Information
-                                </h4>
-                                <div className="space-y-3">
-                                  <div>
-                                    <div className="text-xs text-gray-500 mb-1">
-                                      Method
-                                    </div>
-                                    <div className="font-medium capitalize">
-                                      {order.deliveryMethod}
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <div className="text-xs text-gray-500 mb-1">
-                                      Event Date
-                                    </div>
-                                    <div className="text-sm">
-                                      {formatDate(order.eventDate)}
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <div className="text-xs text-gray-500 mb-1">
-                                      Event Type
-                                    </div>
-                                    <div className="text-sm">
-                                      {order.eventType || "Not specified"}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* Order Summary */}
-                              <div>
-                                <h4 className="font-medium text-gray-900 mb-3">
-                                  Order Summary
-                                </h4>
-                                <div className="space-y-2">
-                                  <div className="flex justify-between text-sm">
-                                    <span>Items:</span>
-                                    <span className="font-medium">
-                                      {order.items?.length || 0}
-                                    </span>
-                                  </div>
-                                  <div className="flex justify-between text-sm">
-                                    <span>Subtotal:</span>
-                                    <span className="font-medium">
-                                      {formatPrice(order.subtotal)}
-                                    </span>
-                                  </div>
-                                  <div className="flex justify-between text-sm">
-                                    <span>Delivery:</span>
-                                    <span className="font-medium">
-                                      {formatPrice(order.deliveryFee || 0)}
-                                    </span>
-                                  </div>
-                                  <div className="border-t border-gray-200 pt-2 mt-2">
-                                    <div className="flex justify-between font-bold">
-                                      <span>Total:</span>
-                                      <span className="text-amber-700">
-                                        {formatPrice(order.totalAmount)}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* Quick Actions */}
-                              <div>
-                                <h4 className="font-medium text-gray-900 mb-3">
-                                  Quick Actions
-                                </h4>
-                                <div className="grid grid-cols-2 gap-2">
-                                  <button
-                                    onClick={() =>
-                                      handleOrderAction("view", order)
-                                    }
-                                    className="flex items-center justify-center gap-2 p-3 bg-amber-50 text-amber-700 hover:bg-amber-100 rounded-lg transition-colors text-sm"
-                                  >
-                                    <Eye className="w-4 h-4" />
-                                    View Details
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      handleOrderAction("invoice", order)
-                                    }
-                                    className="flex items-center justify-center gap-2 p-3 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg transition-colors text-sm"
-                                  >
-                                    <Mail className="w-4 h-4" />
-                                    Send Invoice
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      handleOrderAction("print", order)
-                                    }
-                                    className="flex items-center justify-center gap-2 p-3 bg-green-50 text-green-700 hover:bg-green-100 rounded-lg transition-colors text-sm"
-                                  >
-                                    <Printer className="w-4 h-4" />
-                                    Print Receipt
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      handleOrderAction("update_status", order)
-                                    }
-                                    className="flex items-center justify-center gap-2 p-3 bg-purple-50 text-purple-700 hover:bg-purple-100 rounded-lg transition-colors text-sm"
-                                  >
-                                    <RefreshCw className="w-4 h-4" />
-                                    Update Status
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
+                      <div className="text-sm text-gray-600 mt-1">
+                        {order.deliveryMethod === "delivery"
+                          ? "🚚 Delivery"
+                          : "🏪 Pickup"}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {order.eventType || "No event type"}
+                      </div>
                     </div>
-                  );
-                })}
-              </div>
 
-              {/* Pagination - Full width */}
-              <div className="flex items-center justify-between p-4 border-t border-gray-200">
-                <div className="text-sm text-gray-600">
-                  Showing {indexOfFirstItem + 1}-
-                  {Math.min(indexOfLastItem, orders.length)} of {orders.length}{" "}
-                  orders
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={handlePrevPage}
-                    disabled={currentPage === 1}
-                    className="inline-flex items-center gap-1 px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                    Previous
-                  </button>
-                  <span className="px-3 py-1 bg-amber-600 text-white rounded">
-                    {currentPage}
-                  </span>
-                  <button
-                    onClick={handleNextPage}
-                    disabled={currentPage === totalPages}
-                    className="inline-flex items-center gap-1 px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Next
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
+                    {/* Customer Information */}
+                    <div className="col-span-3">
+                      <div className="font-medium text-gray-900">
+                        {order.customerName}
+                      </div>
+                      <div className="text-sm text-gray-600 truncate">
+                        {order.customerEmail}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        📱 {order.customerPhone}
+                      </div>
+                    </div>
+
+                    {/* Dates */}
+                    <div className="col-span-2">
+                      <div className="text-sm text-gray-900">
+                        📅 {formatDateShort(order.createdAt)}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        🎯 Event: {formatDateShort(order.eventDate)}
+                      </div>
+                    </div>
+
+                    {/* Amount */}
+                    <div className="col-span-1">
+                      <div className="font-bold text-gray-900 text-lg">
+                        {formatPrice(order.totalAmount)}
+                      </div>
+                    </div>
+
+                    {/* Items Count */}
+                    <div className="col-span-1">
+                      <div className="flex items-center gap-1">
+                        <Package className="w-4 h-4 text-gray-400" />
+                        <span className="text-sm text-gray-900">
+                          {order.items?.length || 0}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Status */}
+                    <div className="col-span-1">
+                      <OrderStatusBadge status={order.status} />
+                    </div>
+
+                    {/* Payment */}
+                    <div className="col-span-1">
+                      <PaymentStatusBadge status={order.paymentStatus} />
+                    </div>
+
+                    {/* Actions - Using OrderActions from second layout */}
+                    <div className="col-span-2 flex justify-end items-center gap-2">
+                      <button
+                        onClick={() => {
+                          setSelectedOrder(order);
+                          setDetailModalOpen(true);
+                        }}
+                        className="p-2 hover:bg-amber-50 text-amber-600 rounded transition-colors"
+                        aria-label="View details"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                      <OrderActions
+                        order={order}
+                        onAction={handleOrderAction}
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
         </div>
       </main>
 
-      {/* Order Detail Modal */}
+      {/* Order Detail Modal from second layout */}
       <OrderDetailModal
         order={selectedOrder}
         isOpen={detailModalOpen}
