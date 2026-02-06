@@ -4,12 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useCart } from "@/lib/store";
 import Navbar from "@/components/Navbar";
-import {
-  CheckCircle,
-  Home,
-  ShoppingBag,
-  AlertCircle,
-} from "lucide-react";
+import { CheckCircle, Home, ShoppingBag, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
@@ -35,7 +30,7 @@ export default function PaymentSuccessPage() {
 
         if (!reference) {
           throw new Error(
-            "No payment reference found. Please check your email for order confirmation."
+            "No payment reference found. Please check your email for order confirmation.",
           );
         }
 

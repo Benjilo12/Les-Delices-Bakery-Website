@@ -1,4 +1,4 @@
-// app/dashboard/orders/page.js - COMBINED VERSION
+// app/dashboard/orders/page.js - LAYOUT IMPROVED VERSION
 "use client";
 
 import { useState, useEffect } from "react";
@@ -84,7 +84,7 @@ function OrderStatusBadge({ status }) {
 
   return (
     <span
-      className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${config.className}`}
+      className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${config.className}`}
     >
       <Icon className="w-3 h-3" />
       {config.label}
@@ -116,7 +116,7 @@ function PaymentStatusBadge({ status }) {
 
   return (
     <span
-      className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${config.className}`}
+      className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${config.className}`}
     >
       <CreditCard className="w-3 h-3" />
       {config.label}
@@ -162,14 +162,16 @@ function formatDateShort(dateString) {
   }
 }
 
-// Stats Card Component (from second layout)
+// Stats Card Component
 function StatsCard({ title, value, icon: Icon, color, trend }) {
   return (
-    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+    <div className="bg-white p-4 md:p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between">
-        <div>
-          <div className="text-2xl font-bold text-gray-900">{value}</div>
-          <div className="text-sm text-gray-500">{title}</div>
+        <div className="flex-1 min-w-0">
+          <div className="text-xl md:text-2xl font-bold text-gray-900 truncate">
+            {value}
+          </div>
+          <div className="text-xs md:text-sm text-gray-500 mt-1">{title}</div>
           {trend && (
             <div
               className={`text-xs mt-1 ${
@@ -181,16 +183,16 @@ function StatsCard({ title, value, icon: Icon, color, trend }) {
           )}
         </div>
         <div
-          className={`w-12 h-12 rounded-lg ${color} flex items-center justify-center`}
+          className={`w-10 h-10 md:w-12 md:h-12 rounded-lg ${color} flex items-center justify-center flex-shrink-0 ml-3`}
         >
-          <Icon className="w-6 h-6" />
+          <Icon className="w-5 h-5 md:w-6 md:h-6" />
         </div>
       </div>
     </div>
   );
 }
 
-// Order Actions Dropdown (from second layout)
+// Order Actions Dropdown
 function OrderActions({ order, onAction }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -230,7 +232,7 @@ function OrderActions({ order, onAction }) {
                     onAction(item.action, order);
                     setIsOpen(false);
                   }}
-                  className={`w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 ${
+                  className={`w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 text-sm ${
                     item.danger
                       ? "text-red-600 hover:text-red-700"
                       : "text-gray-700"
@@ -248,7 +250,7 @@ function OrderActions({ order, onAction }) {
   );
 }
 
-// Order Detail Modal (from second layout with first layout's status values)
+// Order Detail Modal
 function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
   const [activeTab, setActiveTab] = useState("details");
   const [newStatus, setNewStatus] = useState(order?.status || "");
@@ -311,12 +313,12 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl w-full max-w-7xl max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-200">
           <div>
-            <h2 className="text-2xl font-semibold text-gray-900">
+            <h2 className="text-xl md:text-2xl font-semibold text-gray-900">
               Order #{order.orderNumber}
             </h2>
-            <p className="text-gray-500 mt-1">
+            <p className="text-sm text-gray-500 mt-1">
               Created {formatDate(order.createdAt)}
             </p>
           </div>
@@ -331,12 +333,12 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
 
         {/* Tabs */}
         <div className="border-b border-gray-200">
-          <div className="flex px-6 overflow-x-auto">
+          <div className="flex px-4 md:px-6 overflow-x-auto">
             {["details", "customer", "items", "actions"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-4 py-3 font-medium text-sm border-b-2 whitespace-nowrap transition-colors ${
+                className={`px-3 md:px-4 py-3 font-medium text-sm border-b-2 whitespace-nowrap transition-colors ${
                   activeTab === tab
                     ? "border-amber-500 text-amber-700"
                     : "border-transparent text-gray-500 hover:text-gray-700"
@@ -349,45 +351,55 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto max-h-[60vh] p-6">
+        <div className="overflow-y-auto max-h-[60vh] p-4 md:p-6">
           {activeTab === "details" && (
             <div className="space-y-6">
               {/* Order Summary */}
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-                <div className="bg-gray-50 p-4 rounded-xl">
-                  <div className="text-sm text-gray-500 mb-1">Status</div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
+                <div className="bg-gray-50 p-3 md:p-4 rounded-xl">
+                  <div className="text-xs md:text-sm text-gray-500 mb-1">
+                    Status
+                  </div>
                   <OrderStatusBadge status={order.status} />
                 </div>
-                <div className="bg-gray-50 p-4 rounded-xl">
-                  <div className="text-sm text-gray-500 mb-1">Payment</div>
+                <div className="bg-gray-50 p-3 md:p-4 rounded-xl">
+                  <div className="text-xs md:text-sm text-gray-500 mb-1">
+                    Payment
+                  </div>
                   <PaymentStatusBadge status={order.paymentStatus} />
                 </div>
-                <div className="bg-gray-50 p-4 rounded-xl">
-                  <div className="text-sm text-gray-500 mb-1">Delivery</div>
-                  <div className="font-medium text-gray-900">
+                <div className="bg-gray-50 p-3 md:p-4 rounded-xl">
+                  <div className="text-xs md:text-sm text-gray-500 mb-1">
+                    Delivery
+                  </div>
+                  <div className="font-medium text-sm md:text-base text-gray-900">
                     {order.deliveryMethod === "delivery"
                       ? "Delivery"
                       : "Pickup"}
                   </div>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-xl">
-                  <div className="text-sm text-gray-500 mb-1">Event Date</div>
-                  <div className="font-medium text-gray-900">
+                <div className="bg-gray-50 p-3 md:p-4 rounded-xl">
+                  <div className="text-xs md:text-sm text-gray-500 mb-1">
+                    Event Date
+                  </div>
+                  <div className="font-medium text-sm md:text-base text-gray-900">
                     {formatDateShort(order.eventDate)}
                   </div>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-xl">
-                  <div className="text-sm text-gray-500 mb-1">Total Amount</div>
-                  <div className="text-2xl font-bold text-gray-900">
+                <div className="bg-gray-50 p-3 md:p-4 rounded-xl">
+                  <div className="text-xs md:text-sm text-gray-500 mb-1">
+                    Total Amount
+                  </div>
+                  <div className="text-lg md:text-2xl font-bold text-gray-900">
                     {formatPrice(order.totalAmount)}
                   </div>
                 </div>
               </div>
 
               {/* Delivery Information */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-4">
                     Delivery Information
                   </h3>
                   <div className="space-y-4">
@@ -397,7 +409,7 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
                           <MapPin className="w-4 h-4" />
                           Delivery Address
                         </div>
-                        <div className="text-gray-700 space-y-1">
+                        <div className="text-gray-700 space-y-1 text-sm">
                           {order.deliveryAddress.street && (
                             <div className="font-medium">
                               {order.deliveryAddress.street}
@@ -422,7 +434,7 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
 
                 {/* Special Instructions */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-4">
                     Order Details
                   </h3>
                   <div className="space-y-4">
@@ -442,7 +454,7 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
                         <div className="text-sm text-gray-500 mb-2">
                           Special Instructions
                         </div>
-                        <p className="text-gray-700">
+                        <p className="text-sm text-gray-700">
                           {order.specialInstructions}
                         </p>
                       </div>
@@ -452,7 +464,7 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
                       <div className="text-sm text-gray-500 mb-2">
                         Order Timeline
                       </div>
-                      <div className="space-y-2">
+                      <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span>Created:</span>
                           <span className="font-medium">
@@ -476,24 +488,26 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
           {activeTab === "customer" && (
             <div className="space-y-6">
               <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-                <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center">
-                  <User className="w-8 h-8 text-amber-600" />
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                  <User className="w-6 h-6 md:w-8 md:h-8 text-amber-600" />
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900">
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-lg md:text-xl font-semibold text-gray-900 truncate">
                     {order.customerName}
                   </h3>
-                  <p className="text-gray-600">Customer ID: {order.userId}</p>
+                  <p className="text-sm text-gray-600 truncate">
+                    Customer ID: {order.userId}
+                  </p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 <div className="p-4 bg-white border border-gray-200 rounded-lg">
                   <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
                     <Mail className="w-4 h-4" />
                     Email Address
                   </div>
-                  <div className="font-medium text-gray-900 break-all">
+                  <div className="font-medium text-sm text-gray-900 break-all">
                     {order.customerEmail}
                   </div>
                 </div>
@@ -503,7 +517,7 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
                     <Phone className="w-4 h-4" />
                     Phone Number
                   </div>
-                  <div className="font-medium text-gray-900">
+                  <div className="font-medium text-sm text-gray-900">
                     {order.customerPhone}
                   </div>
                 </div>
@@ -512,13 +526,13 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
                   <div className="text-sm text-gray-500 mb-2">
                     Order Reference
                   </div>
-                  <div className="font-medium text-gray-900 font-mono">
+                  <div className="font-medium text-sm text-gray-900 font-mono">
                     {order.orderNumber}
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
                 <div className="p-4 bg-white border border-gray-200 rounded-lg">
                   <div className="text-sm text-gray-500 mb-2">
                     Delivery Method
@@ -540,9 +554,9 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
 
           {activeTab === "items" && (
             <div className="space-y-6">
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-base md:text-lg font-semibold text-gray-900">
                     Order Items ({order.items?.length || 0})
                   </h3>
                   <p className="text-gray-500 text-sm mt-1">
@@ -551,25 +565,25 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
                 </div>
                 <button
                   onClick={() => window.print()}
-                  className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
                 >
                   <Printer className="w-4 h-4" />
                   Print Items
                 </button>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3 md:space-y-4">
                 {order.items?.map((item, index) => (
                   <div
                     key={index}
-                    className="flex flex-col lg:flex-row lg:items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors gap-4"
+                    className="flex flex-col lg:flex-row lg:items-center justify-between p-3 md:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors gap-3 md:gap-4"
                   >
-                    <div className="flex items-start gap-4 flex-1 min-w-0">
-                      <div className="w-16 h-16 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Package className="w-8 h-8 text-amber-600" />
+                    <div className="flex items-start gap-3 md:gap-4 flex-1 min-w-0">
+                      <div className="w-12 h-12 md:w-16 md:h-16 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Package className="w-6 h-6 md:w-8 md:h-8 text-amber-600" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium text-gray-900 text-lg">
+                        <div className="font-medium text-gray-900 text-base md:text-lg">
                           {item.productName}
                         </div>
                         <div className="text-sm text-gray-600 mt-1">
@@ -597,7 +611,7 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
                     </div>
                     <div className="flex flex-col lg:items-end gap-2">
                       <div className="text-right">
-                        <div className="font-medium text-gray-900 text-xl">
+                        <div className="font-medium text-gray-900 text-lg md:text-xl">
                           {formatPrice(item.itemTotal)}
                         </div>
                         <div className="text-sm text-gray-500">
@@ -617,27 +631,33 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
               </div>
 
               {/* Price Breakdown */}
-              <div className="mt-6 p-6 bg-white border border-gray-200 rounded-lg">
-                <h4 className="font-semibold text-gray-900 mb-4 text-lg">
+              <div className="mt-6 p-4 md:p-6 bg-white border border-gray-200 rounded-lg">
+                <h4 className="font-semibold text-gray-900 mb-4 text-base md:text-lg">
                   Price Breakdown
                 </h4>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center py-2">
-                    <span className="text-gray-600">Subtotal</span>
-                    <span className="font-medium text-lg">
+                    <span className="text-gray-600 text-sm md:text-base">
+                      Subtotal
+                    </span>
+                    <span className="font-medium text-base md:text-lg">
                       {formatPrice(order.subtotal)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2">
-                    <span className="text-gray-600">Delivery Fee</span>
-                    <span className="font-medium text-lg">
+                    <span className="text-gray-600 text-sm md:text-base">
+                      Delivery Fee
+                    </span>
+                    <span className="font-medium text-base md:text-lg">
                       {formatPrice(order.deliveryFee || 0)}
                     </span>
                   </div>
                   <div className="border-t border-gray-200 pt-3 mt-2">
                     <div className="flex justify-between items-center py-2">
-                      <span className="font-bold text-xl">Total Amount</span>
-                      <span className="font-bold text-2xl text-amber-700">
+                      <span className="font-bold text-lg md:text-xl">
+                        Total Amount
+                      </span>
+                      <span className="font-bold text-xl md:text-2xl text-amber-700">
                         {formatPrice(order.totalAmount)}
                       </span>
                     </div>
@@ -651,15 +671,15 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
             <div className="space-y-6">
               {/* Status Update */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-4">
                   Update Order Status
                 </h3>
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3">
                   {statusOptions.map((option) => (
                     <button
                       key={option.value}
                       onClick={() => setNewStatus(option.value)}
-                      className={`p-4 rounded-lg border-2 transition-colors text-left ${
+                      className={`p-3 md:p-4 rounded-lg border-2 transition-colors text-left ${
                         newStatus === option.value
                           ? `border-${option.color}-500 bg-${option.color}-50`
                           : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
@@ -694,7 +714,7 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
                   <textarea
                     value={updateNote}
                     onChange={(e) => setUpdateNote(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm"
                     rows="3"
                     placeholder="Add a note about this status update..."
                   />
@@ -703,14 +723,14 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
                 <div className="flex gap-3 mt-6">
                   <button
                     onClick={onClose}
-                    className="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                    className="flex-1 border border-gray-300 text-gray-700 py-2 md:py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm md:text-base"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleStatusUpdate}
                     disabled={isUpdating || newStatus === order.status}
-                    className="flex-1 bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-amber-600 hover:bg-amber-700 text-white py-2 md:py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
                   >
                     {isUpdating ? "Updating..." : "Update Status"}
                   </button>
@@ -719,25 +739,27 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
 
               {/* Quick Actions */}
               <div className="border-t border-gray-200 pt-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-4">
                   Quick Actions
                 </h3>
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3">
                   <button
                     onClick={() => {
                       toast.success("Invoice sent to customer email");
                     }}
-                    className="flex items-center justify-center gap-2 p-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg border border-blue-200 transition-colors"
+                    className="flex items-center justify-center gap-2 p-3 md:p-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg border border-blue-200 transition-colors text-sm"
                   >
                     <Mail className="w-4 h-4" />
-                    Send Invoice
+                    <span className="hidden sm:inline">Send Invoice</span>
+                    <span className="sm:hidden">Invoice</span>
                   </button>
                   <button
                     onClick={() => window.print()}
-                    className="flex items-center justify-center gap-2 p-4 bg-green-50 hover:bg-green-100 text-green-700 rounded-lg border border-green-200 transition-colors"
+                    className="flex items-center justify-center gap-2 p-3 md:p-4 bg-green-50 hover:bg-green-100 text-green-700 rounded-lg border border-green-200 transition-colors text-sm"
                   >
                     <Printer className="w-4 h-4" />
-                    Print Receipt
+                    <span className="hidden sm:inline">Print Receipt</span>
+                    <span className="sm:hidden">Print</span>
                   </button>
                   <button
                     onClick={() => {
@@ -750,10 +772,11 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
                         handleStatusUpdate();
                       }
                     }}
-                    className="flex items-center justify-center gap-2 p-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg border border-emerald-200 transition-colors"
+                    className="flex items-center justify-center gap-2 p-3 md:p-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg border border-emerald-200 transition-colors text-sm"
                   >
                     <CheckCircle className="w-4 h-4" />
-                    Mark Completed
+                    <span className="hidden sm:inline">Mark Completed</span>
+                    <span className="sm:hidden">Complete</span>
                   </button>
                   <button
                     onClick={() => {
@@ -766,10 +789,11 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
                         handleStatusUpdate();
                       }
                     }}
-                    className="flex items-center justify-center gap-2 p-4 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg border border-red-200 transition-colors"
+                    className="flex items-center justify-center gap-2 p-3 md:p-4 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg border border-red-200 transition-colors text-sm"
                   >
                     <X className="w-4 h-4" />
-                    Cancel Order
+                    <span className="hidden sm:inline">Cancel Order</span>
+                    <span className="sm:hidden">Cancel</span>
                   </button>
                 </div>
               </div>
@@ -781,7 +805,7 @@ function OrderDetailModal({ order, isOpen, onClose, onUpdateStatus }) {
   );
 }
 
-// Main Component - FIRST LAYOUT with SECOND LAYOUT'S FEATURES
+// Main Component - IMPROVED LAYOUT
 export default function DashboardOrdersPage() {
   const { isLoaded, user } = useUser();
   const { getToken } = useAuth();
@@ -860,7 +884,7 @@ export default function DashboardOrdersPage() {
     }
   }, [isLoaded, getToken, statusFilter, searchTerm]);
 
-  // Handle order actions (from second layout)
+  // Handle order actions
   const handleOrderAction = async (action, order) => {
     switch (action) {
       case "view":
@@ -925,9 +949,7 @@ export default function DashboardOrdersPage() {
                       <tr>
                         <td>${item.productName}</td>
                         <td>${item.quantity}</td>
-                        <td>${formatPrice(
-                          item.selectedOption?.price || 0,
-                        )}</td>
+                        <td>${formatPrice(item.selectedOption?.price || 0)}</td>
                         <td>${formatPrice(item.itemTotal)}</td>
                       </tr>
                     `,
@@ -1059,7 +1081,7 @@ export default function DashboardOrdersPage() {
     }
   };
 
-  // Export orders to CSV (from second layout)
+  // Export orders to CSV
   const exportToCSV = () => {
     toast.loading("Exporting orders to CSV...");
 
@@ -1111,16 +1133,14 @@ export default function DashboardOrdersPage() {
     return (
       <div className="flex min-h-screen bg-gray-50">
         <DashboardSidebar />
-        <div className="flex-1 ml-0 lg:ml-64">
-          <div className="p-8">
-            <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-32 bg-gray-200 rounded"></div>
-                ))}
-              </div>
+        <div className="flex-1 lg:ml-64 p-4 md:p-8">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-32 bg-gray-200 rounded"></div>
+              ))}
             </div>
           </div>
         </div>
@@ -1132,49 +1152,50 @@ export default function DashboardOrdersPage() {
     <div className="flex min-h-screen bg-gray-50">
       <DashboardSidebar />
 
-      <main className="flex-1 ml-0 lg:ml-64">
-        <div className="p-4 md:p-8">
-          {/* Header with Stats Cards from second layout */}
-          <div className="mb-8">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <main className="flex-1 lg:ml-64 p-4 md:p-6 lg:p-8">
+        <div className="max-w-[1600px] mx-auto">
+          {/* Header */}
+          <div className="mb-6 md:mb-8">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
               <div>
-                <h1 className="text-3xl font-serif font-bold text-gray-900">
+                <h1 className="text-2xl md:text-3xl font-serif font-bold text-gray-900">
                   Orders Management
                 </h1>
-                <p className="text-gray-600 mt-2">
+                <p className="text-sm md:text-base text-gray-600 mt-1 md:mt-2">
                   Manage and track all customer orders
                 </p>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2 md:gap-3">
                 <button
                   onClick={refreshOrders}
                   disabled={loading}
-                  className="inline-flex items-center gap-2 border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
+                  className="inline-flex items-center gap-2 border border-gray-300 hover:bg-gray-50 text-gray-700 px-3 md:px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 text-sm md:text-base"
                 >
                   <RefreshCw
                     className={`w-4 h-4 ${loading ? "animate-spin" : ""}`}
                   />
-                  Refresh
+                  <span className="hidden sm:inline">Refresh</span>
                 </button>
                 <Link
                   href="/dashboard/orders/create"
-                  className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                  className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-3 md:px-4 py-2 rounded-lg font-medium transition-colors text-sm md:text-base"
                 >
                   <Plus className="w-4 h-4" />
-                  Create Order
+                  <span className="hidden sm:inline">Create Order</span>
+                  <span className="sm:hidden">Create</span>
                 </Link>
                 <button
                   onClick={exportToCSV}
-                  className="inline-flex items-center gap-2 border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
+                  className="inline-flex items-center gap-2 border border-gray-300 hover:bg-gray-50 text-gray-700 px-3 md:px-4 py-2 rounded-lg font-medium transition-colors text-sm md:text-base"
                 >
                   <Download className="w-4 h-4" />
-                  Export
+                  <span className="hidden sm:inline">Export</span>
                 </button>
               </div>
             </div>
 
-            {/* Stats Cards Grid from second layout */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            {/* Stats Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
               <StatsCard
                 title="Total Orders"
                 value={stats.total}
@@ -1205,29 +1226,29 @@ export default function DashboardOrdersPage() {
               />
             </div>
 
-            {/* Filters and Search - First layout style */}
-            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm mb-6">
-              <div className="flex flex-col md:flex-row gap-4">
+            {/* Filters and Search */}
+            <div className="bg-white p-4 md:p-6 rounded-xl border border-gray-200 shadow-sm">
+              <div className="flex flex-col md:flex-row gap-3 md:gap-4">
                 {/* Search */}
                 <div className="flex-1">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-gray-400" />
                     <input
                       type="text"
-                      placeholder="Search by order #, customer name, email, or phone..."
+                      placeholder="Search orders..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full pl-9 md:pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm md:text-base"
                     />
                   </div>
                 </div>
 
                 {/* Status Filter */}
-                <div className="flex gap-3">
+                <div className="flex gap-2 md:gap-3">
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="px-3 md:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm md:text-base min-w-[140px]"
                   >
                     <option value="all">All Status</option>
                     <option value="pending">Pending</option>
@@ -1243,45 +1264,47 @@ export default function DashboardOrdersPage() {
             </div>
           </div>
 
-          {/* Orders Table - First layout style */}
+          {/* Orders Content */}
           {loading ? (
-            <div className="text-center py-12">
-              <div className="w-16 h-16 border-4 border-amber-200 border-t-amber-600 rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading orders...</p>
+            <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
+              <div className="w-12 h-12 md:w-16 md:h-16 border-4 border-amber-200 border-t-amber-600 rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-sm md:text-base text-gray-600">
+                Loading orders...
+              </p>
             </div>
           ) : error ? (
-            <div className="text-center py-12">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center">
-                <AlertCircle className="w-8 h-8 text-red-500" />
+            <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
+              <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center">
+                <AlertCircle className="w-6 h-6 md:w-8 md:h-8 text-red-500" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2">
                 Error Loading Orders
               </h3>
-              <p className="text-gray-600 mb-4">{error}</p>
+              <p className="text-sm md:text-base text-gray-600 mb-4">{error}</p>
               <button
                 onClick={refreshOrders}
-                className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-medium transition-colors text-sm md:text-base"
               >
                 <RefreshCw className="w-4 h-4" />
                 Try Again
               </button>
             </div>
           ) : orders.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                <Package className="w-8 h-8 text-gray-400" />
+            <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
+              <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                <Package className="w-6 h-6 md:w-8 md:h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2">
                 No Orders Found
               </h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-sm md:text-base text-gray-600 mb-4">
                 {searchTerm || statusFilter !== "all"
                   ? "Try adjusting your filters or search term"
                   : "No orders have been placed yet"}
               </p>
               <Link
                 href="/dashboard/orders/create"
-                className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-medium transition-colors text-sm md:text-base"
               >
                 <Plus className="w-4 h-4" />
                 Create Your First Order
@@ -1289,116 +1312,184 @@ export default function DashboardOrdersPage() {
             </div>
           ) : (
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-              {/* Table Header - First layout 14 columns */}
-              <div className="grid grid-cols-14 gap-2 p-4 border-b border-gray-200 bg-gray-50 font-medium text-sm text-gray-700">
-                <div className="col-span-3">Order Details</div>
-                <div className="col-span-3">Customer Information</div>
-                <div className="col-span-2">Dates</div>
-                <div className="col-span-1">Amount</div>
-                <div className="col-span-1">Items</div>
-                <div className="col-span-1">Status</div>
-                <div className="col-span-1">Payment</div>
-                <div className="col-span-2 text-right">Actions</div>
-              </div>
-
-              {/* Table Body - First layout style */}
-              <div className="divide-y divide-gray-200">
+              {/* Mobile Cards View */}
+              <div className="lg:hidden divide-y divide-gray-200">
                 {orders.map((order) => (
                   <div
                     key={order._id}
-                    className="grid grid-cols-14 gap-2 p-4 hover:bg-gray-50 transition-colors items-center"
+                    className="p-4 hover:bg-gray-50 transition-colors"
                   >
-                    {/* Order Details */}
-                    <div className="col-span-3">
-                      <div className="font-medium text-gray-900 text-lg">
-                        {order.orderNumber}
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-gray-900 text-base truncate">
+                          {order.orderNumber}
+                        </div>
+                        <div className="text-sm text-gray-600 mt-1">
+                          {order.customerName}
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-600 mt-1">
-                        {order.deliveryMethod === "delivery"
-                          ? "🚚 Delivery"
-                          : "🏪 Pickup"}
-                      </div>
-                      <div className="text-xs text-gray-500 mt-1">
-                        {order.eventType || "No event type"}
-                      </div>
-                    </div>
-
-                    {/* Customer Information */}
-                    <div className="col-span-3">
-                      <div className="font-medium text-gray-900">
-                        {order.customerName}
-                      </div>
-                      <div className="text-sm text-gray-600 truncate">
-                        {order.customerEmail}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        📱 {order.customerPhone}
+                      <div className="flex items-center gap-2 ml-2">
+                        <button
+                          onClick={() => {
+                            setSelectedOrder(order);
+                            setDetailModalOpen(true);
+                          }}
+                          className="p-2 hover:bg-amber-50 text-amber-600 rounded transition-colors"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </button>
+                        <OrderActions
+                          order={order}
+                          onAction={handleOrderAction}
+                        />
                       </div>
                     </div>
 
-                    {/* Dates */}
-                    <div className="col-span-2">
-                      <div className="text-sm text-gray-900">
-                        📅 {formatDateShort(order.createdAt)}
-                      </div>
-                      <div className="text-xs text-gray-500 mt-1">
-                        🎯 Event: {formatDateShort(order.eventDate)}
-                      </div>
-                    </div>
-
-                    {/* Amount */}
-                    <div className="col-span-1">
-                      <div className="font-bold text-gray-900 text-lg">
-                        {formatPrice(order.totalAmount)}
-                      </div>
-                    </div>
-
-                    {/* Items Count */}
-                    <div className="col-span-1">
-                      <div className="flex items-center gap-1">
-                        <Package className="w-4 h-4 text-gray-400" />
-                        <span className="text-sm text-gray-900">
-                          {order.items?.length || 0}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Status */}
-                    <div className="col-span-1">
+                    <div className="flex flex-wrap gap-2 mb-3">
                       <OrderStatusBadge status={order.status} />
-                    </div>
-
-                    {/* Payment */}
-                    <div className="col-span-1">
                       <PaymentStatusBadge status={order.paymentStatus} />
                     </div>
 
-                    {/* Actions - Using OrderActions from second layout */}
-                    <div className="col-span-2 flex justify-end items-center gap-2">
-                      <button
-                        onClick={() => {
-                          setSelectedOrder(order);
-                          setDetailModalOpen(true);
-                        }}
-                        className="p-2 hover:bg-amber-50 text-amber-600 rounded transition-colors"
-                        aria-label="View details"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <OrderActions
-                        order={order}
-                        onAction={handleOrderAction}
-                      />
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <div className="text-gray-500 text-xs">Amount</div>
+                        <div className="font-semibold text-gray-900">
+                          {formatPrice(order.totalAmount)}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-gray-500 text-xs">Items</div>
+                        <div className="font-semibold text-gray-900">
+                          {order.items?.length || 0}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-gray-500 text-xs">Created</div>
+                        <div className="font-medium text-gray-900">
+                          {formatDateShort(order.createdAt)}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-gray-500 text-xs">Method</div>
+                        <div className="font-medium text-gray-900 capitalize">
+                          {order.deliveryMethod}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
+              </div>
+
+              {/* Desktop Table View */}
+              <div className="hidden lg:block overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
+                        Order #
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
+                        Customer
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
+                        Date
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
+                        Amount
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
+                        Items
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
+                        Status
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
+                        Payment
+                      </th>
+                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-700">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {orders.map((order) => (
+                      <tr
+                        key={order._id}
+                        className="hover:bg-gray-50 transition-colors"
+                      >
+                        <td className="px-4 py-4">
+                          <div className="font-medium text-gray-900">
+                            {order.orderNumber}
+                          </div>
+                          <div className="text-xs text-gray-500 mt-1">
+                            {order.deliveryMethod === "delivery"
+                              ? "🚚 Delivery"
+                              : "🏪 Pickup"}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="font-medium text-gray-900">
+                            {order.customerName}
+                          </div>
+                          <div className="text-xs text-gray-500 truncate max-w-[200px]">
+                            {order.customerEmail}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="text-sm text-gray-900">
+                            {formatDateShort(order.createdAt)}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            Event: {formatDateShort(order.eventDate)}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="font-bold text-gray-900">
+                            {formatPrice(order.totalAmount)}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="flex items-center gap-1">
+                            <Package className="w-4 h-4 text-gray-400" />
+                            <span className="text-sm text-gray-900">
+                              {order.items?.length || 0}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <OrderStatusBadge status={order.status} />
+                        </td>
+                        <td className="px-4 py-4">
+                          <PaymentStatusBadge status={order.paymentStatus} />
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="flex justify-end items-center gap-2">
+                            <button
+                              onClick={() => {
+                                setSelectedOrder(order);
+                                setDetailModalOpen(true);
+                              }}
+                              className="p-2 hover:bg-amber-50 text-amber-600 rounded transition-colors"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </button>
+                            <OrderActions
+                              order={order}
+                              onAction={handleOrderAction}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           )}
         </div>
       </main>
 
-      {/* Order Detail Modal from second layout */}
+      {/* Order Detail Modal */}
       <OrderDetailModal
         order={selectedOrder}
         isOpen={detailModalOpen}

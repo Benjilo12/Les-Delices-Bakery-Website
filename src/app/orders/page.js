@@ -294,7 +294,10 @@ function OrderDetails({ order, isOpen, onToggle }) {
                   {formatPrice(item.itemTotal)}
                 </div>
                 <div className="text-sm text-gray-500">
-                  {formatPrice(item.unitPrice)} each
+                  {formatPrice(
+                    item.unitPrice || item.selectedOption?.price || 0,
+                  )}{" "}
+                  each
                 </div>
               </div>
             </div>
@@ -303,11 +306,13 @@ function OrderDetails({ order, isOpen, onToggle }) {
       </div>
 
       {/* Order Notes */}
-      {order.orderNotes && (
+      {order.specialInstructions && (
         <div className="mt-6 pt-6 border-t border-gray-200">
-          <h4 className="font-semibold text-gray-900 mb-2">Order Notes</h4>
+          <h4 className="font-semibold text-gray-900 mb-2">
+            Special Instructions
+          </h4>
           <p className="text-gray-600 bg-white p-3 rounded-lg border border-gray-100">
-            {order.orderNotes}
+            {order.specialInstructions}
           </p>
         </div>
       )}
@@ -506,21 +511,22 @@ function EmptyOrdersState() {
 }
 
 export default function OrdersPage() {
-  const { isLoaded, isSignedIn, userId } = useAuth();
+  const { isLoaded, isSignedIn } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (isLoaded && isSignedIn && userId) {
+    if (isLoaded && isSignedIn) {
       fetchUserOrders();
     }
-  }, [isLoaded, isSignedIn, userId]);
+  }, [isLoaded, isSignedIn]);
 
   const fetchUserOrders = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/orders?userId=${userId}`);
+      // Remove userId from query params - API will filter by logged-in user automatically
+      const response = await fetch("/api/orders");
 
       if (!response.ok) {
         throw new Error(`Failed to fetch orders: ${response.status}`);

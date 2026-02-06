@@ -17,6 +17,7 @@ function generateOrderNumber() {
 }
 
 // Add this GET function to your /app/api/orders/route.js file
+// Updated GET function for /app/api/orders/route.js
 export async function GET(request) {
   try {
     console.log("=== Starting orders fetch ===");
@@ -42,13 +43,15 @@ export async function GET(request) {
     const limit = parseInt(searchParams.get("limit") || "20");
     const search = searchParams.get("search");
 
-    // Build query
-    let query = {};
+    // Build query - ALWAYS filter by userId for regular users
+    let query = { userId: user.id }; // This ensures users only see their own orders
 
-    // If user is not admin, only show their orders
-    // You might want to check user roles here
-    // For now, showing all orders to authenticated users
-    // query.userId = user.id; // Uncomment to show only user's orders
+    // Optional: Check if user is admin and allow them to see all orders
+    const isAdmin = user.publicMetadata?.roles?.includes("admin");
+    if (isAdmin) {
+      // Admin can see all orders, so remove userId filter
+      query = {};
+    }
 
     // Apply status filter
     if (status && status !== "all") {
@@ -74,26 +77,42 @@ export async function GET(request) {
       Order.countDocuments(query),
     ]);
 
-    console.log(`Fetched ${orders.length} orders`);
+    console.log(`Fetched ${orders.length} orders for user ${user.id}`);
 
-    // Calculate stats
+    // Calculate stats - only for current user's orders (or all if admin)
+    const statsQuery = isAdmin ? {} : { userId: user.id };
+
     const stats = {
-      total: await Order.countDocuments({}),
-      pending: await Order.countDocuments({ status: "pending" }),
-      confirmed: await Order.countDocuments({ status: "confirmed" }),
-      processing: await Order.countDocuments({ status: "processing" }),
-      ready: await Order.countDocuments({ status: "ready" }),
+      total: await Order.countDocuments(statsQuery),
+      pending: await Order.countDocuments({ ...statsQuery, status: "pending" }),
+      confirmed: await Order.countDocuments({
+        ...statsQuery,
+        status: "confirmed",
+      }),
+      processing: await Order.countDocuments({
+        ...statsQuery,
+        status: "processing",
+      }),
+      ready: await Order.countDocuments({ ...statsQuery, status: "ready" }),
       out_for_delivery: await Order.countDocuments({
+        ...statsQuery,
         status: "out_for_delivery",
       }),
-      delivered: await Order.countDocuments({ status: "delivered" }),
-      cancelled: await Order.countDocuments({ status: "cancelled" }),
+      delivered: await Order.countDocuments({
+        ...statsQuery,
+        status: "delivered",
+      }),
+      cancelled: await Order.countDocuments({
+        ...statsQuery,
+        status: "cancelled",
+      }),
     };
 
-    // Calculate revenue
+    // Calculate revenue - only for current user's paid orders (or all if admin)
     const revenueResult = await Order.aggregate([
       {
         $match: {
+          ...(isAdmin ? {} : { userId: user.id }),
           paymentStatus: "paid",
           status: { $nin: ["cancelled", "refunded"] },
         },

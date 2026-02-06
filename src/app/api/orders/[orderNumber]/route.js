@@ -7,6 +7,7 @@ import { currentUser } from "@clerk/nextjs/server";
 // GET /api/orders/[orderNumber]
 // Fetch single order by orderNumber
 // ────────────────────────────────────────────────
+// Updated GET function for /app/api/orders/[orderNumber]/route.js
 export async function GET(request, { params }) {
   try {
     // Await the params promise in Next.js 15
@@ -29,17 +30,26 @@ export async function GET(request, { params }) {
       );
     }
 
-    // You can add more authorization checks here later, e.g.:
-    // if (!user.publicMetadata?.roles?.includes("admin") && order.userId !== user.id) {
-    //   return unauthorized or forbidden
-    // }
-
     const order = await Order.findOne({ orderNumber }).lean();
 
     if (!order) {
       return NextResponse.json(
         { success: false, error: "Order not found" },
         { status: 404 },
+      );
+    }
+
+    // Check if user owns this order (or is admin)
+    const isAdmin = user.publicMetadata?.roles?.includes("admin");
+    const isOwner = order.userId === user.id;
+
+    if (!isAdmin && !isOwner) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "You don't have permission to view this order",
+        },
+        { status: 403 },
       );
     }
 
