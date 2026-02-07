@@ -36,7 +36,6 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { useUser, useAuth } from "@clerk/nextjs";
-import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import { toast } from "sonner";
 
 // Helper functions
@@ -1132,8 +1131,7 @@ export default function DashboardOrdersPage() {
   if (!isLoaded) {
     return (
       <div className="flex min-h-screen bg-gray-50">
-        <DashboardSidebar />
-        <div className="flex-1 lg:ml-64 p-4 md:p-8">
+        <div className="flex-1 p-4 md:p-8">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
             <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
@@ -1150,9 +1148,7 @@ export default function DashboardOrdersPage() {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <DashboardSidebar />
-
-      <main className="flex-1 lg:ml-64 p-4 md:p-6 lg:p-8">
+      <main className="flex-1 p-4 md:p-6 lg:p-8">
         <div className="max-w-[1600px] mx-auto">
           {/* Header */}
           <div className="mb-6 md:mb-8">

@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import PaymentInfoSection from "@/components/PaymentInfoSection";
 import ProductCarousel from "@/components/ProductCarousel";
 import Topbar from "@/components/Topbar";
+import WhatsAppWidget from "@/components/WhatsAppWidget";
 
 function page() {
   return (
@@ -23,6 +24,7 @@ function page() {
         <CustomerReviews />
         <BlogSection />
         <PaymentInfoSection />
+        <WhatsAppWidget />
       </div>
     </>
   );
