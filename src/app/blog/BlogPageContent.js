@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import Link from "next/link";
 import { Search, ChevronRight, ChevronLeft } from "lucide-react";
+import Topbar from "@/components/Topbar";
 
 // Create a wrapper component for the search params logic
 export default function BlogPageContent() {
@@ -82,6 +83,7 @@ export default function BlogPageContent() {
 
   return (
     <div className="min-h-screen bg-[#FDFCFB] overflow-x-hidden">
+      <Topbar />
       <Navbar />
 
       {/* Hero Header */}

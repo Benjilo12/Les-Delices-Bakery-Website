@@ -22,6 +22,8 @@ import {
   Home,
   ShoppingBag,
 } from "lucide-react";
+import Footer from "@/components/Footer";
+import Topbar from "@/components/Topbar";
 
 // Order status badge component
 function OrderStatusBadge({ status }) {
@@ -488,8 +490,8 @@ function EmptyOrdersState() {
       </div>
       <h2 className="text-2xl font-medium text-gray-900 mb-3">No Orders Yet</h2>
       <p className="text-gray-500 mb-8 max-w-md mx-auto">
-        You haven't placed any orders yet. Start shopping to see your orders
-        here.
+        You haven&apos;t placed any orders yet. Start shopping to see your
+        orders here.
       </p>
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <Link
@@ -551,6 +553,7 @@ export default function OrdersPage() {
   if (!isLoaded) {
     return (
       <>
+        <Topbar />
         <Navbar />
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
@@ -789,6 +792,7 @@ export default function OrdersPage() {
           )}
         </main>
       </div>
+      <Footer />
     </>
   );
 }

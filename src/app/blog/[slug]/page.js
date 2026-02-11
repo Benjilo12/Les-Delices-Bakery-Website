@@ -10,6 +10,8 @@ import {
   Utensils,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import Topbar from "@/components/Topbar";
 
 async function getBlog(slug) {
   try {
@@ -46,6 +48,7 @@ export default async function BlogDetailsPage({ params }) {
 
   return (
     <>
+      <Topbar />
       <Navbar />
       <article className="min-h-screen bg-[#FDFCFB] pt-10 pb-20 overflow-x-hidden">
         {/* Top Progress Bar - ensure it sits just below or on top of Navbar */}
@@ -130,7 +133,7 @@ export default async function BlogDetailsPage({ params }) {
 
           {/* Simple Menu Link Section - Added at the bottom */}
           <div className="mt-16 pt-8 border-t border-gray-100">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-200">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 bg-linear-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-200">
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Utensils className="w-5 h-5 text-amber-600" />
@@ -188,6 +191,7 @@ export default async function BlogDetailsPage({ params }) {
           </div>
         </div>
       </article>
+      <Footer />
     </>
   );
 }

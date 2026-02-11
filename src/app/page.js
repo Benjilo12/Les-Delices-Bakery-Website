@@ -2,6 +2,7 @@ import AboutSection from "@/components/AboutSection";
 import BlogSection from "@/components/BlogSection";
 import CategoryScroll from "@/components/CategoryScroll";
 import CustomerReviews from "@/components/CustomerReviews";
+import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import LesDelicesBanner from "@/components/LesDelicesBanner";
 import Navbar from "@/components/Navbar";
@@ -24,6 +25,7 @@ function page() {
         <CustomerReviews />
         <BlogSection />
         <PaymentInfoSection />
+        <Footer />
         <WhatsAppWidget />
       </div>
     </>

@@ -27,6 +27,8 @@ import { useCart, useWishlist, useUI } from "@/lib/store";
 import ProductCard from "@/components/ProductCard";
 import Navbar from "@/components/Navbar";
 import PaymentBanner from "@/components/PaymentBanner";
+import Footer from "@/components/Footer";
+import Topbar from "@/components/Topbar";
 
 export default function ProductDetailClient({ product, relatedProducts }) {
   const { addToCart } = useCart();
@@ -102,8 +104,9 @@ export default function ProductDetailClient({ product, relatedProducts }) {
 
   return (
     <>
+      <Topbar />
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+      <div className="min-h-screen bg-linear-to-b from-white to-gray-50">
         {/* Breadcrumbs */}
         <div className="border-b border-gray-100 bg-white sticky top-0 z-40 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 py-3">
@@ -529,6 +532,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
         </main>
       </div>
       <PaymentBanner />
+      <Footer />
     </>
   );
 }

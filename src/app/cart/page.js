@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useCart, useUI } from "@/lib/store";
 import Navbar from "@/components/Navbar";
 import PaymentBanner from "@/components/PaymentBanner";
+import Footer from "@/components/Footer";
 import {
   ShoppingBag,
   Trash2,
@@ -28,6 +29,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import { useUser, SignInButton } from "@clerk/nextjs";
+import Topbar from "@/components/Topbar";
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, clearCart, total, count } =
@@ -334,6 +336,7 @@ export default function CartPage() {
 
   return (
     <>
+      <Topbar />
       <Navbar />
       <div className="min-h-screen bg-gray-50">
         {/* Breadcrumb */}
@@ -896,6 +899,7 @@ export default function CartPage() {
           </div>
         </main>
       </div>
+      <Footer />
     </>
   );
 }
@@ -1007,7 +1011,7 @@ function EmptyCart() {
         Your cart is empty
       </h2>
       <p className="text-gray-500 mb-8 max-w-md mx-auto">
-        Looks like you haven&pos;t added any delicious treats to your cart yet.
+        Looks like you haven&apos;t added any delicious treats to your cart yet.
       </p>
       <Link
         href="/menu"

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import PaymentBanner from "@/components/PaymentBanner";
+import Footer from "@/components/Footer";
 import { useWishlist, useCart, useUI } from "@/lib/store";
 import {
   Heart,
@@ -20,6 +21,7 @@ import {
   Grid3x3,
   List,
 } from "lucide-react";
+import Topbar from "@/components/Topbar";
 
 export default function WishlistPage() {
   const { wishlist, toggleWishlist } = useWishlist();
@@ -91,6 +93,7 @@ export default function WishlistPage() {
 
   return (
     <>
+      <Topbar />
       <Navbar />
       <div className="min-h-screen bg-gray-50">
         {/* Breadcrumb */}
@@ -443,6 +446,7 @@ export default function WishlistPage() {
           </div>
         </main>
       </div>
+      <Footer />
     </>
   );
 }
