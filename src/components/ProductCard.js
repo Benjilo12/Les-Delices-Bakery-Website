@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Heart, ArrowRight, Plus } from "lucide-react";
 import { useWishlist, useCart, useUI } from "@/lib/store";
+import { toast } from "sonner";
 
 export default function ProductCard({ product }) {
   const { toggleWishlist, isInWishlist } = useWishlist();
@@ -22,11 +23,24 @@ export default function ProductCard({ product }) {
     e.preventDefault();
     e.stopPropagation();
     toggleWishlist(product);
+
+    if (isFavorite) {
+      toast.success("Removed from wishlist", {
+        description: `${product.name} has been removed from your wishlist.`,
+        icon: "❤️",
+      });
+    } else {
+      toast.success("Added to wishlist", {
+        description: `${product.name} has been added to your wishlist.`,
+        icon: "❤️",
+      });
+    }
   };
 
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
     if (isAvailable) {
       addToCart(
         product,
@@ -35,6 +49,22 @@ export default function ProductCard({ product }) {
         product.customizationNotes || "",
         product.availableFlavors?.[0] || "",
       );
+
+      // Show success notification
+      toast.success("Added to cart", {
+        description: `${product.name} has been added to your cart.`,
+        icon: "🛒",
+        action: {
+          label: "View Cart",
+          onClick: () => (window.location.href = "/cart"),
+        },
+      });
+    } else {
+      // Show error notification if product is not available
+      toast.error("Out of stock", {
+        description: `${product.name} is currently unavailable.`,
+        icon: "😔",
+      });
     }
   };
 
@@ -85,7 +115,7 @@ export default function ProductCard({ product }) {
           </Link>
         ) : (
           <Link href={`/products/${product.slug || product._id}`}>
-            <div className="w-full h-full flex items-center justify-center text-2xl bg-linear-to-br from-amber-50 to-amber-100">
+            <div className="w-full h-full flex items-center justify-center text-2xl bg-gradient-to-br from-amber-50 to-amber-100">
               🎂
             </div>
           </Link>
