@@ -9,7 +9,7 @@ import UserMenu from "./navbar/UserMenu";
 import MobileMenu from "./navbar/MobileMenu";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { LayoutDashboard, Shield } from "lucide-react";
+import { Shield } from "lucide-react";
 
 export default function Navbar() {
   const { user, isSignedIn } = useUser();
@@ -30,24 +30,15 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Left: Mobile Menu + Logo */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-6">
             <MobileMenu />
             <Logo />
-
-            {/* Admin Dashboard Icon - Only for admins, shows on all screens */}
-            {isSignedIn && isAdmin && (
-              <Link
-                href="/dashboard"
-                className="md:hidden p-2 text-gray-600 hover:text-amber-600 transition-colors"
-                title="Dashboard"
-              >
-                <LayoutDashboard className="w-5 h-5" />
-              </Link>
-            )}
           </div>
 
           {/* Center: Nav Links (Desktop) */}
-          <NavLinks />
+          <div className="ml-8 md:ml-12">
+            <NavLinks />
+          </div>
 
           {/* Center-Right: Search Bar (Desktop) */}
           <div className="flex-1 max-w-md mx-8 hidden lg:block">
@@ -56,21 +47,17 @@ export default function Navbar() {
 
           {/* Right: User Actions */}
           <div className="flex items-center gap-4">
-            {/* Admin Dashboard Icon - Only for admins, shows on medium+ screens */}
+            {/* Admin Dashboard Icon - medium+ screens, icon + tooltip only */}
             {isSignedIn && isAdmin && (
               <Link
                 href="/dashboard"
-                className="hidden md:flex items-center gap-2 px-3 py-2 bg-linear-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 text-amber-700 rounded-lg transition-all group relative"
-                title="Admin Dashboard"
+                className="hidden md:flex items-center justify-center p-2 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-lg transition-all group relative"
               >
-                <Shield className="w-4 h-4" />
-                <span className="font-medium text-sm hidden lg:inline">
-                  Dashboard
-                </span>
-                {/* Tooltip for smaller screens */}
-                <div className="lg:hidden absolute -bottom-10 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                <Shield className="w-5 h-5" />
+                {/* Tooltip */}
+                <div className="absolute -bottom-9 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                   Admin Dashboard
-                  <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45"></div>
+                  <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45"></div>
                 </div>
               </Link>
             )}

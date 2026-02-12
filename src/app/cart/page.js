@@ -54,7 +54,8 @@ export default function CartPage() {
     eventDate: "",
   });
 
-  const deliveryFee = cart.length > 0 ? 50.0 : 0;
+  // Delivery fee removed - set to 0
+  const deliveryFee = 0;
   const subTotal = total;
   const grandTotal = subTotal + deliveryFee;
 
@@ -626,15 +627,18 @@ export default function CartPage() {
                       <span>Subtotal ({count} items)</span>
                       <span>{formatPrice(subTotal)}</span>
                     </div>
-                    <div className="flex justify-between text-gray-600">
-                      <span>Delivery Fee</span>
-                      <span>{formatPrice(deliveryFee)}</span>
-                    </div>
+
+                    {/* Delivery Fee Row - Completely Removed */}
+
                     <div className="pt-4 border-t border-gray-200">
                       <div className="flex justify-between text-lg font-bold text-gray-900">
                         <span>Total</span>
                         <span>{formatPrice(grandTotal)}</span>
                       </div>
+                      <p className="text-xs text-green-600 mt-2 flex items-center gap-1">
+                        <Truck className="w-3 h-3" />
+                        Free delivery on all orders
+                      </p>
                     </div>
                   </div>
 
@@ -742,7 +746,7 @@ export default function CartPage() {
                         disabled={!canProceedToPayment || isLoading}
                         className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all cursor-pointer ${
                           canProceedToPayment && !isLoading
-                            ? "bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                            ? "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                             : "bg-gray-200 text-gray-400 cursor-not-allowed"
                         }`}
                       >
@@ -764,7 +768,7 @@ export default function CartPage() {
                         disabled={isProcessingPayment}
                         className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all cursor-pointer ${
                           !isProcessingPayment
-                            ? "bg-linear-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                            ? "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                             : "bg-gray-200 text-gray-400 cursor-not-allowed"
                         }`}
                       >
@@ -804,8 +808,8 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                {/* Delivery Info */}
-                <div className="bg-linear-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-200 p-6">
+                {/* Delivery Info - Updated to show free delivery */}
+                <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-200 p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <Sparkles className="w-5 h-5 text-amber-600" />
                     <h3 className="font-semibold text-amber-900">
@@ -818,10 +822,10 @@ export default function CartPage() {
                       <Truck className="w-4 h-4 text-amber-600 mt-0.5" />
                       <div>
                         <p className="text-sm font-medium text-amber-800">
-                          Delivery Fee: GH₵50
+                          Free Delivery
                         </p>
                         <p className="text-xs text-amber-700">
-                          Standard delivery within Accra
+                          Enjoy free delivery on all orders within Accra
                         </p>
                       </div>
                     </div>

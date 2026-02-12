@@ -1,4 +1,5 @@
 // app/sign-up/page.js
+import Logo from "@/components/navbar/Logo";
 import { SignUp } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,17 +10,11 @@ export default function SignUpPage() {
       {/* Mobile Logo Header (only on mobile) */}
       <div className="lg:hidden sticky top-0 z-10 bg-white border-b border-gray-100 py-4 px-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-linear-to-r from-amber-600 to-amber-800 rounded-full flex items-center justify-center flex-shrink-0">
-            <span className="text-white text-base font-bold">LD</span>
-          </div>
-          <div>
-            <Link
-              href="/"
-              className="text-xl font-serif italic text-amber-900 hover:text-amber-700 transition-colors"
-            >
-              Les Délices
-            </Link>
-            <p className="text-gray-600 text-xs">Join our sweet community</p>
+          <div className="flex items-center gap-2">
+            <Logo />
+            <p className="text-gray-600 text-xs whitespace-nowrap">
+              Join our sweet community
+            </p>
           </div>
         </div>
       </div>
@@ -27,19 +22,19 @@ export default function SignUpPage() {
       {/* LEFT SIDE: Sign Up */}
       <div className="w-full lg:w-[40%] xl:w-[35%] flex-1 flex flex-col justify-center items-center lg:items-start p-4 sm:p-6 lg:p-8 xl:p-12 bg-white overflow-y-auto">
         <div className="w-full max-w-[90vw] sm:max-w-md mx-auto py-4 sm:py-6 lg:py-8">
-          {/* Logo - Desktop only */}
-          <div className="hidden lg:block mb-6 lg:mb-8 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 mb-2">
-              <Link href="/" className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-linear-to-r from-amber-600 to-amber-800 rounded-full flex items-center justify-center">
-                  <span className="text-white text-base font-bold">LD</span>
-                </div>
-                <h1 className="text-2xl font-serif italic text-amber-900 hover:text-amber-700 transition-colors">
-                  Les Délices
-                </h1>
-              </Link>
+          {/* Logo - Desktop only - Side by side */}
+          <div className="hidden lg:flex lg:flex-row lg:items-center lg:justify-between  lg:mb-8 w-full">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/images/logo 2.png"
+                alt="Les Délices"
+                width={120}
+                height={120}
+              />
             </div>
-            <p className="text-gray-600 text-sm">Join our sweet community</p>
+            <p className="text-gray-600 text-sm lg:text-base whitespace-nowrap ml-4">
+              Join our sweet community
+            </p>
           </div>
 
           {/* Clerk Sign Up - Responsive with overflow handling */}
@@ -127,7 +122,7 @@ export default function SignUpPage() {
               priority
               sizes="65vw"
             />
-            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/50 to-black/40" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/40" />
           </div>
 
           {/* Overlay Content */}

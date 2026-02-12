@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/navbar/Logo";
 
 export default async function SignInPage({ searchParams }) {
   // Await searchParams since it's a Promise in Next.js 15
@@ -25,21 +26,15 @@ export default async function SignInPage({ searchParams }) {
     <div className="flex min-h-screen overflow-hidden bg-white">
       {/* LEFT SIDE: Sign In */}
       <div className="w-full lg:w-[40%] xl:w-[40%] h-screen overflow-y-auto flex flex-col justify-center items-center lg:items-start p-6 sm:p-10 lg:pl-12 xl:pl-20 bg-white">
-        <div className="w-full max-w-md py-8">
-          {/* Logo */}
-          <div className="mb-8 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-amber-600 to-amber-800 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-bold">LD</span>
-              </div>
-              <Link
-                href="/"
-                className="text-2xl font-serif italic text-amber-900 hover:text-amber-700 transition-colors"
-              >
-                Les Délices
-              </Link>
+        <div className="w-full max-w-md py-2">
+          {/* Logo - Side by side with tagline */}
+          <div className="">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4">
+              <Logo />
+              {/* <p className="text-gray-600 text-sm lg:text-base whitespace-nowrap">
+                Join our sweet community
+              </p> */}
             </div>
-            <p className="text-gray-600 text-sm">Join our sweet community</p>
           </div>
 
           {/* Clerk Sign In */}
