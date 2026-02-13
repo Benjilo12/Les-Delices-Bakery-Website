@@ -6,8 +6,6 @@ import {
   Heart,
   ArrowRight,
   Plus,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 import { useWishlist, useCart, useUI } from "@/lib/store";
 import { toast } from "sonner";
@@ -17,7 +15,8 @@ export default function ProductCard({ product }) {
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { addToCart } = useCart();
   const { formatPrice } = useUI();
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [hoverImageIndex, setHoverImageIndex] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
 
   const isFavorite = isInWishlist(product._id);
   // Optimistic state so the heart colors instantly on click
@@ -42,6 +41,11 @@ export default function ProductCard({ product }) {
       : product.image
         ? [product.image]
         : [];
+
+  // Determine which image to show
+  const displayImage = isHovering && productImages.length > 1
+    ? productImages[1] // Show second image on hover
+    : productImages[0]; // Show first image normally
 
   const handleToggleFavorite = (e) => {
     e.preventDefault();
@@ -93,24 +97,12 @@ export default function ProductCard({ product }) {
     }
   };
 
-  const handlePrevImage = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setCurrentImageIndex((prev) =>
-      prev === 0 ? productImages.length - 1 : prev - 1,
-    );
-  };
-
-  const handleNextImage = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setCurrentImageIndex((prev) =>
-      prev === productImages.length - 1 ? 0 : prev + 1,
-    );
-  };
-
   return (
-    <div className="group bg-white w-full relative">
+    <div 
+      className="group bg-white w-full relative"
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
       {/* Image Container */}
       <div className="relative aspect-square overflow-hidden mb-4 bg-gray-50 rounded-sm">
         {/* New Arrival Badge */}
@@ -146,27 +138,7 @@ export default function ProductCard({ product }) {
           </button>
         )}
 
-        {/* Image Carousel Navigation */}
-        {productImages.length > 1 && (
-          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-20 flex justify-between px-2 pointer-events-none">
-            <button
-              onClick={handlePrevImage}
-              className="pointer-events-auto w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full shadow-sm flex items-center justify-center hover:bg-white transition-colors opacity-0 group-hover:opacity-100 transform -translate-x-1 group-hover:translate-x-0 transition-all duration-200"
-              aria-label="Previous image"
-            >
-              <ChevronLeft className="w-4 h-4 text-gray-700" />
-            </button>
-            <button
-              onClick={handleNextImage}
-              className="pointer-events-auto w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full shadow-sm flex items-center justify-center hover:bg-white transition-colors opacity-0 group-hover:opacity-100 transform translate-x-1 group-hover:translate-x-0 transition-all duration-200"
-              aria-label="Next image"
-            >
-              <ChevronRight className="w-4 h-4 text-gray-700" />
-            </button>
-          </div>
-        )}
-
-        {/* Image Display */}
+        {/* Image Display with Hover Effect */}
         <Link
           href={`/products/${product.slug || product._id}`}
           className="block w-full h-full"
@@ -174,33 +146,33 @@ export default function ProductCard({ product }) {
           {productImages.length > 0 ? (
             <>
               <Image
-                src={productImages[currentImageIndex]}
+                src={displayImage}
                 alt={product.name}
                 fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-cover transition-opacity duration-500"
                 sizes="(max-width: 768px) 100vw, 25vw"
-                priority={currentImageIndex === 0}
+                priority={true}
               />
-
-              {/* Image Indicators */}
+              
+              {/* Second image preload for smooth transition (if exists) */}
               {productImages.length > 1 && (
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
-                  {productImages.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setCurrentImageIndex(index);
-                      }}
-                      className={`w-1.5 h-1.5 rounded-full transition-all ${
-                        index === currentImageIndex
-                          ? "bg-amber-600 w-3"
-                          : "bg-white/80 hover:bg-white"
-                      }`}
-                      aria-label={`Go to image ${index + 1}`}
-                    />
-                  ))}
+                <Image
+                  src={productImages[1]}
+                  alt={`${product.name} - alternate view`}
+                  fill
+                  className="object-cover opacity-0 pointer-events-none"
+                  sizes="(max-width: 768px) 100vw, 25vw"
+                  priority={false}
+                />
+              )}
+
+              {/* Image counter indicator (shows when multiple images exist) */}
+              {productImages.length > 1 && (
+                <div className="absolute bottom-3 left-3 z-20 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
+                  <span className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+                    <span className="w-1.5 h-1.5 bg-white/50 rounded-full"></span>
+                  </span>
                 </div>
               )}
             </>

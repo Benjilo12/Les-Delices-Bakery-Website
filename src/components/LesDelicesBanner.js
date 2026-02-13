@@ -67,7 +67,7 @@ export default function LesDelicesBanner() {
         {/* Title */}
         <div className="text-center mb-5">
           <h1 className="text-2xl md:text-4xl font-semibold text-gray-800 tracking-wider md:tracking-widest">
-            AUTHENTIC FRENCH PASTRIES BY
+            AUTHENTIC  PASTRIES BY
             <Highlighter action="highlight" color="#FFD54F">
               <span className="text-pink-900">LES DÉLICES</span>
             </Highlighter>

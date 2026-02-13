@@ -76,12 +76,7 @@ export default function ProductCarousel() {
           </div>
           <h2 className="text-3xl md:text-5xl font-serif italic text-gray-900 text-center">
             Our signature{" "}
-            <span className="text-pink-900">
-              <Highlighter action="highlight" color="#FFD54F">
-                French
-              </Highlighter>
-            </span>{" "}
-            collection
+           <span className="text-pink-900"> <Highlighter action="highlight" color="#FFD54F"> collection</Highlighter></span>
           </h2>
         </div>
 

@@ -191,13 +191,12 @@ function StatsCard({ title, value, icon: Icon, color, trend }) {
   );
 }
 
-// Order Actions Dropdown
+// Order Actions Dropdown - Edit Order removed
 function OrderActions({ order, onAction }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const actions = [
     { label: "View Details", icon: Eye, action: "view" },
-    { label: "Edit Order", icon: Edit, action: "edit" },
     { label: "Update Status", icon: RefreshCw, action: "update_status" },
     { label: "Send Invoice", icon: Mail, action: "invoice" },
     { label: "Print Receipt", icon: Printer, action: "print" },
@@ -891,10 +890,6 @@ export default function DashboardOrdersPage() {
         setDetailModalOpen(true);
         break;
 
-      case "edit":
-        window.location.href = `/dashboard/orders/edit/${order.orderNumber}`;
-        break;
-
       case "update_status":
         setSelectedOrder(order);
         setDetailModalOpen(true);
@@ -1376,109 +1371,118 @@ export default function DashboardOrdersPage() {
                 ))}
               </div>
 
-              {/* Desktop Table View */}
-              <div className="hidden lg:block overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50 border-b border-gray-200">
-                    <tr>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
-                        Order #
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
-                        Customer
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
-                        Date
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
-                        Amount
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
-                        Items
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
-                        Status
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
-                        Payment
-                      </th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-700">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {orders.map((order) => (
-                      <tr
-                        key={order._id}
-                        className="hover:bg-gray-50 transition-colors"
-                      >
-                        <td className="px-4 py-4">
-                          <div className="font-medium text-gray-900">
-                            {order.orderNumber}
-                          </div>
-                          <div className="text-xs text-gray-500 mt-1">
-                            {order.deliveryMethod === "delivery"
-                              ? "🚚 Delivery"
-                              : "🏪 Pickup"}
-                          </div>
-                        </td>
-                        <td className="px-4 py-4">
-                          <div className="font-medium text-gray-900">
-                            {order.customerName}
-                          </div>
-                          <div className="text-xs text-gray-500 truncate max-w-[200px]">
-                            {order.customerEmail}
-                          </div>
-                        </td>
-                        <td className="px-4 py-4">
-                          <div className="text-sm text-gray-900">
-                            {formatDateShort(order.createdAt)}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            Event: {formatDateShort(order.eventDate)}
-                          </div>
-                        </td>
-                        <td className="px-4 py-4">
-                          <div className="font-bold text-gray-900">
-                            {formatPrice(order.totalAmount)}
-                          </div>
-                        </td>
-                        <td className="px-4 py-4">
-                          <div className="flex items-center gap-1">
-                            <Package className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm text-gray-900">
-                              {order.items?.length || 0}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="px-4 py-4">
-                          <OrderStatusBadge status={order.status} />
-                        </td>
-                        <td className="px-4 py-4">
-                          <PaymentStatusBadge status={order.paymentStatus} />
-                        </td>
-                        <td className="px-4 py-4">
-                          <div className="flex justify-end items-center gap-2">
-                            <button
-                              onClick={() => {
-                                setSelectedOrder(order);
-                                setDetailModalOpen(true);
-                              }}
-                              className="p-2 hover:bg-amber-50 text-amber-600 rounded transition-colors"
-                            >
-                              <Eye className="w-4 h-4" />
-                            </button>
-                            <OrderActions
-                              order={order}
-                              onAction={handleOrderAction}
-                            />
-                          </div>
-                        </td>
+              {/* Desktop Table View - Now scrollable */}
+              <div className="hidden lg:block">
+                <div className="max-h-[600px] overflow-y-auto relative">
+                  <table className="w-full">
+                    <thead className="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
+                          Order #
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
+                          Customer
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
+                          Date
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
+                          Amount
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
+                          Items
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
+                          Status
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">
+                          Payment
+                        </th>
+                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-700">
+                          Actions
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {orders.map((order) => (
+                        <tr
+                          key={order._id}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
+                          <td className="px-4 py-4">
+                            <div className="font-medium text-gray-900">
+                              {order.orderNumber}
+                            </div>
+                            <div className="text-xs text-gray-500 mt-1">
+                              {order.deliveryMethod === "delivery"
+                                ? "🚚 Delivery"
+                                : "🏪 Pickup"}
+                            </div>
+                          </td>
+                          <td className="px-4 py-4">
+                            <div className="font-medium text-gray-900">
+                              {order.customerName}
+                            </div>
+                            <div className="text-xs text-gray-500 truncate max-w-[200px]">
+                              {order.customerEmail}
+                            </div>
+                          </td>
+                          <td className="px-4 py-4">
+                            <div className="text-sm text-gray-900">
+                              {formatDateShort(order.createdAt)}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              Event: {formatDateShort(order.eventDate)}
+                            </div>
+                          </td>
+                          <td className="px-4 py-4">
+                            <div className="font-bold text-gray-900">
+                              {formatPrice(order.totalAmount)}
+                            </div>
+                          </td>
+                          <td className="px-4 py-4">
+                            <div className="flex items-center gap-1">
+                              <Package className="w-4 h-4 text-gray-400" />
+                              <span className="text-sm text-gray-900">
+                                {order.items?.length || 0}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-4">
+                            <OrderStatusBadge status={order.status} />
+                          </td>
+                          <td className="px-4 py-4">
+                            <PaymentStatusBadge status={order.paymentStatus} />
+                          </td>
+                          <td className="px-4 py-4">
+                            <div className="flex justify-end items-center gap-2">
+                              <button
+                                onClick={() => {
+                                  setSelectedOrder(order);
+                                  setDetailModalOpen(true);
+                                }}
+                                className="p-2 hover:bg-amber-50 text-amber-600 rounded transition-colors"
+                              >
+                                <Eye className="w-4 h-4" />
+                              </button>
+                              <OrderActions
+                                order={order}
+                                onAction={handleOrderAction}
+                              />
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                
+                {/* Scroll indicator - optional */}
+                {orders.length > 10 && (
+                  <div className="text-xs text-gray-400 text-center py-2 border-t border-gray-100">
+                    Scroll for more orders ↓
+                  </div>
+                )}
               </div>
             </div>
           )}
