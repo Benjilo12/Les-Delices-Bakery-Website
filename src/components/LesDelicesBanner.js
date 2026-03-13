@@ -6,7 +6,11 @@ export default function LesDelicesBanner() {
   return (
     <>
       {/* Top Banner */}
-      <div className="bg-linear-to-r from-amber-800 via-amber-600 to-amber-800 text-white py-5 px-6 md:px-10 mb-8 rounded-lg shadow-lg">
+      <div
+        data-aos="fade-right"
+        data-aos-duration="3000"
+        className="bg-linear-to-r from-amber-800 via-amber-600 to-amber-800 text-white py-5 px-6 md:px-10 mb-8 rounded-lg shadow-lg"
+      >
         <div className="max-w-7xl mx-auto flex flex-wrap justify-around items-center gap-6 md:gap-8">
           {/* Accra Same Day Delivery */}
           <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-50 group">
@@ -67,7 +71,7 @@ export default function LesDelicesBanner() {
         {/* Title */}
         <div className="text-center mb-5">
           <h1 className="text-2xl md:text-4xl font-semibold text-gray-800 tracking-wider md:tracking-widest">
-            AUTHENTIC  PASTRIES BY
+            AUTHENTIC PASTRIES BY
             <Highlighter action="highlight" color="#FFD54F">
               <span className="text-pink-900">LES DÉLICES</span>
             </Highlighter>

@@ -208,7 +208,7 @@ function FAQPage() {
           <p className="text-gray-600 mb-4">We&apos;re here to help!</p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link
-              href="https://wa.me/233000000000"
+              href="https://wa.me/233249826137"
               className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
             >
               <MessageCircle className="w-4 h-4" />

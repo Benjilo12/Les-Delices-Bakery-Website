@@ -3,7 +3,7 @@
 import { Phone, Mail } from "lucide-react";
 
 export default function Topbar() {
-  const phoneNumber = "+1 (234) 567-8900";
+  const phoneNumber = "+233249826137";
   const emailAddress = "info@lesdelices.com";
 
   return (

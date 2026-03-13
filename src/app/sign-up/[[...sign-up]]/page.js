@@ -19,11 +19,21 @@ export default function SignUpPage() {
         </div>
       </div>
 
-      {/* LEFT SIDE: Sign Up */}
-      <div className="w-full lg:w-[40%] xl:w-[35%] flex-1 flex flex-col justify-center items-center lg:items-start p-4 sm:p-6 lg:p-8 xl:p-12 bg-white overflow-y-auto">
-        <div className="w-full max-w-[90vw] sm:max-w-md mx-auto py-4 sm:py-6 lg:py-8">
+      {/* LEFT SIDE: Sign Up - WITH SCROLLBAR ON LEFT */}
+      <div
+        className="w-full lg:w-[40%] xl:w-[35%] flex-1 flex flex-col justify-center items-center lg:items-start p-4 sm:p-6 lg:p-8 xl:p-12 bg-white overflow-y-auto"
+        style={{ direction: "rtl" }}
+      >
+        {" "}
+        {/* Add RTL to move scrollbar to left */}
+        <div
+          className="w-full max-w-[90vw] sm:max-w-md mx-auto py-4 sm:py-6 lg:py-8"
+          style={{ direction: "ltr" }}
+        >
+          {" "}
+          {/* Reset direction for content */}
           {/* Logo - Desktop only - Side by side */}
-          <div className="hidden lg:flex lg:flex-row lg:items-center lg:justify-between  lg:mb-8 w-full">
+          <div className="hidden lg:flex lg:flex-row lg:items-center lg:justify-between lg:mb-8 w-full">
             <div className="flex items-center gap-2">
               <Image
                 src="/images/logo 2.png"
@@ -36,7 +46,6 @@ export default function SignUpPage() {
               Join our sweet community
             </p>
           </div>
-
           {/* Clerk Sign Up - Responsive with overflow handling */}
           <div className="w-full overflow-visible">
             <SignUp
@@ -91,7 +100,6 @@ export default function SignUpPage() {
               redirectUrl="/"
             />
           </div>
-
           {/* Terms */}
           <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200">
             <p className="text-[10px] sm:text-[11px] text-gray-500 leading-relaxed text-center lg:text-left">

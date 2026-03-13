@@ -413,9 +413,7 @@ function PrivacyPage() {
                   <h3 className="font-semibold text-gray-900 mb-2">
                     📱 WhatsApp/Phone
                   </h3>
-                  <p className="text-amber-700 font-medium">
-                    [Your Contact Number]
-                  </p>
+                  <p className="text-amber-700 font-medium">[+233249826137]</p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h3 className="font-semibold text-gray-900 mb-2">📧 Email</h3>

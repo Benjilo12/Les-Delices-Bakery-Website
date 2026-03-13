@@ -4,11 +4,11 @@ import Link from "next/link";
 import { Highlighter } from "./ui/highlighter";
 
 const categories = [
-  { name: "Birthday Cakes", image: "/images/cakeloaf.jpg" },
-  { name: "Wedding Cakes", image: "/images/cakeloaf.jpg" },
-  { name: "Cupcakes", image: "/images/cakeloaf.jpg" },
-  { name: "Cake Loaves", image: "/images/cakeloaf.jpg" },
-  { name: "Pastries & Snacks", image: "/images/cakeloaf.jpg" },
+  { name: "Birthday Cakes", image: "/images/bithcake1.png" },
+  { name: "Wedding Cakes", image: "/images/wedding.png" },
+  { name: "Cupcakes", image: "/images/cupcakes.jpeg" },
+  { name: "Cake Loaves", image: "/images/cakeloaf.jpeg" },
+  { name: "Pastries & Snacks", image: "/images/snacks.jpg" },
 ];
 
 export default function CategoryScroll() {

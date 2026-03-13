@@ -15,7 +15,11 @@ export default function HeroSection() {
       <div className="container mx-auto px-4 md:px-6 py-8 md:py-8 lg:py-16 h-full">
         <div className="flex flex-col lg:flex-row items-center justify-center gap-6 md:gap-6 lg:gap-10 xl:gap-12 min-h-[60vh] md:min-h-[60vh]">
           {/* Left side - Text content - Full width on mobile */}
-          <div className="w-full lg:w-1/2 text-center lg:text-left space-y-4 md:space-y-6 flex flex-col justify-center">
+          <div
+            data-aos="fade-right"
+            data-aos-duration="3000"
+            className="w-full lg:w-1/2 text-center lg:text-left space-y-4 md:space-y-6 flex flex-col justify-center"
+          >
             <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-amber-900 leading-tight">
               Taste the Magic of{" "}
               <Highlighter action="underline" color="#E91E63">
@@ -34,7 +38,7 @@ export default function HeroSection() {
             {/* Mobile image - Show below text on mobile */}
             <div className="block lg:hidden relative w-full h-50 sm:h-62.5 my-4">
               <Image
-                src="/images/hamper.png"
+                src="/images/busket.png"
                 alt="Humber filled with delicious cake loaves and chips"
                 fill
                 className="object-contain drop-shadow-xl"
