@@ -1,3 +1,9 @@
+## Les Delicies
+https://les-delices-bakery-website.vercel.app/
+![image alt]()
+
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
@@ -31,7 +37,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## LES DELICIES FILE OR FOLDER STRUCTURE
 
-![image alt]()
+![image alt](https://github.com/Benjilo12/Les-Delices-Bakery-Website/blob/c1b229b83ca46d7fdd87d4892cfc68de136f9f15/les%20delices%20file%20structure.png)
 
 ## Deploy on Vercel
 
